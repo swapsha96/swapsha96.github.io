@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Geekout | Srishti Yadav</title>
+    <link>https://swapsha96.github.io/tag/geekout/</link>
+      <atom:link href="https://swapsha96.github.io/tag/geekout/index.xml" rel="self" type="application/rss+xml" />
+    <description>Geekout</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 06 Nov 2019 01:25:06 -0700</lastBuildDate>
+    <image>
+      <url>https://swapsha96.github.io/images/icon_hu83f24c6794b0c645cb0fb9e8b29ab31d_111941_512x512_fill_lanczos_center_2.png</url>
+      <title>Geekout</title>
+      <link>https://swapsha96.github.io/tag/geekout/</link>
+    </image>
+    
+    <item>
+      <title>Accessing Windows File From Linux Subshell</title>
+      <link>https://swapsha96.github.io/post/2019-11-06-accessing-windows-from-linux/</link>
+      <pubDate>Wed, 06 Nov 2019 01:25:06 -0700</pubDate>
+      <guid>https://swapsha96.github.io/post/2019-11-06-accessing-windows-from-linux/</guid>
+      <description>&lt;p&gt;If you are using Ubuntu subshell in Windows (I use the one available in Microsoft Store), this is for you. There are times, where you may need to access the files saved on your windows in the Linux subshell.
+All you need to do is mount your drive. You may need to access the subshell via administrative privileges. For example, if you have the file in C: Drive, use the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd /mnt/c
+ls
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The same can be used to access data from external hard disk too. If the external disk is in D: Drive, the command would simply change to:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cd /mnt/d
+ls
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
