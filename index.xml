@@ -123,7 +123,7 @@ Vectorized version:91.36772155761719 ms
       <guid>https://swapsha96.github.io/post/2019-11-07-feature-vector-in-machine-learning/</guid>
       <description>&lt;p&gt;In computer vision we keep referring to feature vector, especially when we talk about CNNs. But what exactly is a feature vector and can how can you visualize it?
 Imagine we have an RGB image is the form as shown below:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://swapsha96.github.io/images/rgbchannel.png &#34; width=&#34;150&#34; height=&#34;120&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://swapsha96.github.io/img/rgbchannel.png &#34; width=&#34;150&#34; height=&#34;120&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Notice, that the value are unique for each color channel. However, we don’t intend to send out this data to any algorithm in 3 fold i.e. sending for one channel and doing computation, sending for second and so on. This is very unrealistic from computation point of you because our original data (pixel values) are ‘together’ representing the image. Hence, we create what we call a feature vector. We create 1-D column vector with values from these 3 color channels. For instance, we start from Red channel and bread each value row wise till the last value. Next we do the same for Blue channel and lastly for Green channel. This gives us one single column vector representing the original image in the form of, what we call, ‘feature vector’. So, what is the final size of the feature vector? This is important to know the total amount of data we will eventually use to do any computation.&lt;/p&gt;
 &lt;p&gt;When we see the CNN structure, we see that the architecture is defined usingm x n x 3, in case of RGB images. For example, a CNN architecture of dimension 64 x 64 x 3 will have a feature vector of size 12,288.&lt;/p&gt;
 &lt;p&gt;Simple!&lt;/p&gt;
@@ -252,6 +252,66 @@ model.add(layers.Conv2D(64, (3, 3), activation=&#39;relu&#39;))
       <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quam metus, commodo sit amet ante a, finibus efficitur lorem. Maecenas egestas purus in tempor volutpat. Sed dapibus tortor nec sem suscipit ullamcorper. Nulla nec lorem lacus. Phasellus condimentum massa quis dolor consequat viverra ut ac magna. Ut a consequat nisi. Vivamus at leo ut turpis convallis lacinia. Curabitur eu placerat quam. Donec ultricies faucibus dui, a tincidunt lorem lobortis condimentum.&lt;/p&gt;
 &lt;p&gt;Quisque aliquet consectetur justo sit amet convallis. Nunc vel aliquet ipsum, sit amet elementum justo. Vivamus id magna mi. Cras luctus est vel ipsum sagittis pellentesque. Vivamus ante elit, porttitor vitae quam quis, fermentum malesuada risus. Integer nec lectus vel lacus cursus tristique in euismod ipsum. Duis ut varius enim. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi et elit eu tortor lacinia sollicitudin non in lacus.&lt;/p&gt;
 &lt;p&gt;Integer at viverra turpis. Duis aliquam mattis sapien tempor eleifend. Mauris nec eleifend risus, quis mollis neque. Vivamus non dapibus justo, vel ornare magna. Nunc in nulla venenatis, imperdiet diam in, accumsan massa. Etiam congue augue ipsum, sit amet rutrum nisi blandit quis. Cras in lectus non lorem auctor consequat a vel sem. Aliquam erat volutpat. Fusce lobortis vel orci vitae ullamcorper. Phasellus id eleifend eros. Mauris vulputate, nisi vel auctor auctor, quam enim tincidunt felis, vitae fermentum odio tortor eget est. Integer ornare blandit lectus a accumsan.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>The Replica Dataset: A Digital Replica of Indoor Spaces</title>
+      <link>https://swapsha96.github.io/publication/example-1-copy-2/</link>
+      <pubDate>Mon, 01 Jul 2013 00:00:00 +0000</pubDate>
+      <guid>https://swapsha96.github.io/publication/example-1-copy-2/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Slides&lt;/em&gt; button above to demo Academic&amp;rsquo;s Markdown slides feature.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Supplementary notes can be added here, including 
+&lt;a href=&#34;https://sourcethemes.com/academic/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code and math&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>The Replica Dataset: A Digital Replica of Indoor Spaces</title>
+      <link>https://swapsha96.github.io/publication/example-1-copy/</link>
+      <pubDate>Mon, 01 Jul 2013 00:00:00 +0000</pubDate>
+      <guid>https://swapsha96.github.io/publication/example-1-copy/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Slides&lt;/em&gt; button above to demo Academic&amp;rsquo;s Markdown slides feature.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Supplementary notes can be added here, including 
+&lt;a href=&#34;https://sourcethemes.com/academic/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code and math&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>The Replica Dataset: A Digital Replica of Indoor Spaces</title>
+      <link>https://swapsha96.github.io/publication/example-1/</link>
+      <pubDate>Mon, 01 Jul 2013 00:00:00 +0000</pubDate>
+      <guid>https://swapsha96.github.io/publication/example-1/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Slides&lt;/em&gt; button above to demo Academic&amp;rsquo;s Markdown slides feature.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Supplementary notes can be added here, including 
+&lt;a href=&#34;https://sourcethemes.com/academic/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code and math&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
