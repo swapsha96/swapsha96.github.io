@@ -3,150 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://swapsha96.github.io/post/</loc>
-    <lastmod>2019-11-10T12:38:00-07:00</lastmod>
+    <loc>http://swpnl.co/</loc>
+    <lastmod>2020-05-19T00:47:18+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://swapsha96.github.io/</loc>
-    <lastmod>2019-11-10T12:38:00-07:00</lastmod>
+    <loc>http://swpnl.co/posts/</loc>
+    <lastmod>2020-05-19T00:47:18+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://swapsha96.github.io/tags/</loc>
-    <lastmod>2019-11-10T12:38:00-07:00</lastmod>
+    <loc>http://swpnl.co/posts/new-site/</loc>
+    <lastmod>2020-05-19T00:47:18+05:30</lastmod>
   </url>
   
   <url>
-    <loc>https://swapsha96.github.io/tag/technical/</loc>
-    <lastmod>2019-11-10T12:38:00-07:00</lastmod>
+    <loc>http://swpnl.co/categories/</loc>
   </url>
   
   <url>
-    <loc>https://swapsha96.github.io/post/2019-11-10-why-do-we-use-vectorization-in-ml/</loc>
-    <lastmod>2019-11-10T12:38:00-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/test/</loc>
-    <lastmod>2019-11-10T12:38:00-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/2019-11-07-feature-vector-in-machine-learning/</loc>
-    <lastmod>2019-11-07T22:21:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/2019-11-08-nile-rive-dispute/</loc>
-    <lastmod>2019-11-07T22:21:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/tag/politics/</loc>
-    <lastmod>2019-11-07T22:21:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/2019-11-08-latex-in-jekyll/</loc>
-    <lastmod>2019-11-07T00:15:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/2019-11-06-accessing-windows-from-linux/</loc>
-    <lastmod>2019-11-06T01:25:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/2019-10-20-decode-tensorflow-language/</loc>
-    <lastmod>2019-11-06T01:25:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/tag/geekout/</loc>
-    <lastmod>2019-11-06T01:25:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/2019-11-07-sigmoid-in-deep-learning/</loc>
-    <lastmod>2019-11-06T01:25:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/tag/misc/</loc>
-    <lastmod>2019-11-06T00:10:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/2019-11-08-reddit/</loc>
-    <lastmod>2019-11-06T00:10:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/2019-04-24-what-not-to-do/</loc>
-    <lastmod>2019-04-24T16:25:06-07:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/publication-type/1/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/authors/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/author/julian-straub/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/publication_types/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/publication/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/tag/source-themes/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/author/srishti-yadav/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/publication/example-1-copy-2/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/publication/example-1-copy/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/publication/example-1/</loc>
-    <lastmod>2013-07-01T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/post/2019-03-18-first-blog-post/</loc>
-  </url>
-  
-  <url>
-    <loc>https://swapsha96.github.io/talk/</loc>
+    <loc>http://swpnl.co/tags/</loc>
   </url>
   
 </urlset>
