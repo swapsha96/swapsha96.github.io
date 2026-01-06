@@ -1,20 +1,30 @@
 :root,
 [data-theme="dark"] {
-    --bg-primary: #000000;
-    --bg-card: #1c1c1e;
-    --text-primary: #ffffff;
-    --text-secondary: #8e8e93;
-    --accent: #0a84ff;
-    --divider: rgba(255, 255, 255, 0.08);
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #0f0f0f;
+    --bg-card: #141414;
+    --bg-card-hover: #1a1a1a;
+    --text-primary: #e8e6e3;
+    --text-secondary: #6b6b6b;
+    --accent: #c9a227;
+    --accent-glow: rgba(201, 162, 39, 0.15);
+    --divider: rgba(201, 162, 39, 0.08);
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
+    --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 40px rgba(201, 162, 39, 0.1);
 }
 
 [data-theme="light"] {
-    --bg-primary: #f2f2f7;
-    --bg-card: #ffffff;
-    --text-primary: #000000;
-    --text-secondary: #6e6e73;
-    --accent: #007aff;
-    --divider: rgba(0, 0, 0, 0.06);
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #202020;
+    --bg-card: #2a2a2a;
+    --bg-card-hover: #333333;
+    --text-primary: #f0ece4;
+    --text-secondary: #888888;
+    --accent: #d4af37;
+    --accent-glow: rgba(212, 175, 55, 0.2);
+    --divider: rgba(212, 175, 55, 0.1);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 8px 28px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 175, 55, 0.15);
 }
 
 * {
@@ -26,13 +36,16 @@
 body {
     font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: var(--bg-primary);
+    background-image: 
+        radial-gradient(ellipse at top, var(--bg-secondary) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom, rgba(201, 162, 39, 0.03) 0%, transparent 50%);
     color: var(--text-primary);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    transition: background 0.3s ease, color 0.3s ease;
+    transition: background 0.4s ease, color 0.4s ease;
 }
 
 .theme-toggle {
@@ -41,19 +54,22 @@ body {
     right: 16px;
     width: 48px;
     height: 48px;
-    border: none;
+    border: 1px solid var(--divider);
     border-radius: 50%;
     background: var(--bg-card);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     z-index: 100;
+    box-shadow: var(--shadow);
 }
 
 .theme-toggle:hover {
     transform: scale(1.05);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-hover);
 }
 
 .theme-toggle:active {
@@ -63,7 +79,7 @@ body {
 .theme-toggle svg {
     width: 22px;
     height: 22px;
-    color: var(--text-primary);
+    color: var(--accent);
 }
 
 .theme-toggle .sun-icon { display: none; }
@@ -72,15 +88,15 @@ body {
 [data-theme="light"] .theme-toggle .moon-icon { display: none; }
 
 .container {
-    max-width: 400px;
+    max-width: 420px;
     width: 100%;
-    animation: slideUp 0.5s ease;
+    animation: fadeIn 0.8s ease;
 }
 
-@keyframes slideUp {
+@keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
@@ -90,17 +106,43 @@ body {
 
 .profile {
     background: var(--bg-card);
-    border-radius: 28px;
-    padding: 32px 24px;
+    border: 1px solid var(--divider);
+    border-radius: 20px;
+    padding: 40px 28px;
     margin-bottom: 16px;
     text-align: center;
-    transition: background 0.3s ease;
+    transition: all 0.4s ease;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.5;
 }
 
 .avatar-wrapper {
-    width: 96px;
-    height: 96px;
-    margin: 0 auto 20px;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 24px;
+    position: relative;
+}
+
+.avatar-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), transparent 60%);
+    opacity: 0.6;
 }
 
 .avatar {
@@ -108,6 +150,9 @@ body {
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+    position: relative;
+    z-index: 1;
+    border: 2px solid var(--bg-card);
 }
 
 .intro {
@@ -115,23 +160,27 @@ body {
 }
 
 h1 {
-    font-size: 1.5em;
+    font-size: 1.6em;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     color: var(--text-primary);
+    letter-spacing: 0.5px;
 }
 
 .tagline {
     color: var(--text-secondary);
     font-size: 0.95em;
     font-weight: 400;
+    letter-spacing: 0.3px;
 }
 
 .links {
     background: var(--bg-card);
-    border-radius: 28px;
+    border: 1px solid var(--divider);
+    border-radius: 20px;
     overflow: hidden;
-    transition: background 0.3s ease;
+    transition: all 0.4s ease;
+    box-shadow: var(--shadow);
 }
 
 .links a {
@@ -143,8 +192,20 @@ h1 {
     font-weight: 600;
     text-decoration: none;
     color: var(--text-primary);
-    transition: background 0.15s ease;
+    transition: all 0.3s ease;
     border-bottom: 1px solid var(--divider);
+    position: relative;
+}
+
+.links a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: linear-gradient(90deg, var(--accent-glow), transparent);
+    transition: width 0.3s ease;
 }
 
 .links a:last-child {
@@ -152,12 +213,17 @@ h1 {
 }
 
 .links a:hover {
-    background: var(--divider);
+    background: var(--bg-card-hover);
+    padding-left: 28px;
+}
+
+.links a:hover::before {
+    width: 100%;
 }
 
 .links a:active {
-    background: var(--divider);
-    opacity: 0.7;
+    background: var(--bg-card-hover);
+    opacity: 0.8;
 }
 
 .links a svg {
@@ -165,22 +231,29 @@ h1 {
     height: 24px;
     flex-shrink: 0;
     color: var(--accent);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.links a:hover svg {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px var(--accent-glow));
 }
 
 .footer {
-    margin-top: 24px;
+    margin-top: 28px;
     text-align: center;
 }
 
 .footer p {
     font-size: 0.8em;
     color: var(--text-secondary);
+    letter-spacing: 0.5px;
 }
 
 @media (max-width: 500px) {
     .profile {
-        padding: 28px 20px;
-        border-radius: 24px;
+        padding: 32px 20px;
+        border-radius: 16px;
     }
 
     .avatar-wrapper {
@@ -189,15 +262,19 @@ h1 {
     }
 
     h1 {
-        font-size: 1.35em;
+        font-size: 1.4em;
     }
 
     .links {
-        border-radius: 24px;
+        border-radius: 16px;
     }
 
     .links a {
         padding: 16px 20px;
         font-size: 0.95em;
+    }
+    
+    .links a:hover {
+        padding-left: 24px;
     }
 }
