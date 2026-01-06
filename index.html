@@ -3,115 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swapnil Sharma</title>
-    <style>
-        :root {
-            --bg-color: #121212;
-            --text-color: #e0e0e0;
-            --card-bg-color: #1f1f1f;
-            --link-color: #bb86fc;
-            --link-hover-color: #ffb74d;
-            --switch-bg: #bb86fc;
-            --switch-icon-color: #ffffff;
-        }
-
-        body.light {
-            --bg-color: #f4f4f4;
-            --text-color: #333;
-            --card-bg-color: #ffffff;
-            --link-color: #0073e6;
-            --link-hover-color: #005bb5;
-            --switch-bg: #0073e6;
-            --switch-icon-color: #ffffff;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .theme-switch {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: var(--switch-bg);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
-        }
-
-        .theme-switch:hover {
-            background-color: var(--link-hover-color);
-        }
-
-        .theme-switch-icon {
-            color: var(--switch-icon-color);
-            font-size: 1.2em;
-        }
-
-        .card {
-            background-color: var(--card-bg-color);
-            padding: 20px 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-
-        .links a {
-            display: inline-block;
-            margin: 5px;
-            padding: 10px 15px;
-            font-size: 1em;
-            text-decoration: none;
-            color: var(--link-color);
-            transition: color 0.3s ease-in-out;
-        }
-
-        .links a:hover {
-            color: var(--link-hover-color);
-        }
-    </style>
+    <title>Hi, there! 👋</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <button class="theme-switch" onclick="toggleTheme()">
-        <span class="theme-switch-icon">🌙</span>
-    </button>
-    <div class="card">
-        <h1>Hi, I'm Swapnil Sharma!</h1>
+    <div class="container">
+        <div class="avatar-wrapper">
+            <img src="avatar.jpg" alt="Swapnil Sharma" class="avatar">
+        </div>
+        <h1>You've come too far, my friend!</h1>
+        <p class="tagline">Hey! I'm Swapnil Sharma. Check out the links below to find out what I'm all about.</p>
+        
         <div class="links">
-            <a href="https://www.instagram.com/swapsha96" target="_blank">Instagram</a>
-            <a href="https://www.youtube.com/@swapsha96" target="_blank">YouTube</a>
-            <a href="https://www.linkedin.com/in/swapsha96" target="_blank">LinkedIn</a>
-            <a href="mailto:swap.sha96@gmail.com">Email Me</a>
+            <!-- Links rendered by JavaScript -->
         </div>
     </div>
-
-    <script>
-        const themeSwitchIcon = document.querySelector('.theme-switch-icon');
-
-        function toggleTheme() {
-            document.body.classList.toggle('light');
-            themeSwitchIcon.textContent = document.body.classList.contains('light') ? '☀️' : '🌙';
-        }
-    </script>
+    
+    <script src="js/icons.js"></script>
 </body>
 </html>
