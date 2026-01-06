@@ -3,25 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hi, there! 👋</title>
+    <title>Swapnil Sharma</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <button class="theme-toggle" aria-label="Toggle theme">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
     <div class="container">
-        <div class="avatar-wrapper">
-            <img src="avatar.jpg" alt="Swapnil Sharma" class="avatar">
-        </div>
-        <h1>You've come too far, my friend!</h1>
-        <p class="tagline">Hey, I'm Swapnil Sharma! Check out the links below to find out what I'm all about.</p>
+        <header class="profile">
+            <div class="avatar-wrapper">
+                <img src="avatar.jpg" alt="Swapnil Sharma" class="avatar">
+            </div>
+            <div class="intro">
+                <h1>Swapnil Sharma</h1>
+                <p class="tagline">Building things on the internet ✨</p>
+            </div>
+        </header>
         
-        <div class="links">
+        <nav class="links">
             <!-- Links rendered by JavaScript -->
-        </div>
+        </nav>
+        
+        <footer class="footer">
+            <p>© 2026 · Made with ♥</p>
+        </footer>
     </div>
     
     <script src="js/icons.js"></script>
+    <script>
+        const toggle = document.querySelector('.theme-toggle');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        }
+        
+        // Default to dark, check localStorage for user preference
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+        
+        toggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        });
+    </script>
 </body>
 </html>
