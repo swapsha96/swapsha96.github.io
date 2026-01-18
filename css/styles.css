@@ -1,28 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Space+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Condensed:wght@400;700&display=swap');
 
 :root,
 [data-theme="dark"] {
-    --bg: #0a0a12;
-    --paper: #12121c;
-    --paper-texture: #161622;
-    --ink: #e0e0e8;
-    --ink-secondary: #7a7a8c;
-    --accent: #6c5ce7;
-    --accent-glow: rgba(108, 92, 231, 0.3);
-    --line: rgba(108, 92, 231, 0.15);
-    --line-accent: rgba(108, 92, 231, 0.4);
+    --bg: #0d0d0d;
+    --paper: #1a1a1a;
+    --paper-texture: #222222;
+    --ink: #f5f5f5;
+    --ink-secondary: #888888;
+    --accent: #fcaf17;
+    --accent-secondary: #ff6b9d;
+    --accent-glow: rgba(252, 175, 23, 0.4);
+    --line: rgba(252, 175, 23, 0.15);
+    --line-accent: rgba(252, 175, 23, 0.5);
 }
 
 [data-theme="light"] {
-    --bg: #eeeef2;
-    --paper: #fafafc;
-    --paper-texture: #f4f4f8;
-    --ink: #1a1a2e;
-    --ink-secondary: #5a5a6e;
-    --accent: #5b4cdb;
-    --accent-glow: rgba(91, 76, 219, 0.2);
-    --line: rgba(91, 76, 219, 0.12);
-    --line-accent: rgba(91, 76, 219, 0.4);
+    --bg: #f0f0f0;
+    --paper: #ffffff;
+    --paper-texture: #fafafa;
+    --ink: #1a1a1a;
+    --ink-secondary: #666666;
+    --accent: #d4940f;
+    --accent-secondary: #e05080;
+    --accent-glow: rgba(212, 148, 15, 0.3);
+    --line: rgba(212, 148, 15, 0.15);
+    --line-accent: rgba(212, 148, 15, 0.5);
 }
 
 * {
@@ -32,7 +34,7 @@
 }
 
 body {
-    font-family: 'Space Grotesk', -apple-system, sans-serif;
+    font-family: 'Roboto Condensed', -apple-system, sans-serif;
     background: var(--bg);
     min-height: 100vh;
     display: flex;
@@ -130,14 +132,14 @@ body {
 
 /* Thin decorative line */
 .profile::after {
-    content: '◆';
+    content: '★';
     position: absolute;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 10px;
-    color: var(--ink-secondary);
-    opacity: 0.5;
+    font-size: 8px;
+    color: var(--accent);
+    opacity: 0.6;
 }
 
 .avatar-wrapper {
@@ -178,11 +180,11 @@ body {
 }
 
 h1 {
-    font-family: 'Space Grotesk', -apple-system, sans-serif;
-    font-size: 1.8em;
-    font-weight: 500;
+    font-family: 'Oswald', Impact, sans-serif;
+    font-size: 2em;
+    font-weight: 600;
     color: var(--ink);
-    letter-spacing: -0.01em;
+    letter-spacing: 0.02em;
     margin-bottom: 12px;
     position: relative;
     display: inline-block;
@@ -202,10 +204,10 @@ h1::after {
 }
 
 .tagline {
-    font-family: 'Space Mono', monospace;
-    color: var(--ink-secondary);
-    font-size: 0.9em;
-    letter-spacing: 0.02em;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: var(--accent);
+    font-size: 0.95em;
+    letter-spacing: 0.08em;
 }
 
 /* Divider */
@@ -218,14 +220,14 @@ h1::after {
 
 /* Small ornament on divider */
 .links::before {
-    content: '▸▸';
+    content: '★';
     position: absolute;
-    top: -10px;
+    top: -12px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--paper);
     padding: 0 15px;
-    font-size: 12px;
+    font-size: 16px;
     color: var(--accent);
     letter-spacing: 2px;
 }
@@ -236,27 +238,30 @@ h1::after {
     justify-content: center;
     gap: 12px;
     padding: 14px 20px;
+    font-family: 'Oswald', Impact, sans-serif;
     font-size: 1em;
+    font-weight: 500;
     text-decoration: none;
+    text-transform: uppercase;
     color: var(--ink);
     position: relative;
     transition: all 0.3s ease;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.1em;
 }
 
 .links a::before,
 .links a::after {
-    content: '▸';
+    content: '—';
     color: var(--line);
     font-weight: 300;
-    font-size: 10px;
+    font-size: 12px;
     transition: all 0.3s ease;
     opacity: 0;
 }
 
 .links a:hover {
     color: var(--accent);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.15em;
 }
 
 .links a:hover::before,
@@ -284,10 +289,10 @@ h1::after {
 }
 
 .footer p {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75em;
+    font-family: 'Oswald', Impact, sans-serif;
+    font-size: 0.8em;
     color: var(--ink-secondary);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
 }
 
