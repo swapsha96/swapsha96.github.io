@@ -16,7 +16,6 @@ const icons = {
 // Social links data
 const socialLinks = [
     { name: 'Instagram', url: 'https://www.instagram.com/swapsha96', icon: 'instagram' },
-    { name: 'Goodreads', url: 'https://www.goodreads.com/user/show/86722040-swapnil-sharma', icon: 'goodreads' },
     { name: 'Twitter', url: 'https://x.com/swapsha96', icon: 'twitter' },
     { name: 'LinkedIn', url: 'https://www.linkedin.com/in/swapsha96', icon: 'linkedin' },
     { name: 'Goodreads', url: 'https://www.goodreads.com/user/show/86722040-swapnil-sharma', icon: 'goodreads' },
