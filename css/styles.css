@@ -42,6 +42,58 @@ body {
     align-items: center;
     padding: 40px 20px;
     transition: background 0.4s ease;
+    overflow: hidden;
+}
+
+/* Falling Leaves Animation */
+.leaves {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.leaves span {
+    position: absolute;
+    top: -20px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 0 50% 50% 50%;
+    transform: rotate(45deg);
+    opacity: 0.6;
+    animation: fall linear infinite;
+}
+
+.leaves span:nth-child(1) { left: 5%; animation-duration: 12s; animation-delay: 0s; width: 6px; height: 6px; opacity: 0.4; }
+.leaves span:nth-child(2) { left: 15%; animation-duration: 15s; animation-delay: 2s; width: 10px; height: 10px; opacity: 0.5; }
+.leaves span:nth-child(3) { left: 25%; animation-duration: 18s; animation-delay: 4s; width: 7px; height: 7px; opacity: 0.6; }
+.leaves span:nth-child(4) { left: 40%; animation-duration: 14s; animation-delay: 1s; width: 9px; height: 9px; opacity: 0.4; }
+.leaves span:nth-child(5) { left: 55%; animation-duration: 16s; animation-delay: 3s; width: 6px; height: 6px; opacity: 0.5; }
+.leaves span:nth-child(6) { left: 65%; animation-duration: 13s; animation-delay: 5s; width: 8px; height: 8px; opacity: 0.6; }
+.leaves span:nth-child(7) { left: 75%; animation-duration: 17s; animation-delay: 0.5s; width: 10px; height: 10px; opacity: 0.4; }
+.leaves span:nth-child(8) { left: 85%; animation-duration: 11s; animation-delay: 2.5s; width: 7px; height: 7px; opacity: 0.5; }
+.leaves span:nth-child(9) { left: 92%; animation-duration: 19s; animation-delay: 4.5s; width: 9px; height: 9px; opacity: 0.6; }
+.leaves span:nth-child(10) { left: 48%; animation-duration: 14s; animation-delay: 6s; width: 6px; height: 6px; opacity: 0.4; }
+
+@keyframes fall {
+    0% {
+        top: -20px;
+        transform: rotate(45deg) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        top: 100vh;
+        transform: rotate(405deg) translateX(100px);
+        opacity: 0;
+    }
 }
 
 .theme-toggle {
