@@ -657,11 +657,13 @@ function initExtras() {
 }
 
 function activateMatrixMode() {
-    alert("KONAMI CODE ACTIVATED!");
-    document.body.style.filter = "invert(1) hue-rotate(180deg)";
-    setTimeout(() => {
-        document.body.style.filter = "";
-    }, 5000);
+    const screen = document.getElementById('main-screen');
+    if (screen) {
+        screen.style.filter = "invert(1) hue-rotate(180deg)";
+        setTimeout(() => {
+            screen.style.filter = "";
+        }, 5000);
+    }
 }
 
 // Initialize when DOM is ready
