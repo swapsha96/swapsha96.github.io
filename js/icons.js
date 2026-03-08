@@ -183,7 +183,7 @@ function switchToTab(index) {
 
 // Typewriter Effect Variables
 let typeWriterInterval;
-const aboutTextVal = "I love playing guitar, lifting weights, long drives, and video games. I like to believe I'm Batman, but I'm just an engineer who loves a good laugh. :-)";
+const aboutTextVal = "Hey, I'm Swapnil! How do you do? :-D\nI love playing guitar, lifting weights, long drives, and video games. I like to believe I'm Batman, but I'm just an engineer who loves a good laugh. :-)";
 let typeWriterIdx = 0;
 let isTyping = false;
 
@@ -208,9 +208,13 @@ function startTypewriter() {
         if (typeWriterIdx < aboutTextVal.length) {
             const char = aboutTextVal.charAt(typeWriterIdx);
             
-            // Insert text before cursor
-            const textNode = document.createTextNode(char);
-            container.insertBefore(textNode, cursor);
+            if (char === '\n') {
+                container.insertBefore(document.createElement('br'), cursor);
+            } else {
+                // Insert text before cursor
+                const textNode = document.createTextNode(char);
+                container.insertBefore(textNode, cursor);
+            }
             
             // Random tiny sound for typing (mechanical keyboard feel)
             if (typeWriterIdx % 3 === 0) SoundEngine.playTone(1200, 'sine', 0.03, 0.02);
@@ -557,12 +561,7 @@ function initExtras() {
              e.stopImmediatePropagation();
              
              dismissed = true;
-             overlay.style.transition = 'opacity 0.5s';
-             overlay.style.opacity = '0';
-             setTimeout(() => {
-                 overlay.style.display = 'none';
-                 // If we had a specific "Start Game" sound, play it here
-             }, 500);
+             overlay.style.display = 'none';
              
              unlockAudio();
              
@@ -634,7 +633,8 @@ function initExtras() {
                 level.style.width = `${battery.level * 100}%`;
                 if (battery.charging) {
                     level.classList.add('charging');
-                    level.style.backgroundColor = '#0affc2'; 
+                    // Use theme variable for color consistency
+                    level.style.backgroundColor = 'var(--screen-text)'; 
                 } else {
                     level.classList.remove('charging');
                     if (battery.level < 0.2) level.style.backgroundColor = '#ff0055'; // Red
