@@ -175,36 +175,26 @@ body {
 ::view-transition-group(console-dpad),
 ::view-transition-group(console-buttons),
 ::view-transition-group(console-meta),
-/* ::view-transition-group(console-pill), */
 ::view-transition-group(btn-select),
 ::view-transition-group(btn-start),
 ::view-transition-group(label-select),
 ::view-transition-group(label-start),
 ::view-transition-group(console-speaker),
 ::view-transition-group(console-power-switch) {
-    animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
-    animation-duration: 0.6s;
+    /* "Nintendo Snappy" - Fast attack, solid impact, no wobble */
+    animation-timing-function: cubic-bezier(0.12, 1, 0.14, 1);
+    animation-duration: 0.5s;
 }
 
-/* Ensure children and SHELL morph smoothly */
-::view-transition-old(console-shell),
-::view-transition-new(console-shell),
-::view-transition-old(console-screen),
-::view-transition-new(console-screen),
-::view-transition-old(console-dpad),
-::view-transition-new(console-dpad),
-::view-transition-old(console-buttons),
-::view-transition-new(console-buttons),
-::view-transition-old(console-meta),
-::view-transition-new(console-meta),
-::view-transition-old(btn-select),
-::view-transition-new(btn-select),
-::view-transition-old(btn-start),
-::view-transition-new(btn-start),
-::view-transition-old(label-select),
-::view-transition-new(label-select),
-::view-transition-old(label-start),
-::view-transition-new(label-start) {
+/* Add GBA Boot Flash to Screen Morph */
+@keyframes gbaFlash {
+    0% { filter: brightness(1); }
+    40% { filter: brightness(1.5) contrast(0.8); background-color: #fff; }
+    100% { filter: brightness(1); background-color: var(--screen-bg); }
+}
+
+::view-transition-new(console-screen) {
+    animation: gbaFlash 0.5s cubic-bezier(0.12, 1, 0.14, 1);
     height: 100%;
     width: 100%;
 }
