@@ -722,13 +722,23 @@ h1 {
 
 /* Responsiveness */
 @media (max-width: 500px) {
+    body {
+        padding: 0;
+        margin: 0;
+        background-color: #000;
+        background-image: none;
+        overflow: hidden;
+    }
+
     .console {
-        width: 100%;
+        width: 100vw;
         border-radius: 0;
-        height: 100vh;
+        height: 100dvh;
+        min-height: 100dvh;
         transform: none;
         box-shadow: none;
         border: none;
+        margin: 0;
     }
 
     .top-hud {
