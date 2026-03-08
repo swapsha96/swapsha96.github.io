@@ -379,6 +379,27 @@ function initNavigation() {
         setTimeout(() => btn.classList.remove('pressed'), duration);
     };
 
+    const toggleTurn = () => {
+        const btnTurn = document.getElementById('btn-turn');
+        const consoleEl = document.querySelector('.console');
+        
+        if (btnTurn) animatePress(btnTurn);
+        SoundEngine.playTone(880, 'sawtooth', 0.1, 0.1);
+
+        const performSwitch = () => {
+            if (consoleEl) consoleEl.classList.toggle('landscape');
+        };
+
+        if (document.startViewTransition) {
+             document.startViewTransition(performSwitch);
+        } else {
+             performSwitch();
+        }
+        
+        // Sound feedback for transform
+        setTimeout(() => SoundEngine.playTone(440, 'triangle', 0.5, 0.1), 100);
+    };
+
     document.addEventListener('keyup', (e) => {
         toggleButtonState(e.key, false);
     });
@@ -456,6 +477,13 @@ function initNavigation() {
                     handleThemeSwitch();
                 }
                 break;
+            case 'o': // Turn button mapped to O
+            case 'O':
+                 if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+                    e.preventDefault();
+                    toggleTurn();
+                }
+                break;
         }
     });
 
@@ -526,19 +554,8 @@ function initNavigation() {
 
     // Turn Button (Custom Feature - Switch Layout)
     const btnTurn = document.getElementById('btn-turn');
-    const consoleEl = document.querySelector('.console');
 
-    if (btnTurn && consoleEl) {
-        const toggleTurn = () => {
-            animatePress(btnTurn);
-            SoundEngine.playTone(880, 'sawtooth', 0.1, 0.1);
-            
-            // Switch Layout
-            consoleEl.classList.toggle('landscape');
-            
-            // Sound feedback for transform
-            setTimeout(() => SoundEngine.playTone(440, 'triangle', 0.3, 0.1), 100);
-        };
+    if (btnTurn) {
         btnTurn.addEventListener('click', toggleTurn);
         btnTurn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleTurn(); });
     }

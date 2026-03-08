@@ -98,14 +98,17 @@ body {
     align-items: center;
     transform-style: preserve-3d;
     border: 2px solid rgba(255,255,255,0.1);
+    /* Whip-in animation removed from transform to avoid conflict with View Transitions */
     animation: whipIn 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     
     /* Default Portrait Dimensions */
     width: 420px;
     height: 720px;
     border-radius: 20px 20px 60px 20px;
     padding: 40px 30px;
+    
+    /* Ensure it is centered in the viewport */
+    margin: 0 auto;
 }
 
 .console.landscape {
@@ -133,11 +136,52 @@ body {
 }
 
 .console.landscape .console-body {
-    display: flex;
+    display: grid;
+    grid-template-columns: 180px 1fr 180px;
+    grid-template-rows: 1fr auto;
+    grid-template-areas: 
+        "left screen right"
+        "meta screen speaker";
     align-items: center;
-    justify-content: space-between;
     gap: 15px;
+    width: 100%; /* Ensure full width usage */
 }
+
+/* View Transition Names */
+.console { view-transition-name: console-shell; }
+.screen-lens { view-transition-name: console-screen; }
+/* Animate the inner components for better rotation/transform interpolation */
+.dpad { view-transition-name: console-dpad; } 
+.action-buttons { view-transition-name: console-buttons; }
+.meta-controls { view-transition-name: console-meta; grid-area: meta; }
+.speaker { view-transition-name: console-speaker; }
+/* Power Switch uses its own transition logic declared below */
+
+
+/* Custom Transition Physics */
+::view-transition-group(root),
+::view-transition-group(console-shell),
+::view-transition-group(console-screen),
+::view-transition-group(console-dpad),
+::view-transition-group(console-buttons),
+::view-transition-group(console-meta),
+::view-transition-group(console-speaker),
+::view-transition-group(console-power-switch) {
+    animation-timing-function: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    animation-duration: 0.6s;
+}
+
+/* Ensure children morph smoothly */
+::view-transition-old(console-screen),
+::view-transition-new(console-screen),
+::view-transition-old(console-dpad),
+::view-transition-new(console-dpad),
+::view-transition-old(console-buttons),
+::view-transition-new(console-buttons) {
+    height: 100%;
+    width: 100%;
+}
+
 
 .left-controls, .right-controls {
     display: flex;
@@ -152,6 +196,23 @@ body {
     justify-content: flex-start;
     padding-top: 20px;
 }
+
+/* Landscape D-Pad Animation: "Lock and Load" Spin/Scale */
+.console.landscape .left-controls {
+    align-items: center;
+    padding-right: 10px;
+    padding-top: 0;
+}
+
+.console.landscape .dpad {
+    transform: scale(1.1) rotate(360deg); /* 10% bigger + Full Spin */
+    box-shadow: 0 0 15px rgba(0,0,0,0.5); /* Deepen shadow */
+    transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+/* Counter-rotate buttons so symbols stay upright if they had any */
+/* (Currently they don't, but shadows do) */
+
 .right-controls {
     grid-area: right;
     justify-content: flex-start;
@@ -186,8 +247,38 @@ body {
     transform-style: preserve-3d;
     cursor: pointer;
     padding: 10px 20px 10px 0;
+    view-transition-name: console-power-switch;
 }
 
+.console.landscape .power-switch-container {
+    left: 178px; /* Move closer to screen (was 170px) */
+    top: 45px;
+    z-index: 5; 
+}
+
+/* Landscape Power Switch Sizing */
+.console.landscape .switch-track {
+    width: 18px; /* Narrower width */
+    height: 40px; /* Slightly shorter */
+}
+.console.landscape .switch-handle {
+    width: 16px;
+    height: 14px; /* Adjust handle size match */
+}
+.console.landscape .switch-track[aria-checked="false"] .switch-handle {
+    top: 24px; /* Adjust travel distance for shorter track */
+}
+
+/* Ensure Power Switch is below Screen Lens during transition */
+::view-transition-group(console-power-switch) {
+    z-index: 5;
+}
+
+::view-transition-group(console-screen) {
+    z-index: 20; 
+}
+
+/* Remove separate timing declaration to avoid duplication since we added it to the main group block */
 .switch-track {
     width: 25px;
     height: 50px;
@@ -341,8 +432,7 @@ body {
     width: 100%;
     height: 230px;
     box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden; /* Only programmatic scroll */
     padding: 15px;
     font-family: 'VT323', monospace;
     font-size: 1.4rem;
@@ -713,6 +803,7 @@ h1 {
     position: relative;
     border-radius: 50%;
     background: rgba(0,0,0,0.1); /* Subtle recess */
+    transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
 .dpad-btn {
@@ -870,7 +961,8 @@ h1 {
     transform: rotate(25deg);
     opacity: 0.6;
     margin-bottom: 20px;
-    margin-left: 50%;
+    justify-self: end; /* Align to right side instead of using margin-left % */
+    padding-right: 40px;
 }
 
 .speaker span {
@@ -982,7 +1074,7 @@ h1 {
     left: 50%;
     transform: translateX(-50%);
     font-size: 8px;
-    color: #666;
+    color: rgba(255,255,255,0.4); /* Match portrait color */
     font-family: sans-serif;
     font-weight: bold;
 }
