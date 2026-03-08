@@ -3,65 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hey! 👋</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+    <title>Hey!</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👋</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Antique&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <button class="theme-toggle" aria-label="Toggle theme">
-        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-        </svg>
-        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
-    </button>
-    <div class="leaves">
-        <span></span><span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span><span></span>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="pixels" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span><span></span>
     </div>
-    <div class="container">
-        <header class="profile">
-            <div class="avatar-wrapper">
-                <img src="avatar.jpg" alt="Swapnil Sharma" class="avatar">
-            </div>
-            <div class="intro">
-                <h1>Hi, I'm Swapnil Sharma!</h1>
-                <p class="tagline">Press START to connect.</p>
-            </div>
-        </header>
-        
-        <nav class="links">
-            <!-- Links rendered by JavaScript -->
-        </nav>
-        
-        <footer class="footer">
-            <p>© 2026 · +1 life remaining</p>
-        </footer>
-    </div>
+
+    <main class="console">
+        <div class="console-body">
+            <section class="screen-lens">
+                <div class="power-indicator">
+                    <span class="led"></span>
+                </div>
+                <!-- Added "clickable" class for scanline effects on click -->
+                <div class="screen-display" id="main-screen">
+                    <header class="profile">
+                        <div class="intro">
+                            <h1>SWAPNIL SHARMA</h1>
+                            <p class="tagline">HEY! HOW DO YOU DO?</p>
+                        </div>
+                    </header>
     
+                    <nav class="links">
+                        <!-- Links rendered by JavaScript -->
+                    </nav>
+    
+                    <footer class="footer">
+                        <p>MADE WITH &lt;3</p>
+                    </footer>
+                </div>
+            </section>
+    
+            <section class="controls">
+                <div class="dpad-area">
+                    <div class="dpad">
+                        <button id="up" class="dpad-btn dpad-up" aria-label="Up"></button>
+                        <button id="right" class="dpad-btn dpad-right" aria-label="Right"></button>
+                        <button id="down" class="dpad-btn dpad-down" aria-label="Down"></button>
+                        <button id="left" class="dpad-btn dpad-left" aria-label="Left"></button>
+                        <div class="dpad-center"></div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <div class="btn-group">
+                        <button type="button" class="btn-a" id="btn-a">A</button>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn-b" id="btn-b">B</button>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="meta-controls">
+                <button class="pill-btn select" id="btn-select"></button>
+                <button class="pill-btn start" id="btn-start"></button>
+            </section>
+
+            <div class="speaker">
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+    </main>
+
     <script src="js/icons.js"></script>
-    <script>
-        const toggle = document.querySelector('.theme-toggle');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-        }
-        
-        // Default to dark, check localStorage for user preference
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(savedTheme);
-        
-        toggle.addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            setTheme(current === 'dark' ? 'light' : 'dark');
-        });
-    </script>
 </body>
 </html>
