@@ -118,16 +118,73 @@ function switchTab(direction) {
 
     // Update Tab Content
     document.querySelectorAll('.tab-content').forEach((content, index) => {
-        if (index === currentTab) content.classList.add('active');
-        else content.classList.remove('active');
+        if (index === currentTab) {
+            content.classList.add('active');
+            if (index === 1) startTypewriter();
+        } else {
+            content.classList.remove('active');
+            if (index === 1) stopTypewriter();
+        }
     });
-    
-    // Play sound if we implement audio later
 
     // If switching back to Links tab, ensure active link is visible
     if (currentTab === 0) {
         // Short delay to allow tab content to become visible
         setTimeout(() => updateActiveLink(currentIndex), 50);
+    }
+}
+
+// Typewriter Effect Variables
+let typeWriterInterval;
+const aboutTextVal = "I love playing guitar, lifting weights, long drives, and video games. I like to believe I'm Batman, but I'm just an engineer who loves a good laugh. :-)";
+let typeWriterIdx = 0;
+let isTyping = false;
+
+function startTypewriter() {
+    const container = document.getElementById('about-text-content');
+    if (!container || container.dataset.typed === 'true') return;
+    
+    // Clear initial content
+    container.innerHTML = '';
+    typeWriterIdx = 0;
+    
+    // Create cursor element
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    cursor.textContent = '|'; // Visually explicit cursor
+    container.appendChild(cursor);
+
+    if (isTyping) clearInterval(typeWriterInterval);
+    isTyping = true;
+
+    typeWriterInterval = setInterval(() => {
+        if (typeWriterIdx < aboutTextVal.length) {
+            const char = aboutTextVal.charAt(typeWriterIdx);
+            
+            // Insert text before cursor
+            const textNode = document.createTextNode(char);
+            container.insertBefore(textNode, cursor);
+            
+            // Random tiny sound for typing (mechanical keyboard feel)
+            if (typeWriterIdx % 3 === 0) SoundEngine.playTone(1200, 'sine', 0.03, 0.02);
+            
+            typeWriterIdx++;
+        } else {
+            clearInterval(typeWriterInterval);
+            isTyping = false;
+            container.dataset.typed = 'true'; // Mark as done so we don't re-type on every tab switch
+            
+            // Keep cursor blinking at end
+        }
+    }, 50); // Speed: 50ms per char
+}
+
+
+
+function stopTypewriter() {
+    if (isTyping) {
+        clearInterval(typeWriterInterval);
+        isTyping = false;
     }
 }
 
@@ -483,28 +540,22 @@ function initExtras() {
         }
     });
 
-    // 3. Battery Indicator
-    // If not supported, we default to 85% in CSS/HTML structure or here
+    // 3. Battery Indicator (Keep this)
     const level = document.getElementById('battery-level');
     if (level && 'getBattery' in navigator) {
         navigator.getBattery().then(function(battery) {
             const updateBattery = () => {
                 level.style.width = `${battery.level * 100}%`;
-                
-                // Charging animation
                 if (battery.charging) {
                     level.classList.add('charging');
-                    // Ensure charging color is distinct or standard
                     level.style.backgroundColor = '#0affc2'; 
                 } else {
                     level.classList.remove('charging');
-                    // Color based on level only when not charging
                     if (battery.level < 0.2) level.style.backgroundColor = '#ff0055'; // Red
                     else if (battery.level < 0.5) level.style.backgroundColor = '#ffff00'; // Yellow
                     else level.style.backgroundColor = 'var(--screen-text)'; // Theme Default
                 }
             };
-            
             updateBattery();
             battery.addEventListener('levelchange', updateBattery);
             battery.addEventListener('chargingchange', updateBattery);
@@ -513,6 +564,7 @@ function initExtras() {
         level.style.width = '85%';
         level.style.backgroundColor = 'var(--screen-text)';
     }
+
 }
 
 function activateMatrixMode() {
