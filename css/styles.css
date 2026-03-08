@@ -510,6 +510,7 @@ h1 {
     /* texture */
     background-image: radial-gradient(circle, #333 1px, transparent 1px);
     background-size: 4px 4px;
+    transition: all 0.1s; 
 }
 
 .dpad-up {
@@ -560,7 +561,23 @@ h1 {
 .dpad-btn:active,
 .dpad-btn.pressed {
     background: #444;
-    transform: scale(0.95);
+}
+
+.dpad-up:active, .dpad-up.pressed {
+    transform: translateY(4px);
+    box-shadow: 0 -1px 0 #000, inset 0 5px 10px rgba(0,0,0,0.5);
+}
+.dpad-down:active, .dpad-down.pressed {
+    transform: translateY(-4px);
+    box-shadow: 0 1px 0 #000, inset 0 -5px 10px rgba(0,0,0,0.5);
+}
+.dpad-left:active, .dpad-left.pressed {
+    transform: translateX(4px);
+    box-shadow: -1px 0 0 #000, inset 5px 0 10px rgba(0,0,0,0.5);
+}
+.dpad-right:active, .dpad-right.pressed {
+    transform: translateX(-4px);
+    box-shadow: 1px 0 0 #000, inset -5px 0 10px rgba(0,0,0,0.5);
 }
 
 /* Functional Buttons A & B */
