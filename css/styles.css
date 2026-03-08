@@ -249,7 +249,7 @@ h1 {
     margin-bottom: 20px;
     border-bottom: 2px solid var(--screen-dim);
     padding-bottom: 5px;
-    margin-top: 62px; /* Replaced profile margin */
+    margin-top: 40px;
 }
 
 .tab-indicator {
