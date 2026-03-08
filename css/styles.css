@@ -80,9 +80,9 @@ body {
 
 /* --- Console Body --- */
 @keyframes whipIn {
-    0% { transform: translateX(100vw) rotate(10deg) scale(0.9); opacity: 0; }
-    60% { transform: translateX(-15px) rotate(-2deg) scale(1.02); opacity: 1; }
-    80% { transform: translateX(5px) rotate(1deg) scale(0.99); }
+    0% { transform: translateX(100vw) rotate(5deg) scale(0.9); opacity: 0; }
+    60% { transform: translateX(-15px) rotate(-1deg) scale(1.02); opacity: 1; }
+    80% { transform: translateX(5px) rotate(0.5deg) scale(0.99); }
     100% { transform: translateX(0) rotate(0deg) scale(1); opacity: 1; }
 }
 
@@ -96,14 +96,15 @@ body {
     background: linear-gradient(135deg, var(--console-body), var(--console-shadow));
     backdrop-filter: blur(10px);
     box-shadow: 
-        inset 2px 2px 5px rgba(255,255,255,0.2),
+        inset 3px 3px 6px rgba(255,255,255,0.3), /* Enhanced top highlight */
         inset -5px -5px 15px rgba(0,0,0,0.5),
-        20px 20px 50px rgba(0,0,0,0.6);
+        0 0 15px rgba(120, 60, 220, 0.3), /* Ambient glow to define edges */
+        25px 25px 60px rgba(0,0,0,0.7); /* Deep shadow for better separation */
     display: flex;
     justify-content: center;
     align-items: center;
     transform-style: preserve-3d;
-    border: 2px solid rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.25); /* Broader, clearer border */
     /* Entrance + Idle Float Animation */
     animation: 
         whipIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards,
@@ -112,7 +113,7 @@ body {
     /* Default Portrait Dimensions */
     width: 420px;
     height: 720px;
-    border-radius: 20px 20px 60px 20px;
+    border-radius: 40px; /* Constant border radius */
     padding: 40px 30px;
     
     /* Ensure it is centered in the viewport */
@@ -122,7 +123,7 @@ body {
 .console.landscape {
     width: 860px; /* Landscape GBA Style */
     height: 400px;
-    border-radius: 40px 40px 60px 60px; /* Softer, wider curves */
+    /* border-radius removed to keep it constant (inherits 40px) */
     padding: 20px;
 }
 
@@ -162,6 +163,7 @@ body {
 .dpad { view-transition-name: console-dpad; } 
 .action-buttons { view-transition-name: console-buttons; }
 .meta-controls { view-transition-name: console-meta; grid-area: meta; }
+/* .pill-btn { view-transition-name: console-pill; } */ /* Removed generic selector */
 .speaker { view-transition-name: console-speaker; }
 /* Power Switch uses its own transition logic declared below */
 
@@ -173,21 +175,46 @@ body {
 ::view-transition-group(console-dpad),
 ::view-transition-group(console-buttons),
 ::view-transition-group(console-meta),
+/* ::view-transition-group(console-pill), */
+::view-transition-group(btn-select),
+::view-transition-group(btn-start),
+::view-transition-group(label-select),
+::view-transition-group(label-start),
 ::view-transition-group(console-speaker),
 ::view-transition-group(console-power-switch) {
-    animation-timing-function: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    animation-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
     animation-duration: 0.6s;
 }
 
-/* Ensure children morph smoothly */
+/* Ensure children and SHELL morph smoothly */
+::view-transition-old(console-shell),
+::view-transition-new(console-shell),
 ::view-transition-old(console-screen),
 ::view-transition-new(console-screen),
 ::view-transition-old(console-dpad),
 ::view-transition-new(console-dpad),
 ::view-transition-old(console-buttons),
-::view-transition-new(console-buttons) {
+::view-transition-new(console-buttons),
+::view-transition-old(console-meta),
+::view-transition-new(console-meta),
+::view-transition-old(btn-select),
+::view-transition-new(btn-select),
+::view-transition-old(btn-start),
+::view-transition-new(btn-start),
+::view-transition-old(label-select),
+::view-transition-new(label-select),
+::view-transition-old(label-start),
+::view-transition-new(label-start) {
     height: 100%;
     width: 100%;
+}
+
+/* Prevent cross-fade ghosting on console body */
+::view-transition-old(console-shell) {
+    display: none;
+}
+::view-transition-new(console-shell) {
+    animation: none;
 }
 
 
@@ -215,7 +242,7 @@ body {
 .console.landscape .dpad {
     transform: scale(1.1) rotate(360deg); /* 10% bigger + Full Spin */
     box-shadow: 0 0 15px rgba(0,0,0,0.5); /* Deepen shadow */
-    transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 /* Counter-rotate buttons so symbols stay upright if they had any */
@@ -811,7 +838,7 @@ h1 {
     position: relative;
     border-radius: 50%;
     background: rgba(0,0,0,0.1); /* Subtle recess */
-    transition: transform 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .dpad-btn {
@@ -1011,6 +1038,27 @@ h1 {
     z-index: 5;
 }
 
+.meta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    gap: 4px;
+}
+
+.pill-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    font-family: sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    /* transition name for labels */
+    view-transition-name: none; 
+}
+.pill-label.label-select { view-transition-name: label-select; }
+.pill-label.label-start { view-transition-name: label-start; }
+
+
 .pill-btn {
     width: 60px;
     height: 14px;
@@ -1020,39 +1068,42 @@ h1 {
     position: relative;
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     cursor: pointer;
+    view-transition-name: none; /* Disable individual transition */
 }
+
+/* Assign unique view transition names to each button so they track individually */
+.pill-btn.select { view-transition-name: btn-select; }
+.pill-btn.start { view-transition-name: btn-start; }
 
 .pill-btn:active, .pill-btn.pressed {
     transform: translateY(2px);
     box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
 }
 
-.pill-btn::after {
-    content: 'SELECT';
-    position: absolute;
-    bottom: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 10px;
-    color: rgba(255,255,255,0.4);
-    font-family: sans-serif;
-    font-weight: bold;
-    letter-spacing: 0.5px;
-}
-.pill-btn.start::after { content: 'START'; }
 
-/* Landscape: Move to Top of Screen Lens (PlayStation Style) */
+/* Landscape: Move to Bottom Center */
 .console.landscape .meta-controls {
     position: absolute;
-    top: 55px; /* Sits on top part of screen lens */
-    left: 40px; /* Align to edges of screen lens */
-    right: 40px; 
-    transform: none;
+    bottom: 20px; /* Position at bottom */
+    left: 50%;
+    transform: translateX(-50%);
     width: auto;
-    justify-content: space-between; /* Spread to edges */
+    justify-content: center;
+    gap: 40px; /* Space between the two groups */
     margin-top: 0;
-    pointer-events: none; /* Let clicks pass through container */
+    pointer-events: none;
     padding: 0;
+    top: auto;
+    right: auto;
+}
+
+.console.landscape .meta-group {
+    flex-direction: column-reverse; /* Put label on top */
+    gap: 2px;
+}
+
+.console.landscape .pill-label {
+    font-size: 8px; /* Slightly smaller text */
 }
 
 .console.landscape .pill-btn {
@@ -1070,23 +1121,6 @@ h1 {
     background: #222;
     box-shadow: 0 0 1px rgba(0,0,0,0.8), inset 0 2px 4px rgba(0,0,0,0.5);
 }
-
-/* Switch labels for landscape */
-.console.landscape .pill-btn::after {
-    display: none; 
-}
-.console.landscape .pill-btn::before {
-    content: 'SELECT';
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 8px;
-    color: rgba(255,255,255,0.4); /* Match portrait color */
-    font-family: sans-serif;
-    font-weight: bold;
-}
-.console.landscape .pill-btn.start::before { content: 'START'; }
 
 /* Responsiveness */
 @media (max-width: 500px) {
