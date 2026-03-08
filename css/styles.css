@@ -135,12 +135,11 @@ body {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto 1fr auto auto;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas: 
         "screen screen"
         "left right"
-        "meta meta"
-        "speaker speaker";
+        "meta speaker";
     gap: 10px;
 }
 
@@ -1062,7 +1061,7 @@ h1 {
     justify-content: flex-start; /* Moved to left */
     padding-left: 20px; /* More to the left */
     gap: 15px;
-    margin-top: 30px; /* Lower down */
+    margin-bottom: 20px; /* Align with speaker */
     transform: rotate(25deg);
     z-index: 5;
 }
