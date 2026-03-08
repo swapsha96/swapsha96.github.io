@@ -30,6 +30,11 @@
                             <p class="blink">PRESS ANY BUTTON</p>
                         </div>
                     </div>
+
+                    <div class="top-hud" id="top-hud" aria-label="Status HUD">
+                        <div class="hud-item" id="hud-time">--:--</div>
+                        <div class="hud-item" id="hud-date">-- ---</div>
+                    </div>
                     
                     <div class="battery" id="battery-indicator">
                         <div class="battery-level" id="battery-level"></div>
@@ -45,6 +50,7 @@
                     <div class="tabs-header">
                         <div class="tab-indicator active" id="tab-ind-0">LINKS</div>
                         <div class="tab-indicator" id="tab-ind-1">ABOUT</div>
+                        <div class="tab-indicator" id="tab-ind-2">HELP</div>
                     </div>
 
                     <div class="tab-container">
@@ -58,6 +64,35 @@
                                 <!-- Text will be typed here by JS -->
                             </div>
 
+                        </div>
+                        <div class="tab-content" id="tab-2">
+                            <section class="help-panel" aria-label="Controls and secrets">
+                                <h3>KEYMAP</h3>
+                                <ul>
+                                    <li><span>ARROWS / WASD</span><span>NAVIGATE</span></li>
+                                    <li><span>A / ENTER / Z</span><span>OPEN LINK</span></li>
+                                    <li><span>B / X</span><span>SWITCH THEME</span></li>
+                                    <li><span>LEFT / RIGHT</span><span>CHANGE TAB</span></li>
+                                    <li><span>M</span><span>MUTE AUDIO</span></li>
+                                    <li><span>H</span><span>TOGGLE HELP</span></li>
+                                </ul>
+                                <p class="secret-hint">SECRET: U U D D L R L R B A</p>
+                            </section>
+                        </div>
+                    </div>
+
+                    <div class="help-overlay" id="help-overlay" aria-hidden="true">
+                        <div class="help-modal" role="dialog" aria-modal="true" aria-label="Help">
+                            <h3>CONSOLE HELP</h3>
+                            <ul>
+                                <li><span>ARROWS / WASD</span><span>NAVIGATE</span></li>
+                                <li><span>A / ENTER / Z</span><span>OPEN LINK</span></li>
+                                <li><span>B / X</span><span>SWITCH THEME</span></li>
+                                <li><span>LEFT / RIGHT</span><span>CHANGE TAB</span></li>
+                                <li><span>M</span><span>MUTE AUDIO</span></li>
+                            </ul>
+                            <p class="secret-hint">SECRET: U U D D L R L R B A</p>
+                            <button type="button" id="help-close" class="help-close">CLOSE</button>
                         </div>
                     </div>
     

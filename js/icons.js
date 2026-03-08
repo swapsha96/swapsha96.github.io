@@ -91,7 +91,47 @@ let currentThemeIndex = Math.floor(Math.random() * themes.length);
 
 let currentIndex = 0;
 let currentTab = 0; // 0 = Links, 1 = About
-const numTabs = 2;
+const numTabs = 3;
+let hudClockInterval;
+
+function isHelpOverlayOpen() {
+    const overlay = document.getElementById('help-overlay');
+    return overlay ? overlay.classList.contains('active') : false;
+}
+
+function setHelpOverlay(open) {
+    const overlay = document.getElementById('help-overlay');
+    if (!overlay) return;
+
+    overlay.classList.toggle('active', open);
+    overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
+}
+
+function initHudClock() {
+    const timeEl = document.getElementById('hud-time');
+    const dateEl = document.getElementById('hud-date');
+    if (!timeEl || !dateEl) return;
+
+    const updateHudClock = () => {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+        const dateStr = now.toLocaleDateString([], {
+            day: '2-digit',
+            month: 'short'
+        }).toUpperCase();
+
+        timeEl.textContent = timeStr;
+        dateEl.textContent = dateStr;
+    };
+
+    updateHudClock();
+    if (hudClockInterval) clearInterval(hudClockInterval);
+    hudClockInterval = setInterval(updateHudClock, 1000);
+}
 
 function switchTab(direction) {
     // Only switch if we have multiple tabs
@@ -132,6 +172,14 @@ function switchTab(direction) {
         // Short delay to allow tab content to become visible
         setTimeout(() => updateActiveLink(currentIndex), 50);
     }
+}
+
+function switchToTab(index) {
+    if (index < 0 || index >= numTabs || index === currentTab) return;
+
+    const delta = index - currentTab;
+    const direction = delta > 0 ? 'right' : 'left';
+    for (let i = 0; i < Math.abs(delta); i++) switchTab(direction);
 }
 
 // Typewriter Effect Variables
@@ -247,8 +295,8 @@ function handleNavigation(direction) {
             updateActiveLink(currentIndex);
         }
     }
-    // Tab 1: About scroll
-    else if (currentTab === 1) {
+    // Tab 1 and 2: About / Help scroll
+    else if (currentTab === 1 || currentTab === 2) {
         const screen = document.getElementById('main-screen');
         const scrollAmount = 50;
         
@@ -325,8 +373,28 @@ function initNavigation() {
         toggleButtonState(e.key, false);
     });
 
+    document.querySelectorAll('.tab-indicator').forEach((tab, index) => {
+        tab.addEventListener('click', () => switchToTab(index));
+    });
+
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isHelpOverlayOpen()) {
+            e.preventDefault();
+            setHelpOverlay(false);
+            return;
+        }
+
+        if (e.key === 'h' || e.key === 'H') {
+            if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+                e.preventDefault();
+                setHelpOverlay(!isHelpOverlayOpen());
+                return;
+            }
+        }
+
+        if (isHelpOverlayOpen()) return;
+
         if (!e.repeat) toggleButtonState(e.key, true);
 
         switch(e.key) {
@@ -380,6 +448,8 @@ function initNavigation() {
     const btnB = document.getElementById('btn-b');
     const btnSelect = document.getElementById('btn-select');
     const btnStart = document.getElementById('btn-start');
+    const helpClose = document.getElementById('help-close');
+    const helpOverlay = document.getElementById('help-overlay');
 
     if (btnUp) {
         btnUp.addEventListener('click', () => handleNavigation('up'));
@@ -427,11 +497,21 @@ function initNavigation() {
             handleThemeSwitch(); 
         });
     }
-    
+
     // Select Button: Switch Color
     if (btnSelect) {
         btnSelect.addEventListener('click', () => handleThemeSwitch());
         btnSelect.addEventListener('touchstart', (e) => { e.preventDefault(); handleThemeSwitch(); });
+    }
+
+    if (helpClose) {
+        helpClose.addEventListener('click', () => setHelpOverlay(false));
+    }
+
+    if (helpOverlay) {
+        helpOverlay.addEventListener('click', (e) => {
+            if (e.target === helpOverlay) setHelpOverlay(false);
+        });
     }
     
     // Allow mouse hover to set active state too
@@ -605,4 +685,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderSocialLinks();
     initNavigation();
+    initHudClock();
 });

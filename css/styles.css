@@ -151,6 +151,29 @@ body {
     background-size: 100% 2px, 3px 100%;
 }
 
+/* --- Top HUD --- */
+.top-hud {
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    right: 60px; /* Leave room for battery on the right */
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 13px;
+    line-height: 1;
+    color: var(--screen-text);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.hud-item {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    text-shadow: 0 0 4px rgba(10, 255, 194, 0.35);
+}
+
 /* --- Branding Text on Lens --- */
 .brand-text {
     text-align: center;
@@ -185,7 +208,7 @@ body {
     margin-bottom: 15px;
     border-bottom: 1px solid rgba(10, 255, 194, 0.3);
     padding-bottom: 10px;
-    margin-top: 50px; /* Push down to avoid overlap */
+    margin-top: 62px; /* Push down to avoid overlap with HUD + battery */
 }
 
 .avatar-wrapper {
@@ -275,6 +298,97 @@ h1 {
     background: rgba(0, 0, 0, 0.2);
     border: 1px dotted var(--screen-dim);
     min-height: 100px;
+}
+
+.help-panel {
+    padding: 10px;
+    border: 1px dotted var(--screen-dim);
+    background: rgba(0, 0, 0, 0.25);
+    font-size: 18px;
+}
+
+.help-panel h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+    color: #ff0055;
+    text-shadow: 0 0 4px rgba(255, 0, 85, 0.5);
+}
+
+.help-panel ul,
+.help-modal ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+}
+
+.help-panel li,
+.help-modal li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px dashed rgba(10, 255, 194, 0.25);
+    padding-bottom: 2px;
+}
+
+.help-panel li span:first-child,
+.help-modal li span:first-child {
+    color: #8eead4;
+}
+
+.secret-hint {
+    margin: 10px 0 0;
+    color: #ffff66;
+    letter-spacing: 1px;
+    opacity: 0.95;
+}
+
+.help-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 90;
+    background: rgba(0, 0, 0, 0.78);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+}
+
+.help-overlay.active {
+    display: flex;
+}
+
+.help-modal {
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid var(--screen-text);
+    background: #101c1a;
+    box-shadow: 0 0 14px rgba(10, 255, 194, 0.35);
+    padding: 12px;
+    font-size: 16px;
+}
+
+.help-modal h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    color: var(--screen-text);
+}
+
+.help-close {
+    margin-top: 10px;
+    width: 100%;
+    border: 1px solid var(--screen-text);
+    background: transparent;
+    color: var(--screen-text);
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.help-close:hover {
+    background: var(--screen-text);
+    color: var(--screen-bg);
 }
 
 /* --- Typewriter Cursor --- */
@@ -551,7 +665,7 @@ h1 {
     display: flex;
     gap: 15px;
     justify-content: center;
-    padding-right: 60px; /* Shift left to avoid speaker overlap */
+    padding-right: 45px; /* Shift left to avoid speaker overlap */
     margin-bottom: 50px; 
     transform: rotate(-15deg); 
 }
@@ -615,6 +729,25 @@ h1 {
         transform: none;
         box-shadow: none;
         border: none;
+    }
+
+    .top-hud {
+        left: 10px;
+        right: 52px;
+        gap: 10px;
+        font-size: 11px;
+    }
+
+    .profile {
+        margin-top: 58px;
+    }
+
+    .help-panel {
+        font-size: 16px;
+    }
+
+    .help-modal {
+        font-size: 15px;
     }
 }
 
