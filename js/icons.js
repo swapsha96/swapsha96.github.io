@@ -24,12 +24,44 @@ const themes = ['theme-atomic', 'theme-berry', 'theme-ice', 'theme-jungle', 'the
 let currentThemeIndex = Math.floor(Math.random() * themes.length);
 
 let currentIndex = 0;
+let currentTab = 0; // 0 = Links, 1 = About
+const numTabs = 2;
+
+function switchTab(direction) {
+    // Only switch if we have multiple tabs
+    if (direction === 'left') {
+        currentTab = (currentTab - 1 + numTabs) % numTabs;
+    } else {
+        currentTab = (currentTab + 1) % numTabs;
+    }
+
+    // Update Tab Indicators
+    document.querySelectorAll('.tab-indicator').forEach((indicator, index) => {
+        if (index === currentTab) indicator.classList.add('active');
+        else indicator.classList.remove('active');
+    });
+
+    // Update Tab Content
+    document.querySelectorAll('.tab-content').forEach((content, index) => {
+        if (index === currentTab) content.classList.add('active');
+        else content.classList.remove('active');
+    });
+    
+    // Play sound if we implement audio later
+
+    // If switching back to Links tab, ensure active link is visible
+    if (currentTab === 0) {
+        // Short delay to allow tab content to become visible
+        setTimeout(() => updateActiveLink(currentIndex), 50);
+    }
+}
 
 // Render social links
 function renderSocialLinks() {
     const linksContainer = document.querySelector('.links');
     if (!linksContainer) return;
     
+    // Ensure we're targeting the correct container inside the tab
     linksContainer.innerHTML = socialLinks.map((link, index) => `
         <a href="${link.url}" 
            target="${link.url.startsWith('mailto') ? '_self' : '_blank'}" 
@@ -49,33 +81,55 @@ function updateActiveLink(index) {
     if (links[index]) {
         links[index].classList.add('active');
         
-        const screen = document.getElementById('main-screen');
-        if (index === 0) {
-            // Scroll to top to show header
-            if (screen) screen.scrollTo({ top: 0, behavior: 'smooth' });
-        } else if (index === links.length - 1) {
-            // Scroll to bottom to show footer ("Made with <3")
-            if (screen) screen.scrollTo({ top: screen.scrollHeight, behavior: 'smooth' });
-        } else {
-            // Normal scroll to item
-            links[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // Ensure element is visible
+        if (currentTab === 0) {
+            const screen = document.getElementById('main-screen');
+            if (index === 0) {
+                // Scroll to top to show header
+                if (screen) screen.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (index === links.length - 1) {
+                // Scroll to bottom to show footer ("Made with <3")
+                if (screen) screen.scrollTo({ top: screen.scrollHeight, behavior: 'smooth' });
+            } else {
+                // Normal scroll into view
+                links[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
+        
         currentIndex = index;
     }
 }
 
 function handleNavigation(direction) {
-    const links = document.querySelectorAll('.social-link');
-    if (direction === 'up' && currentIndex > 0) {
-        currentIndex--;
-        updateActiveLink(currentIndex);
-    } else if (direction === 'down' && currentIndex < links.length - 1) {
-        currentIndex++;
-        updateActiveLink(currentIndex);
+    // Tab 0: Links navigation
+    if (currentTab === 0) {
+        const links = document.querySelectorAll('.social-link');
+        if (direction === 'up' && currentIndex > 0) {
+            currentIndex--;
+            updateActiveLink(currentIndex);
+        } else if (direction === 'down' && currentIndex < links.length - 1) {
+            currentIndex++;
+            updateActiveLink(currentIndex);
+        }
+    }
+    // Tab 1: About scroll
+    else if (currentTab === 1) {
+        const screen = document.getElementById('main-screen');
+        const scrollAmount = 50;
+        
+        if (screen) {
+            if (direction === 'up') {
+                screen.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+            } else if (direction === 'down') {
+                screen.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+            }
+        }
     }
 }
 
 function handleSelection() {
+    if (currentTab !== 0) return; // Only select links on tab 0
+
     const links = document.querySelectorAll('.social-link');
     if (links[currentIndex]) {
         // Trigger click event on the link
@@ -109,6 +163,8 @@ function initNavigation() {
     const keyMap = {
         'ArrowUp': 'up', 'w': 'up', 'W': 'up',
         'ArrowDown': 'down', 's': 'down', 'S': 'down',
+        'ArrowLeft': 'left', 'a': 'left', 'A': 'left',
+        'ArrowRight': 'right', 'd': 'right', 'D': 'right',
         'Enter': 'btn-a', ' ': 'btn-a', 'z': 'btn-a', 'Z': 'btn-a',
         'x': 'btn-b', 'X': 'btn-b'
     };
@@ -145,6 +201,18 @@ function initNavigation() {
                 e.preventDefault();
                 handleNavigation('down');
                 break;
+            case 'ArrowLeft':
+            case 'a':
+            case 'A':
+                e.preventDefault();
+                switchTab('left');
+                break;
+            case 'ArrowRight':
+            case 'd':
+            case 'D':
+                e.preventDefault();
+                switchTab('right');
+                break;
             case 'Enter':
             case ' ': // Space - Select / A
             case 'z': // A button often mapped to Z
@@ -165,6 +233,8 @@ function initNavigation() {
     // Touch/Click navigation via console buttons
     const btnUp = document.getElementById('up');
     const btnDown = document.getElementById('down');
+    const btnLeft = document.getElementById('left');
+    const btnRight = document.getElementById('right');
     const btnA = document.getElementById('btn-a');
     const btnB = document.getElementById('btn-b');
     const btnSelect = document.getElementById('btn-select');
@@ -178,6 +248,16 @@ function initNavigation() {
     if (btnDown) {
         btnDown.addEventListener('click', () => handleNavigation('down'));
         btnDown.addEventListener('touchstart', (e) => { e.preventDefault(); handleNavigation('down'); });
+    }
+
+    if (btnLeft) {
+        btnLeft.addEventListener('click', () => switchTab('left'));
+        btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); switchTab('left'); });
+    }
+
+    if (btnRight) {
+        btnRight.addEventListener('click', () => switchTab('right'));
+        btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); switchTab('right'); });
     }
 
     // A Button: Open Page
@@ -221,15 +301,139 @@ function initNavigation() {
             if (link) {
                 const index = parseInt(link.getAttribute('data-index'));
                 if (!isNaN(index)) {
-                    updateActiveLink(index);
+                    // Only update active link if using mouse on Links tab
+                    if (currentTab === 0) {
+                        updateActiveLink(index);
+                    }
                 }
             }
         });
     }
 }
 
+function initExtras() {
+    // 1. Start Screen Overlay
+    const overlay = document.getElementById('start-overlay');
+    
+    // Helper to request audio context (if added later)
+    const unlockAudio = () => {
+        // const AudioContext = window.AudioContext || window.webkitAudioContext;
+        // const audioCtx = new AudioContext();
+        // audioCtx.resume();
+    };
+
+    if (overlay) {
+        let dismissed = false;
+        const dismissOverlay = (e) => {
+             if (dismissed) return;
+             
+             // Prevent input from triggering game actions just this once
+             e.preventDefault();
+             e.stopImmediatePropagation();
+             
+             dismissed = true;
+             overlay.style.transition = 'opacity 0.5s';
+             overlay.style.opacity = '0';
+             setTimeout(() => {
+                 overlay.style.display = 'none';
+                 // If we had a specific "Start Game" sound, play it here
+             }, 500);
+             
+             unlockAudio();
+             
+             document.removeEventListener('keydown', dismissOverlay);
+             document.removeEventListener('click', dismissOverlay);
+             document.removeEventListener('touchstart', dismissOverlay);
+        };
+        
+        document.addEventListener('keydown', dismissOverlay);
+        document.addEventListener('click', dismissOverlay);
+        document.addEventListener('touchstart', dismissOverlay);
+    }
+
+    // 2. Konami Code (Up, Up, Down, Down, Left, Right, Left, Right, B, A)
+    const konamiCode = [
+        'ArrowUp', 'ArrowUp', 
+        'ArrowDown', 'ArrowDown', 
+        'ArrowLeft', 'ArrowRight', 
+        'ArrowLeft', 'ArrowRight', 
+        'x', 'z' // Assuming B=x and A=z/enter. The button mapping is x->btn-b, z->btn-a.
+    ];
+    let konamiIndex = 0;
+
+    document.addEventListener('keydown', (e) => {
+        // Check key - allow 'b'/'a' explicitly or mapped keys
+        const key = e.key.toLowerCase();
+        const expected = konamiCode[konamiIndex].toLowerCase();
+        
+        let match = false;
+        if (key === expected) match = true;
+        
+        // Handle explicit B/A regardless of mapping
+        if (konamiIndex === 8) { // Expecting B
+             if (key === 'b') match = true;
+        }
+        if (konamiIndex === 9) { // Expecting A
+             if (key === 'a' || key === 'enter') match = true;
+        }
+
+        if (match) {
+            konamiIndex++;
+            if (konamiIndex === konamiCode.length) {
+                // Activate Easter Egg
+                activateMatrixMode();
+                konamiIndex = 0;
+            }
+        } else {
+            konamiIndex = 0; 
+        }
+    });
+
+    // 3. Battery Indicator
+    // If not supported, we default to 85% in CSS/HTML structure or here
+    const level = document.getElementById('battery-level');
+    if (level && 'getBattery' in navigator) {
+        navigator.getBattery().then(function(battery) {
+            const updateBattery = () => {
+                level.style.width = `${battery.level * 100}%`;
+                
+                // Charging animation
+                if (battery.charging) {
+                    level.classList.add('charging');
+                    // Ensure charging color is distinct or standard
+                    level.style.backgroundColor = '#0affc2'; 
+                } else {
+                    level.classList.remove('charging');
+                    // Color based on level only when not charging
+                    if (battery.level < 0.2) level.style.backgroundColor = '#ff0055'; // Red
+                    else if (battery.level < 0.5) level.style.backgroundColor = '#ffff00'; // Yellow
+                    else level.style.backgroundColor = 'var(--screen-text)'; // Theme Default
+                }
+            };
+            
+            updateBattery();
+            battery.addEventListener('levelchange', updateBattery);
+            battery.addEventListener('chargingchange', updateBattery);
+        });
+    } else if (level) {
+        level.style.width = '85%';
+        level.style.backgroundColor = 'var(--screen-text)';
+    }
+}
+
+function activateMatrixMode() {
+    alert("KONAMI CODE ACTIVATED!");
+    document.body.style.filter = "invert(1) hue-rotate(180deg)";
+    setTimeout(() => {
+        document.body.style.filter = "";
+    }, 5000);
+}
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Init Extras (Overlay, Battery, Konami)
+    initExtras();
+
     // Apply initial random theme
     document.body.classList.add(themes[currentThemeIndex]);
     

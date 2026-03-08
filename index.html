@@ -24,6 +24,17 @@
                 </div>
                 <!-- Added "clickable" class for scanline effects on click -->
                 <div class="screen-display" id="main-screen">
+                    <div id="start-overlay">
+                        <div class="start-content">
+                            <h2>SYSTEM BOOT</h2>
+                            <p class="blink">PRESS ANY BUTTON</p>
+                        </div>
+                    </div>
+                    
+                    <div class="battery" id="battery-indicator">
+                        <div class="battery-level" id="battery-level"></div>
+                    </div>
+
                     <header class="profile">
                         <div class="intro">
                             <h1>SWAPNIL SHARMA</h1>
@@ -31,9 +42,23 @@
                         </div>
                     </header>
     
-                    <nav class="links">
-                        <!-- Links rendered by JavaScript -->
-                    </nav>
+                    <div class="tabs-header">
+                        <div class="tab-indicator active" id="tab-ind-0">LINKS</div>
+                        <div class="tab-indicator" id="tab-ind-1">ABOUT</div>
+                    </div>
+
+                    <div class="tab-container">
+                        <div class="tab-content active" id="tab-0">
+                            <nav class="links">
+                                <!-- Links rendered by JavaScript -->
+                            </nav>
+                        </div>
+                        <div class="tab-content" id="tab-1">
+                            <div class="about-text">
+                                <p>I love playing guitar, lifting weights, long drives, and video games. I like to believe I'm Batman, but I'm just an engineer who loves a good laugh.😌</p>
+                            </div>
+                        </div>
+                    </div>
     
                     <footer class="footer">
                         <p>MADE WITH &lt;3</p>

@@ -219,6 +219,144 @@ h1 {
     color: #ff0055;
 }
 
+/* --- Tabs --- */
+.tabs-header {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--screen-dim);
+    padding-bottom: 5px;
+}
+
+.tab-indicator {
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s, text-shadow 0.2s;
+    color: var(--screen-text);
+    text-transform: uppercase;
+}
+
+.tab-indicator:hover {
+    opacity: 0.8;
+}
+
+.tab-indicator.active {
+    opacity: 1;
+    font-weight: bold;
+    text-shadow: 0 0 5px var(--screen-text);
+    border-bottom: 2px solid var(--screen-text);
+    margin-bottom: -7px; /* Align with border-bottom */
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.about-text {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    line-height: 1.4;
+    color: var(--screen-text);
+    text-shadow: 0 0 2px var(--screen-text);
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px dotted var(--screen-dim);
+}
+
+/* --- Battery Indicator --- */
+.battery {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    width: 30px;
+    height: 14px;
+    border: 2px solid var(--screen-dim);
+    border-radius: 2px;
+    padding: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.battery::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 3px;
+    width: 2px;
+    height: 4px;
+    background: var(--screen-dim);
+}
+
+.battery-level {
+    height: 100%;
+    width: 0%; /* JS will update */
+    background: var(--screen-dim);
+    transition: width 0.5s, background-color 0.5s;
+}
+
+.battery-level.charging {
+    animation: charge 2s infinite;
+}
+
+@keyframes charge {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+/* --- Start Screen Overlay --- */
+#start-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: var(--screen-text);
+    font-size: 20px;
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* --- CRT Turn On Effect --- */
+@keyframes turnOn {
+    0% { transform: scale(1, 0.002); opacity: 0; filter: brightness(30); }
+    30% { transform: scale(1, 0.002); opacity: 1; }
+    50% { transform: scale(1, 0.002); opacity: 1; }
+    70% { transform: scale(1, 1); opacity: 1; }
+    100% { transform: scale(1, 1); opacity: 1; filter: brightness(1); }
+}
+
+.screen-display {
+    animation: turnOn 0.3s ease-out;
+    /* Maintain other styles */
+    overflow-y: auto;
+    /* ... */
+}
+
 /* --- Links Inside Screen --- */
 .links {
     display: flex;
