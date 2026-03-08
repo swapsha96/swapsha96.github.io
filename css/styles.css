@@ -161,10 +161,12 @@ body {
 .screen-lens { view-transition-name: console-screen; }
 /* Animate the inner components for better rotation/transform interpolation */
 .dpad { view-transition-name: console-dpad; } 
-.action-buttons { view-transition-name: console-buttons; }
-.meta-controls { view-transition-name: console-meta; grid-area: meta; }
+.action-buttons { view-transition-name: none; } /* Disable container transition to let children fly */
+.group-a { view-transition-name: btn-group-a; }
+.group-b { view-transition-name: btn-group-b; }
+.meta-controls { view-transition-name: none; grid-area: meta; }
 /* .pill-btn { view-transition-name: console-pill; } */ /* Removed generic selector */
-.speaker { view-transition-name: console-speaker; }
+.speaker { view-transition-name: none; } /* Disabled container morph */
 /* Power Switch uses its own transition logic declared below */
 
 
@@ -173,18 +175,21 @@ body {
 ::view-transition-group(console-shell),
 ::view-transition-group(console-screen),
 ::view-transition-group(console-dpad),
-::view-transition-group(console-buttons),
-::view-transition-group(console-meta),
+/* ::view-transition-group(console-buttons), */
+::view-transition-group(btn-group-a),
+::view-transition-group(btn-group-b),
 /* ::view-transition-group(console-pill), */
 ::view-transition-group(btn-select),
 ::view-transition-group(btn-start),
 ::view-transition-group(label-select),
 ::view-transition-group(label-start),
-::view-transition-group(console-speaker),
+/* ::view-transition-group(console-speaker), */
+::view-transition-group(s1), ::view-transition-group(s2), ::view-transition-group(s3), 
+::view-transition-group(s4), ::view-transition-group(s5), ::view-transition-group(s6), 
 ::view-transition-group(console-power-switch) {
     /* "Nintendo Snappy" - Fast attack, solid impact, no wobble */
     animation-timing-function: cubic-bezier(0.12, 1, 0.14, 1);
-    animation-duration: 1.5s;
+    animation-duration: 0.5s;
 }
 
 /* Add GBA Boot Flash to Screen Morph */
@@ -195,7 +200,7 @@ body {
 }
 
 ::view-transition-new(console-screen) {
-    animation: gbaFlash 1.5s cubic-bezier(0.12, 1, 0.14, 1);
+    animation: gbaFlash 0.5s cubic-bezier(0.12, 1, 0.14, 1);
     height: 100%;
     width: 100%;
 }
@@ -207,18 +212,28 @@ body {
 ::view-transition-new(console-screen),
 ::view-transition-old(console-dpad),
 ::view-transition-new(console-dpad),
-::view-transition-old(console-buttons),
-::view-transition-new(console-buttons),
-::view-transition-old(console-meta),
-::view-transition-new(console-meta),
+/* ::view-transition-old(console-buttons),
+::view-transition-new(console-buttons), */
+::view-transition-old(btn-group-a),
+::view-transition-new(btn-group-a),
+::view-transition-old(btn-group-b),
+::view-transition-new(btn-group-b),
 ::view-transition-old(btn-select),
 ::view-transition-new(btn-select),
+::view-transition-old(console-power-switch),
+::view-transition-new(console-power-switch),
 ::view-transition-old(btn-start),
 ::view-transition-new(btn-start),
 ::view-transition-old(label-select),
 ::view-transition-new(label-select),
 ::view-transition-old(label-start),
-::view-transition-new(label-start) {
+::view-transition-new(label-start),
+::view-transition-old(s1), ::view-transition-new(s1),
+::view-transition-old(s2), ::view-transition-new(s2),
+::view-transition-old(s3), ::view-transition-new(s3),
+::view-transition-old(s4), ::view-transition-new(s4),
+::view-transition-old(s5), ::view-transition-new(s5),
+::view-transition-old(s6), ::view-transition-new(s6) {
     height: 100%;
     width: 100%;
 }
