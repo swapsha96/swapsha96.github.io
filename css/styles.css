@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
-
 :root {
     /* Vibrant Retro-Modern Palette (Atomic Purple / Vaporwave) */
     --console-body: rgba(108, 38, 194, 0.85); /* Atomic Purple Translucent */
@@ -254,12 +252,16 @@ h1 {
 }
 
 .tab-indicator {
+    appearance: none;
+    border: 0;
+    background: transparent;
     font-size: 16px;
     cursor: pointer;
     opacity: 0.5;
     transition: opacity 0.2s, text-shadow 0.2s;
     color: var(--screen-text);
     text-transform: uppercase;
+    font-family: 'VT323', monospace;
 }
 
 .tab-indicator:hover {
@@ -456,6 +458,15 @@ h1 {
     color: var(--screen-bg);
     box-shadow: 0 0 10px var(--screen-text);
     font-weight: bold;
+}
+
+.tab-indicator:focus-visible,
+.links a:focus-visible,
+.dpad-btn:focus-visible,
+.action-buttons button:focus-visible,
+.pill-btn:focus-visible {
+    outline: 2px solid var(--screen-text);
+    outline-offset: 2px;
 }
 
 .links a svg {
@@ -706,6 +717,16 @@ h1 {
         font-size: 16px;
     }
 
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
 }
 
 /* --- Color Themes --- */

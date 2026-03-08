@@ -1,3 +1,5 @@
+'use strict';
+
 // --- Audio Engine ---
 const SoundEngine = {
     ctx: null, // For SFX
@@ -93,6 +95,31 @@ let currentIndex = 0;
 let currentTab = 0; // 0 = Links, 1 = About
 const numTabs = 3;
 let hudClockInterval;
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+function getScrollBehavior() {
+    return prefersReducedMotion.matches ? 'auto' : 'smooth';
+}
+
+function updateTabUI() {
+    document.querySelectorAll('.tab-indicator').forEach((indicator, index) => {
+        const isActive = index === currentTab;
+        indicator.classList.toggle('active', isActive);
+        indicator.setAttribute('aria-selected', String(isActive));
+        indicator.tabIndex = isActive ? 0 : -1;
+    });
+
+    document.querySelectorAll('.tab-content').forEach((content, index) => {
+        const isActive = index === currentTab;
+        content.classList.toggle('active', isActive);
+        content.hidden = !isActive;
+
+        if (index === 1) {
+            if (isActive) startTypewriter();
+            else stopTypewriter();
+        }
+    });
+}
 
 function initHudClock() {
     const timeEl = document.getElementById('hud-time');
@@ -134,25 +161,10 @@ function switchTab(direction) {
     // Reset scroll position of the main screen
     const screen = document.getElementById('main-screen');
     if (screen) {
-        screen.scrollTo({ top: 0, behavior: 'instant' });
+        screen.scrollTo({ top: 0, behavior: 'auto' });
     }
 
-    // Update Tab Indicators
-    document.querySelectorAll('.tab-indicator').forEach((indicator, index) => {
-        if (index === currentTab) indicator.classList.add('active');
-        else indicator.classList.remove('active');
-    });
-
-    // Update Tab Content
-    document.querySelectorAll('.tab-content').forEach((content, index) => {
-        if (index === currentTab) {
-            content.classList.add('active');
-            if (index === 1) startTypewriter();
-        } else {
-            content.classList.remove('active');
-            if (index === 1) stopTypewriter();
-        }
-    });
+    updateTabUI();
 
     // If switching back to Links tab, ensure active link is visible
     if (currentTab === 0) {
@@ -164,9 +176,9 @@ function switchTab(direction) {
 function switchToTab(index) {
     if (index < 0 || index >= numTabs || index === currentTab) return;
 
-    const delta = index - currentTab;
-    const direction = delta > 0 ? 'right' : 'left';
-    for (let i = 0; i < Math.abs(delta); i++) switchTab(direction);
+    currentTab = index;
+    SoundEngine.switch();
+    updateTabUI();
 }
 
 // Typewriter Effect Variables
@@ -232,7 +244,7 @@ function renderSocialLinks() {
     linksContainer.innerHTML = socialLinks.map((link, index) => `
         <a href="${link.url}" 
            target="${link.url.startsWith('mailto') ? '_self' : '_blank'}" 
-           rel="noopener noreferrer" 
+           ${link.url.startsWith('mailto') ? '' : 'rel="noopener noreferrer"'}
            class="social-link ${link.icon} ${index === 0 ? 'active' : ''}"
            data-index="${index}">
             ${icons[link.icon]}
@@ -256,13 +268,13 @@ function updateActiveLink(index) {
             const screen = document.getElementById('main-screen');
             if (index === 0) {
                 // Scroll to top to show header
-                if (screen) screen.scrollTo({ top: 0, behavior: 'smooth' });
+                if (screen) screen.scrollTo({ top: 0, behavior: getScrollBehavior() });
             } else if (index === links.length - 1) {
                 // Scroll to bottom to show footer ("Made with <3")
-                if (screen) screen.scrollTo({ top: screen.scrollHeight, behavior: 'smooth' });
+                if (screen) screen.scrollTo({ top: screen.scrollHeight, behavior: getScrollBehavior() });
             } else {
                 // Normal scroll into view
-                links[index].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                links[index].scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest' });
             }
         }
         
@@ -289,9 +301,9 @@ function handleNavigation(direction) {
         
         if (screen) {
             if (direction === 'up') {
-                screen.scrollBy({ top: -scrollAmount, behavior: 'smooth' });
+                screen.scrollBy({ top: -scrollAmount, behavior: getScrollBehavior() });
             } else if (direction === 'down') {
-                screen.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+                screen.scrollBy({ top: scrollAmount, behavior: getScrollBehavior() });
             }
         }
     }
@@ -373,6 +385,17 @@ function initNavigation() {
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
+        const target = e.target;
+        const isTypingTarget = target && (
+            target.tagName === 'INPUT' ||
+            target.tagName === 'TEXTAREA' ||
+            target.isContentEditable
+        );
+
+        if (isTypingTarget || e.isComposing || e.metaKey) {
+            return;
+        }
+
         if (e.key === 'h' || e.key === 'H') {
             if (!e.ctrlKey && !e.altKey && !e.metaKey) {
                 e.preventDefault();
@@ -622,6 +645,9 @@ function initExtras() {
             updateBattery();
             battery.addEventListener('levelchange', updateBattery);
             battery.addEventListener('chargingchange', updateBattery);
+        }).catch(() => {
+            level.style.width = '85%';
+            level.style.backgroundColor = 'var(--screen-text)';
         });
     } else if (level) {
         level.style.width = '85%';
@@ -668,5 +694,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderSocialLinks();
     initNavigation();
+    updateTabUI();
     initHudClock();
 });
