@@ -355,7 +355,8 @@ function initNavigation() {
         'ArrowLeft': 'left', 'a': 'left', 'A': 'left',
         'ArrowRight': 'right', 'd': 'right', 'D': 'right',
         'Enter': 'btn-a', ' ': 'btn-a', 'z': 'btn-a', 'Z': 'btn-a',
-        'x': 'btn-b', 'X': 'btn-b'
+        'x': 'btn-b', 'X': 'btn-b',
+        'q': 'btn-select', 'Q': 'btn-select'
     };
 
     const toggleButtonState = (key, isPressed) => {
@@ -388,7 +389,8 @@ function initNavigation() {
         if (e.key === 'h' || e.key === 'H') {
             if (!e.ctrlKey && !e.altKey && !e.metaKey) {
                 e.preventDefault();
-                setHelpOverlay(!isHelpOverlayOpen());
+                if (isHelpOverlayOpen()) setHelpOverlay(false);
+                switchToTab(2);
                 return;
             }
         }
@@ -436,6 +438,13 @@ function initNavigation() {
                     handleThemeSwitch();
                 }
                 break;
+            case 'q': // Select button mapped to Q
+            case 'Q':
+                if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+                    e.preventDefault();
+                    handleThemeSwitch();
+                }
+                break;
         }
     });
 
@@ -477,10 +486,13 @@ function initNavigation() {
         btnA.addEventListener('touchstart', (e) => { e.preventDefault(); handleSelection(); });
     }
     
-    // Start Button: Also Open Page
+    // Start Button: Open/Close Help Menu
     if (btnStart) {
-        btnStart.addEventListener('click', () => handleSelection());
-        btnStart.addEventListener('touchstart', (e) => { e.preventDefault(); handleSelection(); });
+        btnStart.addEventListener('click', () => setHelpOverlay(!isHelpOverlayOpen()));
+        btnStart.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            setHelpOverlay(!isHelpOverlayOpen());
+        });
     }
 
     // B Button: Switch Color
