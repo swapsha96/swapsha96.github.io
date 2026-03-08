@@ -524,6 +524,25 @@ function initNavigation() {
         btnSelect.addEventListener('touchstart', (e) => { e.preventDefault(); animatePress(btnSelect); handleThemeSwitch(); });
     }
 
+    // Turn Button (Custom Feature - Switch Layout)
+    const btnTurn = document.getElementById('btn-turn');
+    const consoleEl = document.querySelector('.console');
+
+    if (btnTurn && consoleEl) {
+        const toggleTurn = () => {
+            animatePress(btnTurn);
+            SoundEngine.playTone(880, 'sawtooth', 0.1, 0.1);
+            
+            // Switch Layout
+            consoleEl.classList.toggle('landscape');
+            
+            // Sound feedback for transform
+            setTimeout(() => SoundEngine.playTone(440, 'triangle', 0.3, 0.1), 100);
+        };
+        btnTurn.addEventListener('click', toggleTurn);
+        btnTurn.addEventListener('touchstart', (e) => { e.preventDefault(); toggleTurn(); });
+    }
+
     // Allow mouse hover to set active state too
     const linksContainer = document.querySelector('.links');
     if (linksContainer) {
@@ -750,3 +769,4 @@ document.addEventListener('DOMContentLoaded', () => {
     updateTabUI();
     initHudClock();
 });
+
