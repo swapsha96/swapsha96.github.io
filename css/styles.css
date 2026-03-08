@@ -1081,20 +1081,22 @@ h1 {
 }
 
 
-/* Landscape: Move to Bottom Center */
+/* Landscape: Top corners of console face */
 .console.landscape .meta-controls {
     position: absolute;
-    bottom: 20px; /* Position at bottom */
-    left: 50%;
-    transform: translateX(-50%);
+    top: 20px;
+    bottom: auto; /* Ensure bottom is cleared */
+    left: 40px;
+    right: 40px;
     width: auto;
-    justify-content: center;
-    gap: 40px; /* Space between the two groups */
-    margin-top: 0;
+    height: auto;
+    transform: none;
+    justify-content: space-between;
+    gap: 0;
     pointer-events: none;
     padding: 0;
-    top: auto;
-    right: auto;
+    margin: 0;
+    z-index: 20;
 }
 
 .console.landscape .meta-group {
