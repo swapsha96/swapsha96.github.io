@@ -94,19 +94,6 @@ let currentTab = 0; // 0 = Links, 1 = About
 const numTabs = 3;
 let hudClockInterval;
 
-function isHelpOverlayOpen() {
-    const overlay = document.getElementById('help-overlay');
-    return overlay ? overlay.classList.contains('active') : false;
-}
-
-function setHelpOverlay(open) {
-    const overlay = document.getElementById('help-overlay');
-    if (!overlay) return;
-
-    overlay.classList.toggle('active', open);
-    overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
-}
-
 function initHudClock() {
     const timeEl = document.getElementById('hud-time');
     const dateEl = document.getElementById('hud-date');
@@ -370,6 +357,12 @@ function initNavigation() {
         }
     };
 
+    const animatePress = (btn, duration = 120) => {
+        if (!btn) return;
+        btn.classList.add('pressed');
+        setTimeout(() => btn.classList.remove('pressed'), duration);
+    };
+
     document.addEventListener('keyup', (e) => {
         toggleButtonState(e.key, false);
     });
@@ -380,22 +373,13 @@ function initNavigation() {
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isHelpOverlayOpen()) {
-            e.preventDefault();
-            setHelpOverlay(false);
-            return;
-        }
-
         if (e.key === 'h' || e.key === 'H') {
             if (!e.ctrlKey && !e.altKey && !e.metaKey) {
                 e.preventDefault();
-                if (isHelpOverlayOpen()) setHelpOverlay(false);
                 switchToTab(2);
                 return;
             }
         }
-
-        if (isHelpOverlayOpen()) return;
 
         if (!e.repeat) toggleButtonState(e.key, true);
 
@@ -457,75 +441,62 @@ function initNavigation() {
     const btnB = document.getElementById('btn-b');
     const btnSelect = document.getElementById('btn-select');
     const btnStart = document.getElementById('btn-start');
-    const helpClose = document.getElementById('help-close');
-    const helpOverlay = document.getElementById('help-overlay');
 
     if (btnUp) {
-        btnUp.addEventListener('click', () => handleNavigation('up'));
-        btnUp.addEventListener('touchstart', (e) => { e.preventDefault(); handleNavigation('up'); });
+        btnUp.addEventListener('click', () => { animatePress(btnUp); handleNavigation('up'); });
+        btnUp.addEventListener('touchstart', (e) => { e.preventDefault(); animatePress(btnUp); handleNavigation('up'); });
     }
     
     if (btnDown) {
-        btnDown.addEventListener('click', () => handleNavigation('down'));
-        btnDown.addEventListener('touchstart', (e) => { e.preventDefault(); handleNavigation('down'); });
+        btnDown.addEventListener('click', () => { animatePress(btnDown); handleNavigation('down'); });
+        btnDown.addEventListener('touchstart', (e) => { e.preventDefault(); animatePress(btnDown); handleNavigation('down'); });
     }
 
     if (btnLeft) {
-        btnLeft.addEventListener('click', () => switchTab('left'));
-        btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); switchTab('left'); });
+        btnLeft.addEventListener('click', () => { animatePress(btnLeft); switchTab('left'); });
+        btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); animatePress(btnLeft); switchTab('left'); });
     }
 
     if (btnRight) {
-        btnRight.addEventListener('click', () => switchTab('right'));
-        btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); switchTab('right'); });
+        btnRight.addEventListener('click', () => { animatePress(btnRight); switchTab('right'); });
+        btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); animatePress(btnRight); switchTab('right'); });
     }
 
     // A Button: Open Page
     if (btnA) {
-        btnA.addEventListener('click', () => handleSelection());
-        btnA.addEventListener('touchstart', (e) => { e.preventDefault(); handleSelection(); });
+        btnA.addEventListener('click', () => { animatePress(btnA); handleSelection(); });
+        btnA.addEventListener('touchstart', (e) => { e.preventDefault(); animatePress(btnA); handleSelection(); });
     }
     
-    // Start Button: Open/Close Help Menu
+    // Start Button: Open Help Tab
     if (btnStart) {
-        btnStart.addEventListener('click', () => setHelpOverlay(!isHelpOverlayOpen()));
+        btnStart.addEventListener('click', () => { animatePress(btnStart); switchToTab(2); });
         btnStart.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            setHelpOverlay(!isHelpOverlayOpen());
+            animatePress(btnStart);
+            switchToTab(2);
         });
     }
 
     // B Button: Switch Color
     if (btnB) {
         btnB.addEventListener('click', () => {
-             btnB.classList.add('active');
-             setTimeout(() => btnB.classList.remove('active'), 100);
+             animatePress(btnB);
              handleThemeSwitch();
         });
         btnB.addEventListener('touchstart', (e) => { 
             e.preventDefault(); 
-            btnB.classList.add('active');
-            setTimeout(() => btnB.classList.remove('active'), 100);
+            animatePress(btnB);
             handleThemeSwitch(); 
         });
     }
 
     // Select Button: Switch Color
     if (btnSelect) {
-        btnSelect.addEventListener('click', () => handleThemeSwitch());
-        btnSelect.addEventListener('touchstart', (e) => { e.preventDefault(); handleThemeSwitch(); });
+        btnSelect.addEventListener('click', () => { animatePress(btnSelect); handleThemeSwitch(); });
+        btnSelect.addEventListener('touchstart', (e) => { e.preventDefault(); animatePress(btnSelect); handleThemeSwitch(); });
     }
 
-    if (helpClose) {
-        helpClose.addEventListener('click', () => setHelpOverlay(false));
-    }
-
-    if (helpOverlay) {
-        helpOverlay.addEventListener('click', (e) => {
-            if (e.target === helpOverlay) setHelpOverlay(false);
-        });
-    }
-    
     // Allow mouse hover to set active state too
     const linksContainer = document.querySelector('.links');
     if (linksContainer) {

@@ -314,8 +314,7 @@ h1 {
     text-shadow: 0 0 4px rgba(255, 0, 85, 0.5);
 }
 
-.help-panel ul,
-.help-modal ul {
+.help-panel ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -323,8 +322,7 @@ h1 {
     gap: 6px;
 }
 
-.help-panel li,
-.help-modal li {
+.help-panel li {
     display: flex;
     justify-content: space-between;
     gap: 12px;
@@ -332,8 +330,7 @@ h1 {
     padding-bottom: 2px;
 }
 
-.help-panel li span:first-child,
-.help-modal li span:first-child {
+.help-panel li span:first-child {
     color: #8eead4;
 }
 
@@ -342,53 +339,6 @@ h1 {
     color: #ffff66;
     letter-spacing: 1px;
     opacity: 0.95;
-}
-
-.help-overlay {
-    position: absolute;
-    inset: 0;
-    z-index: 90;
-    background: rgba(0, 0, 0, 0.78);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 12px;
-}
-
-.help-overlay.active {
-    display: flex;
-}
-
-.help-modal {
-    width: 100%;
-    max-width: 300px;
-    border: 1px solid var(--screen-text);
-    background: #101c1a;
-    box-shadow: 0 0 14px rgba(10, 255, 194, 0.35);
-    padding: 12px;
-    font-size: 16px;
-}
-
-.help-modal h3 {
-    margin: 0 0 10px;
-    font-size: 18px;
-    color: var(--screen-text);
-}
-
-.help-close {
-    margin-top: 10px;
-    width: 100%;
-    border: 1px solid var(--screen-text);
-    background: transparent;
-    color: var(--screen-text);
-    font-family: 'VT323', monospace;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.help-close:hover {
-    background: var(--screen-text);
-    color: var(--screen-bg);
 }
 
 /* --- Typewriter Cursor --- */
@@ -756,9 +706,6 @@ h1 {
         font-size: 16px;
     }
 
-    .help-modal {
-        font-size: 15px;
-    }
 }
 
 /* --- Color Themes --- */
