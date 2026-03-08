@@ -666,10 +666,61 @@ function activateMatrixMode() {
     }
 }
 
+function initPowerSwitch() {
+    const switchTrack = document.getElementById('power-switch');
+    const consoleBody = document.querySelector('.console');
+    const screenDisplay = document.querySelector('.screen-display');
+    const powerLed = document.querySelector('.led');
+    
+    let isPoweredOn = true;
+
+    if (!switchTrack || !consoleBody) return;
+
+    const togglePower = () => {
+        isPoweredOn = !isPoweredOn;
+        
+        switchTrack.setAttribute('aria-checked', isPoweredOn);
+        
+        if (isPoweredOn) {
+            // Power ON
+            consoleBody.classList.remove('console-off');
+            SoundEngine.playTone(100, 'sawtooth', 0.1); // Click sound
+            setTimeout(() => SoundEngine.playTone(600, 'sine', 0.4), 100); // Boot chime
+            
+            // Re-trigger screen animation
+            if (screenDisplay) {
+                screenDisplay.style.animation = 'none';
+                screenDisplay.offsetHeight; /* trigger reflow */
+                screenDisplay.style.animation = 'turnOn 0.3s ease-out';
+            }
+            
+            document.title = "Hey!";
+        } else {
+            // Power OFF
+            SoundEngine.playTone(100, 'sawtooth', 0.1); // Click sound
+            SoundEngine.playTone(50, 'square', 0.3, 0.2); // Power down buzz
+            
+            consoleBody.classList.add('console-off');
+            document.title = "OFF";
+        }
+    };
+
+    switchTrack.addEventListener('click', togglePower);
+    
+    // Keyboard accessibility for switch
+    switchTrack.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            togglePower();
+        }
+    });
+}
+
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Init Extras (Overlay, Battery, Konami)
     initExtras();
+    initPowerSwitch();
 
     // Apply initial random theme
     document.body.classList.add(themes[currentThemeIndex]);
