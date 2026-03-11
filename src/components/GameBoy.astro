@@ -8,6 +8,11 @@ const aboutEntry = await getEntry('sections', 'about');
 const aboutText = aboutEntry ? aboutEntry.body.trim() : "";
 
 // Map icons to SVGs (Inline for performance)
+// --- 60Hz Quantization Heartbeat ---
+// Game Boy Original Refresh Rate: ~59.73Hz (~16.74ms)
+// We align all animations to this frame time to prevent jitter.
+const FRAME_DURATION = 16.74; 
+
 const iconSvgs = {
     instagram: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`,
     twitter: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>`,
@@ -157,10 +162,12 @@ const iconSvgs = {
 <script is:inline>
     'use strict';
 
+    const FRAME_DURATION = 16.74;
+
     // --- Audio Engine ---
     const SoundEngine = {
         ctx: null, // For SFX
-        muted: false,
+        muted: localStorage.getItem('gb_muted') === 'true',
         
         init: function() {
             // Init SFX Context
@@ -173,6 +180,7 @@ const iconSvgs = {
         
         toggleMute: function() {
             this.muted = !this.muted;
+            localStorage.setItem('gb_muted', this.muted);
             return this.muted;
         },
 
@@ -201,31 +209,39 @@ const iconSvgs = {
         },
         
         hover: function() {
-            // High-pitched blip
-            this.playTone(440, 'sine', 0.1, 0.05);
+            // High-pitched blip (6 frames)
+            this.playTone(440, 'sine', (FRAME_DURATION * 6) / 1000, 0.05);
         },
         
         select: function() {
             // Chime-like ding (Square wave)
-            this.playTone(660, 'square', 0.1, 0.05);
-            setTimeout(() => this.playTone(880, 'square', 0.2, 0.05), 100);
+            // 6 frames then 12 frames
+            this.playTone(660, 'square', (FRAME_DURATION * 6) / 1000, 0.05);
+            setTimeout(() => this.playTone(880, 'square', (FRAME_DURATION * 12) / 1000, 0.05), FRAME_DURATION * 6);
         },
         
         back: function() {
-            // Low-pitched buzz
-            this.playTone(150, 'sawtooth', 0.15, 0.05);
+            // Low-pitched buzz (9 frames)
+            this.playTone(150, 'sawtooth', (FRAME_DURATION * 9) / 1000, 0.05);
         },
         
         switch: function() {
-            // Tab switch sound
-            this.playTone(300, 'triangle', 0.1, 0.05);
+            // Tab switch sound (6 frames)
+            this.playTone(300, 'triangle', (FRAME_DURATION * 6) / 1000, 0.05);
         }
     };
 
     // Color Themes
     const themes = ['theme-atomic', 'theme-berry', 'theme-ice', 'theme-jungle', 'theme-classic'];
-    // Randomize start index
-    let currentThemeIndex = Math.floor(Math.random() * themes.length);
+    
+    // Randomize start index or load from storage
+    let currentThemeIndex = (() => {
+        try {
+            const saved = localStorage.getItem('gb_theme');
+            if (saved && themes.includes(saved)) return themes.indexOf(saved);
+        } catch(e) {}
+        return Math.floor(Math.random() * themes.length);
+    })();
 
     let currentIndex = 0;
     let currentTab = 0; // 0 = Links, 1 = About
@@ -278,9 +294,10 @@ const iconSvgs = {
             dateEl.textContent = dateStr;
         };
 
+        // Update clock every second (approx 60 frames)
         updateHudClock();
         if (hudClockInterval) clearInterval(hudClockInterval);
-        hudClockInterval = setInterval(updateHudClock, 1000);
+        hudClockInterval = setInterval(updateHudClock, FRAME_DURATION * 60);
     }
 
     function switchTab(direction) {
@@ -305,7 +322,7 @@ const iconSvgs = {
         // If switching back to Links tab, ensure active link is visible
         if (currentTab === 0) {
             // Short delay to allow tab content to become visible
-            setTimeout(() => updateActiveLink(currentIndex), 50);
+            setTimeout(() => updateActiveLink(currentIndex), FRAME_DURATION * 3); // ~50ms
         }
     }
 
@@ -373,7 +390,7 @@ const iconSvgs = {
                 
                 // Keep cursor blinking at end
             }
-        }, 50); // Speed: 50ms per char
+        }, FRAME_DURATION); // Speed: 1 frame (~16.74ms)
     }
 
     function stopTypewriter() {
@@ -450,7 +467,7 @@ const iconSvgs = {
             
             // Add a visual 'pressed' effect
             links[currentIndex].classList.add('pressed');
-            setTimeout(() => links[currentIndex].classList.remove('pressed'), 200);
+            setTimeout(() => links[currentIndex].classList.remove('pressed'), FRAME_DURATION * 8); // ~134ms
 
             // Sound effect
             SoundEngine.select();
@@ -458,11 +475,15 @@ const iconSvgs = {
     }
 
     function handleThemeSwitch() {
-        // Sound effect
-        SoundEngine.playTone(200, 'triangle', 0.2, 0.05);
+        // Sound effect (12 frames)
+        SoundEngine.playTone(200, 'triangle', (FRAME_DURATION * 12) / 1000, 0.05);
 
         // Cycle to next theme
         currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+        
+        try {
+            localStorage.setItem('gb_theme', themes[currentThemeIndex]);
+        } catch(e) {}
         
         // Remove all theme classes
         document.body.classList.remove(...themes);
@@ -474,7 +495,7 @@ const iconSvgs = {
         const screen = document.getElementById('main-screen');
         if (screen) {
             screen.style.opacity = '0.8';
-            setTimeout(() => screen.style.opacity = '1', 100);
+            setTimeout(() => screen.style.opacity = '1', FRAME_DURATION * 6); // ~100ms
         }
     }
 
@@ -500,7 +521,7 @@ const iconSvgs = {
             }
         };
 
-        const animatePress = (btn, duration = 120) => {
+        const animatePress = (btn, duration = FRAME_DURATION * 5) => { // ~84ms
             if (!btn) return;
             btn.classList.add('pressed');
             setTimeout(() => btn.classList.remove('pressed'), duration);
@@ -511,7 +532,7 @@ const iconSvgs = {
             const consoleEl = document.querySelector('.console');
             
             if (btnTurn) animatePress(btnTurn);
-            SoundEngine.playTone(880, 'sawtooth', 0.1, 0.1);
+            SoundEngine.playTone(880, 'sawtooth', (FRAME_DURATION * 6) / 1000, 0.1);
 
             const performSwitch = () => {
                 if (consoleEl) consoleEl.classList.toggle('landscape');
@@ -524,7 +545,8 @@ const iconSvgs = {
             }
             
             // Sound feedback for transform
-            setTimeout(() => SoundEngine.playTone(440, 'triangle', 0.5, 0.1), 100);
+            // 30 frames = 0.5 sec
+            setTimeout(() => SoundEngine.playTone(440, 'triangle', (FRAME_DURATION * 30) / 1000, 0.1), FRAME_DURATION * 6);
         };
 
         document.addEventListener('keyup', (e) => {
@@ -703,6 +725,41 @@ const iconSvgs = {
                 }
             });
         }
+
+        // Mouse Wheel Support (mapped to D-pad / scrolling)
+        let accumulatedDelta = 0;
+        let wheelTimeout;
+        const LINK_SCROLL_THRESHOLD = 30; // Sensitivity for switching links
+
+        document.addEventListener('wheel', (e) => {
+            // Allow zoom
+            if (e.ctrlKey) return; 
+            
+            e.preventDefault(); // Disable default page scroll
+
+            // Detect current context
+            if (currentTab === 1 || currentTab === 2) {
+                // About/Help tabs: smooth scroll content
+                const screen = document.getElementById('main-screen');
+                if (screen) {
+                    screen.scrollBy({ top: e.deltaY, behavior: 'auto' });
+                }
+            } else {
+                // Links tab: debounced navigation
+                accumulatedDelta += e.deltaY;
+                
+                if (Math.abs(accumulatedDelta) > LINK_SCROLL_THRESHOLD) {
+                    if (accumulatedDelta > 0) handleNavigation('down');
+                    else handleNavigation('up');
+                    
+                    accumulatedDelta = 0; // Reset after action
+                }
+                
+                // Reset accumulator if idle
+                clearTimeout(wheelTimeout);
+                wheelTimeout = setTimeout(() => { accumulatedDelta = 0; }, 100);
+            }
+        }, { passive: false });
     }
 
     function initExtras() {
@@ -818,7 +875,7 @@ const iconSvgs = {
             screen.style.filter = "invert(1) hue-rotate(180deg)";
             setTimeout(() => {
                 screen.style.filter = "";
-            }, 5000);
+            }, FRAME_DURATION * 300); // ~5000ms
         }
     }
 
@@ -839,8 +896,8 @@ const iconSvgs = {
             if (isPoweredOn) {
                 // Power ON
                 consoleBody.classList.remove('console-off');
-                SoundEngine.playTone(100, 'sawtooth', 0.1); // Click sound
-                setTimeout(() => SoundEngine.playTone(600, 'sine', 0.4), 100); // Boot chime
+                SoundEngine.playTone(100, 'sawtooth', (FRAME_DURATION * 6) / 1000); // Click sound (6 frames)
+                setTimeout(() => SoundEngine.playTone(600, 'sine', (FRAME_DURATION * 24) / 1000), FRAME_DURATION * 6); // Boot chime (24 frames)
                 
                 // Re-trigger screen animation
                 if (screenDisplay) {
@@ -852,8 +909,8 @@ const iconSvgs = {
                 document.title = "Hey!";
             } else {
                 // Power OFF
-                SoundEngine.playTone(100, 'sawtooth', 0.1); // Click sound
-                SoundEngine.playTone(50, 'square', 0.3, 0.2); // Power down buzz
+                SoundEngine.playTone(100, 'sawtooth', (FRAME_DURATION * 6) / 1000); // Click sound
+                SoundEngine.playTone(50, 'square', (FRAME_DURATION * 18) / 1000, 0.2); // Power down buzz (18 frames)
                 
                 consoleBody.classList.add('console-off');
                 document.title = "OFF";
@@ -865,6 +922,24 @@ const iconSvgs = {
         // Keyboard accessibility for switch
         switchTrack.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                togglePower();
+            }
+        });
+
+        // Global keyboard shortcut (P) for power toggle
+        document.addEventListener('keydown', (e) => {
+            // Avoid triggering when typing in inputs/textareas
+            const target = e.target;
+            const isTypingTarget = target && (
+                target.tagName === 'INPUT' ||
+                target.tagName === 'TEXTAREA' ||
+                target.isContentEditable
+            );
+
+            if (isTypingTarget || e.metaKey || e.ctrlKey || e.altKey) return;
+
+            if (e.key === 'p' || e.key === 'P') {
                 e.preventDefault();
                 togglePower();
             }
@@ -1635,7 +1710,13 @@ h1 {
     animation: turnOn 0.3s ease-out;
     /* Maintain other styles */
     overflow-y: auto;
-    /* ... */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.screen-display::-webkit-scrollbar {
+    display: none;
 }
 
 /* --- Links Inside Screen --- */

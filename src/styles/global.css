@@ -78,3 +78,71 @@ body {
     display: none;
 }
 
+/* --- Theme Classes --- */
+
+/* Atomic Purple (Default) - Explicit class to match JS logic */
+body.theme-atomic {
+    /* Uses :root defaults */
+}
+
+/* Berry (Vibrant Pink/Red) */
+body.theme-berry {
+    --console-body: rgba(215, 45, 109, 0.9);
+    --console-shadow: #5c0b2b;
+    --screen-bg: #2b0f16;
+    --screen-text: #ff7eb6;
+    --screen-dim: #a63e6b;
+    --btn-a: #00f0ff; /* Cyan contrast */
+    --btn-b: #00f0ff;
+    --accent-glow: 0 0 10px rgba(255, 126, 182, 0.6);
+    --bg-color: #1a0509;
+    --bg-gradient: #4d0f22;
+}
+
+/* Ice (Glacier Blue) */
+body.theme-ice {
+    --console-body: rgba(100, 200, 255, 0.85);
+    --console-shadow: #1a4d66;
+    --screen-bg: #0d1b2a;
+    --screen-text: #00e5ff;
+    --screen-dim: #007ea7;
+    --btn-a: #ff0055;
+    --btn-b: #ff0055;
+    --accent-glow: 0 0 10px rgba(0, 229, 255, 0.6);
+    --bg-color: #05101a;
+    --bg-gradient: #153b50;
+}
+
+/* Jungle (Green) */
+body.theme-jungle {
+    --console-body: rgba(50, 205, 50, 0.85);
+    --console-shadow: #0f4d12;
+    --screen-bg: #0a1f0b;
+    --screen-text: #adff2f; /* GreenYellow */
+    --screen-dim: #4caf50;
+    --btn-a: #ffae00; /* Orange */
+    --btn-b: #ffae00;
+    --accent-glow: 0 0 10px rgba(173, 255, 47, 0.5);
+    --bg-color: #051406;
+    --bg-gradient: #143d16;
+}
+
+/* Classic (DMG Grey - Retro) */
+body.theme-classic {
+    --console-body: #c0c0c0; /* Opaque Grey */
+    --console-shadow: #555;
+    --console-highlight: rgba(255,255,255,0.4);
+    
+    --screen-bg: #8bac0f; /* DMG Green */
+    --screen-text: #0f380f; /* Dark Green */
+    --screen-dim: #306230;
+    
+    --btn-dpad: #333;
+    --btn-a: #8b0000; /* Dark Red */
+    --btn-b: #8b0000;
+    
+    --accent-glow: none;
+    --bg-color: #222;
+    --bg-gradient: #444;
+}
+
