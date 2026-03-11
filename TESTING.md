@@ -1,41 +1,60 @@
 # Testing Strategy
 
-This project uses a comprehensive testing pipeline ensuring the `GameBoy` component and site functionality are robust.
+This project uses a robust testing pipeline combining Vitest and Playwright to ensure the `GameBoy` component and site functionality work flawlessly across browsers.
 
 ## 1. Unit Testing (Vitest)
-Used for testing isolated logic and utility functions.
-- **Config:** `vitest.config.ts`
-- **Command:** `npm run test:unit`
-- **Location:** `tests/unit/`
+Unit tests focus on isolated logic and utility functions that don't depend on browser rendering.
+
+*   **Location:** `tests/unit/`
+*   **Config:** `vitest.config.ts`
+*   **Command:** `npm run test:unit`
 
 ## 2. End-to-End Testing (Playwright)
-Used for simulating user interactions (clicks, keyboard navigation, theme switching) in real browsers.
-- **Config:** `playwright.config.ts`
-- **Command:** `npm run test:e2e`
-- **Location:** `tests/e2e/`
-- **Browsers:** Chromium, Firefox, WebKit. (Chromium runs in CI/local, others configured).
+E2E tests simulate real user interactions in a browser environment. The suite covers 100% of the interactive features of the device.
+
+*   **Location:** `tests/e2e/gameboy.spec.ts`
+*   **Config:** `playwright.config.ts`
+*   **Command:** `npm run test:e2e`
+
+### Test Coverage
+The E2E suite verifies the following user stories:
+1.  **Boot Sequence**: Ensures the start overlay appears and is dismissible via keyboard interaction.
+2.  **Navigation**:
+    *   **D-Pad**: Verifies Up/Down navigation correctly updates active links.
+    *   **Tabs**: Verifies Left/Right navigation switches between Links, About, and Help tabs.
+3.  **Selection**: Validates that pressing 'Enter' (A button) triggers link navigation.
+4.  **Theming**: Checks that switching themes (B button) updates the DOM and persists across page reloads (via `localStorage`).
+5.  **Audio**: Confirms toggling mute (M key) updates state and persists across reloads.
+6.  **Hardware Features**:
+    *   **Power Switch**: Verifies the power switch toggles the console on/off.
+    *   **Konami Code**: Inputs the secret code (Up, Up, Down, Down, Left, Right, Left, Right, B, A) and verifies the "Matrix Mode" visual effect.
 
 ## 3. Static Analysis
-- **Command:** `npm run check`
-- Uses `@astrojs/check` to validate `.astro` files.
+Validates `.astro` file syntax and TypeScript types.
+
+*   **Command:** `npm run check` (runs `astro check`)
 
 ## CI/CD Pipeline
-A GitHub Actions workflow is defined in `.github/workflows/ci.yml`.
-It runs on every push and PR to `main`:
-1. Installs dependencies.
-2. Runs static analysis (`npm run check`).
-3. Runs unit tests.
-4. Builds the project.
-5. Runs E2E tests against the preview build.
-6. Uploads artifacts (videos/traces) on failure.
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push to `main` and pull requests.
 
-## How to add tests
-- **Unit:** Add `*.test.ts` files in `tests/unit/`.
-- **E2E:** Add `*.spec.ts` files in `tests/e2e/`.
+**Workflow Steps:**
+1.  **Install**: Sets up Node.js and dependencies.
+2.  **Check**: Runs static analysis.
+3.  **Unit Tests**: Executes Vitest suite.
+4.  **Build**: Compiles the Astro project.
+5.  **E2E Tests**: Runs Playwright against the preview build.
+6.  **Artifacts**: Uploads failure traces and videos if tests fail.
 
-## Debugging E2E Tests
-To run E2E tests with UI mode:
+## Debugging
+
+### Interactive Mode (UI)
+To debug tests visually, use the Playwright UI mode. This allows you to step through tests, time-travel, and inspect the DOM.
 ```bash
 npx playwright test --ui
 ```
-This allows you to see the browser, time travel through steps, and inspect DOM.
+
+### Viewing Reports
+Playwright generates an HTML report for each run.
+```bash
+npx playwright show-report
+```

@@ -1,100 +1,171 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('GameBoy Component', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-    // Dismiss the boot sequence/overlay first thing for all tests
-    // Logic: The overlay is dismissed on ANY key press or click.
-    // It's safer to wait for it to be visible first.
-    const overlay = page.locator('#start-overlay');
-    await expect(overlay).toBeVisible();
-    
-    // Click the overlay directly to dismiss it.
-    // Use force: true to bypass actionability checks (stability) because of the CRT turn-on animation
-    // or the blinking text which might be causing Playwright to think the element is moving.
-    await overlay.click({ force: true });
-    
-    await expect(overlay).toBeHidden();
-  });
+test.describe('GameBoy E2E', () => {
+    test.beforeEach(async ({ page }) => {
+        await page.goto('/');
+        // Wait for the overlay to be visible
+        const overlay = page.locator('#start-overlay');
+        await expect(overlay).toBeVisible();
+        
+        // Dismiss overlay with keyboard interaction to be more robust than click
+        await page.keyboard.press('Space');
+        
+        await expect(overlay).toBeHidden();
+    });
 
-  test('should display initial state correctly', async ({ page }) => {
-    // Check main screen visibility
-    await expect(page.locator('#main-screen')).toBeVisible();
-    
-    // Check D-Pad presence
-    await expect(page.locator('.dpad')).toBeVisible();
-    
-    // Check active tab is Links
-    const linksTab = page.locator('#tab-ind-0');
-    await expect(linksTab).toHaveClass(/active/);
-    await expect(page.locator('#tab-0')).toBeVisible();
-  });
+    test('Boot Sequence: Overlay Dismissal', async ({ page }) => {
+        // Verification is handled in beforeEach, checking main screen availability 
+        await expect(page.locator('.screen-display')).toBeVisible();
+    });
 
-  test('D-Pad navigation should change active link', async ({ page }) => {
-    // Check first link is active by default
-    const firstLink = page.locator('.social-link').nth(0);
-    const secondLink = page.locator('.social-link').nth(1);
+    test('Navigation: Links Tab (D-Pad)', async ({ page }) => {
+        const firstLink = page.locator('.social-link').first();
+        const secondLink = page.locator('.social-link').nth(1);
 
-    await expect(firstLink).toHaveClass(/active/);
-    await expect(secondLink).not.toHaveClass(/active/);
+        // Initial state: first link active
+        await expect(firstLink).toHaveClass(/active/);
+        await expect(secondLink).not.toHaveClass(/active/);
 
-    // Press Down (navigate to next link)
-    await page.keyboard.press('ArrowDown');
-    
-    // Check second link is active
-    await expect(secondLink).toHaveClass(/active/);
-    await expect(firstLink).not.toHaveClass(/active/);
-    
-    // Press Up (navigate back)
-    await page.keyboard.press('ArrowUp');
-    await expect(firstLink).toHaveClass(/active/);
-  });
+        // Press Down to move selection
+        await page.keyboard.press('ArrowDown');
+        await expect(firstLink).not.toHaveClass(/active/);
+        await expect(secondLink).toHaveClass(/active/);
 
-  test('Tab switching works with Left/Right arrows', async ({ page }) => {
-    const linksTab = page.locator('#tab-0');
-    const aboutTab = page.locator('#tab-1');
-    const helpTab = page.locator('#tab-2');
+        // Press Up to move selection back
+        await page.keyboard.press('ArrowUp');
+        await expect(firstLink).toHaveClass(/active/);
+        await expect(secondLink).not.toHaveClass(/active/);
+    });
 
-    // Initial: Links tab
-    await expect(linksTab).toBeVisible();
-    await expect(aboutTab).toBeHidden();
+    test('Navigation: Tab Switching', async ({ page }) => {
+        const tabLinks = page.locator('#tab-0');
+        const tabAbout = page.locator('#tab-1');
+        const tabHelp = page.locator('#tab-2');
 
-    // Switch Right (Links -> About)
-    await page.keyboard.press('ArrowRight'); 
-    
-    await expect(linksTab).toBeHidden();
-    await expect(aboutTab).toBeVisible();
-    
-    // Switch Right (About -> Help)
-    await page.keyboard.press('ArrowRight');
-    await expect(helpTab).toBeVisible();
-    
-    // Switch Left (Help -> About)
-    await page.keyboard.press('ArrowLeft');
-    await expect(aboutTab).toBeVisible();
-  });
+        const indLinks = page.locator('#tab-ind-0');
+        const indAbout = page.locator('#tab-ind-1');
+        const indHelp = page.locator('#tab-ind-2');
 
-  test('Theme switching persists', async ({ page }) => {
-    const body = page.locator('body');
-    // Get initial class (might be empty or have a default)
-    const initialClass = await body.getAttribute('class') || '';
+        // Initial State: Links Active
+        await expect(tabLinks).toBeVisible();
+        await expect(tabAbout).toBeHidden();
+        
+        // Right -> About
+        await page.keyboard.press('ArrowRight');
+        await expect(tabLinks).toBeHidden();
+        await expect(tabAbout).toBeVisible();
+        await expect(indAbout).toHaveClass(/active/);
+
+        // Right -> Help
+        await page.keyboard.press('ArrowRight');
+        await expect(tabAbout).toBeHidden();
+        await expect(tabHelp).toBeVisible();
+        await expect(indHelp).toHaveClass(/active/);
+
+        // Loop Right -> Back to Links
+        await page.keyboard.press('ArrowRight');
+        await expect(tabHelp).toBeHidden();
+        await expect(tabLinks).toBeVisible();
+        await expect(indLinks).toHaveClass(/active/);
+        
+        // Left -> Help (Loop Backwards)
+        await page.keyboard.press('ArrowLeft');
+        await expect(tabLinks).toBeHidden();
+        await expect(tabHelp).toBeVisible();
+        await expect(indHelp).toHaveClass(/active/);
+    });
+
+    test('Selection: Open Link', async ({ page }) => {
+        // Trigger generic selection
+        // Since links open in new tabs, verify the popup event
+        const [popup] = await Promise.all([
+            page.waitForEvent('popup'),
+            page.keyboard.press('Enter')
+        ]);
+        
+        expect(popup).toBeTruthy();
+        await popup.close();
+    });
+
+    test('Theme Switching & Persistence', async ({ page }) => {
+        const body = page.locator('body');
+        // Get initial class
+        const initialClass = await body.getAttribute('class') || '';
+
+        // Press 'B' (x) to switch
+        await page.keyboard.press('x');
+        
+        // Verify class changed
+        await expect(body).not.toHaveClass(initialClass);
+        const newClass = await body.getAttribute('class');
+
+        // Reload
+        await page.reload();
+        
+        // Handle overlay on reload
+        const overlay = page.locator('#start-overlay');
+        await expect(overlay).toBeVisible();
+        await page.keyboard.press('Space');
+        await expect(overlay).toBeHidden();
+
+        // Verify persistence
+        await expect(body).toHaveClass(newClass!);
+    });
+
+    test('Audio Mute Toggle & Persistence', async ({ page }) => {
+        // 1. Toggle Mute with 'm'
+        await page.keyboard.press('m');
+        
+        // 2. Interact with localStorage
+        const isMuted = await page.evaluate(() => localStorage.getItem('gb_muted'));
+        expect(isMuted).toBe('true');
+
+        // 3. Reload
+        await page.reload();
+        
+        // Handle overlay on reload
+        const overlay = page.locator('#start-overlay');
+        await expect(overlay).toBeVisible();
+        await page.keyboard.press('Space');
+        await expect(overlay).toBeHidden();
+
+        // 4. Verify persistence
+        const persistedState = await page.evaluate(() => localStorage.getItem('gb_muted'));
+        expect(persistedState).toBe('true');
+    });
+
+    test('Power Switch Toggle', async ({ page }) => {
+        const consoleBody = page.locator('.console');
+
+        // Press 'p' to turn off
+        await page.keyboard.press('p');
+        await expect(consoleBody).toHaveClass(/console-off/);
+        
+        // Press 'p' to turn on
+        await page.keyboard.press('p');
+        await expect(consoleBody).not.toHaveClass(/console-off/);
+    });
     
-    // Press 'B' (mapped to 'x' key or 'b' is not mapped? wait)
-    // Code says: case 'x': case 'X': handleThemeSwitch()
-    // Code instructions say: "B / X - SWITCH THEME"
-    // So usually 'x' key.
-    await page.keyboard.press('x');
-    
-    // Expect class to change
-    const newClass = await body.getAttribute('class');
-    expect(newClass).not.toBe(initialClass);
-    
-    // Verify persistence on reload
-    await page.reload();
-    
-    // Note: Reload resets the application state (overlay returns)
-    // But theme is applied from localStorage immediately.
-    const reloadedClass = await body.getAttribute('class');
-    expect(reloadedClass).toBe(newClass);
-  });
+    test('Konami Code (Matrix Mode)', async ({ page }) => {
+        const screen = page.locator('#main-screen');
+        
+        // Code: Up Up Down Down Left Right Left Right B A
+        // Lowercase for safety in press
+        const sequence = [
+            'ArrowUp', 'ArrowUp', 
+            'ArrowDown', 'ArrowDown', 
+            'ArrowLeft', 'ArrowRight', 
+            'ArrowLeft', 'ArrowRight', 
+            'b', 'a'
+        ];
+
+        for (const key of sequence) {
+            await page.keyboard.press(key);
+            // Slight delay to mimic human input
+            await page.waitForTimeout(50);
+        }
+
+        // Verify CSS filter effect
+        await expect(screen).toHaveAttribute('style', /filter: invert\(1\) hue-rotate\(180deg\)/);
+    });
 });
