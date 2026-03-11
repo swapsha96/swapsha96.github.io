@@ -246,7 +246,7 @@ const iconSvgs = {
     };
 
     // Color Themes
-    const themes = ['theme-atomic', 'theme-berry', 'theme-ice', 'theme-jungle', 'theme-classic'];
+    const themes = ['theme-atomic', 'theme-berry', 'theme-ice', 'theme-jungle', 'theme-classic', 'theme-sunblaze', 'theme-cyberpunk', 'theme-midnight'];
     
     // Randomize start index or load from storage
     let currentThemeIndex = (() => {
@@ -448,11 +448,11 @@ const iconSvgs = {
         // Tab 0: Links navigation
         if (currentTab === 0) {
             const links = document.querySelectorAll('.social-link');
-            if (direction === 'up' && currentIndex > 0) {
-                currentIndex--;
+            if (direction === 'up') {
+                currentIndex = (currentIndex > 0) ? currentIndex - 1 : links.length - 1;
                 updateActiveLink(currentIndex);
-            } else if (direction === 'down' && currentIndex < links.length - 1) {
-                currentIndex++;
+            } else if (direction === 'down') {
+                currentIndex = (currentIndex < links.length - 1) ? currentIndex + 1 : 0;
                 updateActiveLink(currentIndex);
             }
         }
@@ -565,6 +565,15 @@ const iconSvgs = {
 
         document.addEventListener('keyup', (e) => {
             toggleButtonState(e.key, false);
+        });
+
+        const clearPressedStates = () => {
+            document.querySelectorAll('.pressed').forEach(el => el.classList.remove('pressed'));
+        };
+
+        window.addEventListener('blur', clearPressedStates);
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) clearPressedStates();
         });
 
         document.querySelectorAll('.tab-indicator').forEach((tab, index) => {
@@ -928,6 +937,23 @@ const iconSvgs = {
                 
                 consoleBody.classList.add('console-off');
                 document.title = "OFF";
+
+                // Reset System State
+                setTimeout(() => {
+                    // Reset to Links Tab (Tab 0)
+                    if (currentTab !== 0) {
+                        switchToTab(0);
+                    }
+                    
+                    // Reset Link Selection to first item
+                    currentIndex = 0;
+                    updateActiveLink(0);
+                    
+                    // Reset Scroll Position
+                    if (screenDisplay) {
+                        screenDisplay.scrollTo({ top: 0, behavior: 'auto' });
+                    }
+                }, 100); // Small delay to hide reset behind the off-screen animation
             }
         };
 
@@ -1410,7 +1436,6 @@ const iconSvgs = {
 
 @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
-/* --- The Actual LCD Screen --- */
 .screen-display {
     background: var(--screen-bg);
     width: 100%;
@@ -1427,6 +1452,20 @@ const iconSvgs = {
     /* Modern Scanline */
     background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
     background-size: 100% 2px, 3px 100%;
+}
+
+/* Glass Reflection */
+.screen-lens::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit; /* Copies the 15px 15px 45px 15px inherited from screen-lens */
+    background: linear-gradient(110deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 45%, transparent 45.1%);
+    pointer-events: none;
+    z-index: 100;
 }
 
 /* --- Top HUD --- */
@@ -1781,98 +1820,165 @@ h1 {
 
 /* Functional D-Pad */
 .dpad-area {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     position: relative;
     /* margin-bottom handled by flex gap */
 }
 
 .dpad {
-    width: 110px;
-    height: 110px;
+    width: 130px;
+    height: 130px;
     position: relative;
     border-radius: 50%;
-    background: rgba(0,0,0,0.1); /* Subtle recess */
+    /* Recessed Socket */
+    background: rgba(0,0,0,0.05);
+    box-shadow: 
+        inset 2px 2px 8px rgba(0,0,0,0.6), 
+        inset -1px -1px 3px rgba(255,255,255,0.1),
+        0 1px 1px rgba(255,255,255,0.2);
     transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 .dpad-btn {
     position: absolute;
-    background: var(--btn-dpad);
+    background-color: var(--btn-dpad);
     border: none;
     cursor: pointer;
-    overflow: hidden;
-    /* texture */
-    background-image: radial-gradient(circle, #333 1px, transparent 1px);
-    background-size: 4px 4px;
-    transition: all 0.1s; 
+    /* Clean matte finish instead of gradient dots */
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.2) 100%);
+    transition: all 0.08s cubic-bezier(0.3, 0.8, 0.3, 1);
+    outline: none;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Subtle engraved arrows instead of nothing */
+.dpad-btn::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    opacity: 0.15;
 }
 
 .dpad-up {
-    top: 0;
-    left: 38px;
-    width: 34px;
-    height: 38px;
+    top: 12px;
+    left: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 4px 4px 0 0;
-    box-shadow: 0 -4px 0 #000;
+    box-shadow: 
+        inset 0 1.5px 2px rgba(255,255,255,0.2), 
+        inset 1px 0 2px rgba(255,255,255,0.1), 
+        inset -1px 0 2px rgba(0,0,0,0.2), 
+        0 4px 0 rgba(0,0,0,0.7), 
+        0 6px 10px rgba(0,0,0,0.5); 
 }
+.dpad-up::after { border-width: 0 6px 7px 6px; border-color: transparent transparent #000 transparent; margin-bottom: 8px;}
+
 .dpad-down {
-    bottom: 0;
-    left: 38px;
-    width: 34px;
-    height: 38px;
+    bottom: 12px;
+    left: 45px;
+    width: 40px;
+    height: 40px;
     border-radius: 0 0 4px 4px;
-    box-shadow: 0 4px 0 #000; /* Shadow below */
+    box-shadow: 
+        inset 1px 0 2px rgba(255,255,255,0.1), 
+        inset -1px 0 2px rgba(0,0,0,0.2), 
+        inset 0 -2px 4px rgba(0,0,0,0.5), 
+        0 4px 0 rgba(0,0,0,0.7), 
+        0 6px 10px rgba(0,0,0,0.5); 
 }
+.dpad-down::after { border-width: 7px 6px 0 6px; border-color: #000 transparent transparent transparent; margin-top: 8px; }
+
 .dpad-left {
-    top: 38px;
-    left: 0;
-    width: 38px;
-    height: 34px;
+    top: 45px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
     border-radius: 4px 0 0 4px;
-    box-shadow: -4px 0 0 #000;
+    box-shadow: 
+        inset 1.5px 0 2px rgba(255,255,255,0.2), 
+        inset 0 1px 2px rgba(255,255,255,0.1), 
+        inset 0 -1px 2px rgba(0,0,0,0.2), 
+        0 4px 0 rgba(0,0,0,0.7), 
+        0 6px 10px rgba(0,0,0,0.5); 
 }
+.dpad-left::after { border-width: 6px 7px 6px 0; border-color: transparent #000 transparent transparent; margin-right: 8px; }
+
 .dpad-right {
-    top: 38px;
-    right: 0;
-    width: 38px;
-    height: 34px;
+    top: 45px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
     border-radius: 0 4px 4px 0;
-    box-shadow: 4px 0 0 #000;
+    box-shadow: 
+        inset 0 1px 2px rgba(255,255,255,0.1), 
+        inset 0 -1px 2px rgba(0,0,0,0.2), 
+        inset -2px 0 4px rgba(0,0,0,0.5), 
+        0 4px 0 rgba(0,0,0,0.7), 
+        0 6px 10px rgba(0,0,0,0.5); 
 }
+.dpad-right::after { border-width: 6px 0 6px 7px; border-color: transparent transparent transparent #000; margin-left: 8px; }
+
 .dpad-center {
     position: absolute;
-    top: 38px;
-    left: 38px;
-    width: 34px;
-    height: 34px;
-    background: var(--btn-dpad);
-    /* texture */
-    background-image: radial-gradient(circle, #151515 20%, transparent 20%);
-    background-size: 10px 10px;
-    background-position: center;
+    top: 45px;
+    left: 45px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--btn-dpad);
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%);
+    z-index: 3;
+    /* Fill gaps between directional arms and add center recess */
+    box-shadow: 
+        -4px 0 0 var(--btn-dpad), 
+        4px 0 0 var(--btn-dpad), 
+        0 -4px 0 var(--btn-dpad), 
+        0 4px 0 var(--btn-dpad),
+        0 4px 0 rgba(0,0,0,0.7), 
+        0 6px 10px rgba(0,0,0,0.5); 
+}
+
+/* Subtle thumb divot in center */
+.dpad-center::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.1);
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.4), 0 1px 1px rgba(255,255,255,0.05);
 }
 
 .dpad-btn:active,
 .dpad-btn.pressed {
-    background: #444;
+    /* Need to keep background colors but remove highlight */
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.3) 100%);
 }
 
 .dpad-up:active, .dpad-up.pressed {
     transform: translateY(4px);
-    box-shadow: 0 -1px 0 #000, inset 0 5px 10px rgba(0,0,0,0.5);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 1px 0 2px rgba(0,0,0,0.2), inset -1px 0 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
 }
 .dpad-down:active, .dpad-down.pressed {
-    transform: translateY(-4px);
-    box-shadow: 0 1px 0 #000, inset 0 -5px 10px rgba(0,0,0,0.5);
+    transform: translateY(4px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 1px 0 2px rgba(0,0,0,0.2), inset -1px 0 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
 }
 .dpad-left:active, .dpad-left.pressed {
-    transform: translateX(4px);
-    box-shadow: -1px 0 0 #000, inset 5px 0 10px rgba(0,0,0,0.5);
+    transform: translateY(4px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 1.5px 0 2px rgba(0,0,0,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
 }
 .dpad-right:active, .dpad-right.pressed {
-    transform: translateX(-4px);
-    box-shadow: 1px 0 0 #000, inset -5px 0 10px rgba(0,0,0,0.5);
+    transform: translateY(4px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset -2px 0 4px rgba(0,0,0,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
 }
 
 /* Functional Buttons A & B */
@@ -1882,6 +1988,7 @@ h1 {
     transform: rotate(25deg);
     margin-bottom: 30px;
     padding-left: 20px;
+    margin-top: 15px; /* Adjusted to balance against D-Pad */
 }
 
 .console.landscape .action-buttons {
@@ -1895,48 +2002,91 @@ h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-group::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
+    box-shadow: 
+        inset 2px 2px 5px rgba(0,0,0,0.6), 
+        inset -1px -1px 3px rgba(255,255,255,0.1),
+        0 1px 1px rgba(255,255,255,0.2); 
+    z-index: -1;
+    pointer-events: none;
 }
 
 .action-buttons button {
-    width: 55px;
-    height: 55px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     border: none;
-    font-family: sans-serif;
-    font-weight: bold;
-    font-size: 16px;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.5), 0 0 10px rgba(255,255,255,0.1);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: 1px;
+    color: var(--btn-text, rgba(255, 255, 255, 0.95));
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.15) 100%);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
     cursor: pointer;
     position: relative;
-    transition: all 0.1s;
-    background-size: 120%;
-    background-position: center;
+    z-index: 2;
+    transition: transform 0.08s cubic-bezier(0.3, 0.8, 0.3, 1), box-shadow 0.08s cubic-bezier(0.3, 0.8, 0.3, 1);
+    outline: none;
 }
 
 .btn-a {
-    background: var(--btn-a);
-    color: var(--btn-text, rgba(255,255,255,0.9));
-    box-shadow: 0 0 15px var(--btn-a);
+    background-color: var(--btn-a);
+    box-shadow: 
+        inset 0 1.5px 2px rgba(255,255,255,0.6), 
+        inset 0 -2px 4px rgba(0,0,0,0.3), 
+        0 4px 0 rgba(0,0,0,0.6), 
+        0 6px 10px rgba(0,0,0,0.6); 
 }
 .btn-b {
-    background: var(--btn-b);
-    color: var(--btn-text, rgba(255,255,255,0.9));
-    box-shadow: 0 0 15px var(--btn-b);
+    background-color: var(--btn-b);
+    box-shadow: 
+        inset 0 1.5px 2px rgba(255,255,255,0.6), 
+        inset 0 -2px 4px rgba(0,0,0,0.3), 
+        0 4px 0 rgba(0,0,0,0.6), 
+        0 6px 10px rgba(0,0,0,0.6); 
 }
 
-.action-buttons button:active,
-.action-buttons button.pressed {
+.action-buttons .btn-a:active,
+.action-buttons .btn-a.pressed {
     transform: translateY(4px);
-    box-shadow: 0 1px 0 rgba(0,0,0,0.5), 0 0 20px inset rgba(0,0,0,0.2);
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.5), 
+        inset 0 -1px 2px rgba(255,255,255,0.1), 
+        0 0px 0 rgba(0,0,0,0.6),
+        0 2px 4px rgba(0,0,0,0.5);
+}
+
+.action-buttons .btn-b:active,
+.action-buttons .btn-b.pressed {
+    transform: translateY(4px);
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.5), 
+        inset 0 -1px 2px rgba(255,255,255,0.1), 
+        0 0px 0 rgba(0,0,0,0.6),
+        0 2px 4px rgba(0,0,0,0.5);
 }
 
 .btn-group::after {
     content: 'A';
-    font-family: sans-serif;
-    font-weight: bold;
-    color: rgba(255,255,255,0.3);
-    font-size: 14px;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-weight: 800;
+    color: rgba(255,255,255,0.4);
+    font-size: 15px;
+    letter-spacing: 1px;
+    margin-top: 2px;
 }
 .btn-group:last-child::after { content: 'B'; }
 .btn-group:first-child::after { content: 'A'; } 

@@ -146,3 +146,47 @@ body.theme-classic {
     --bg-gradient: #444;
 }
 
+/* Sunblaze (Orange/Red) */
+body.theme-sunblaze {
+    --console-body: rgba(255, 100, 0, 0.85); /* Orange Translucent */
+    --console-shadow: #662200;
+    --screen-bg: #2a0a00;
+    --screen-text: #ffaa00;
+    --screen-dim: #cc5500;
+    --btn-a: #ffee00;
+    --btn-b: #ffee00;
+    --accent-glow: 0 0 10px rgba(255, 170, 0, 0.6);
+    --bg-color: #1a0a00;
+    --bg-gradient: #3d1500;
+}
+
+/* Cyberpunk (Yellow) */
+body.theme-cyberpunk {
+    --console-body: rgba(250, 230, 40, 0.9); /* Yellow */
+    --console-shadow: #665c00;
+    --screen-bg: #1a0033;
+    --screen-text: #00ffff;
+    --screen-dim: #ff00ff;
+    --btn-a: #ff00ff;
+    --btn-b: #ff00ff;
+    --accent-glow: 0 0 10px rgba(0, 255, 255, 0.6);
+    --bg-color: #0b001a;
+    --bg-gradient: #1a0033;
+}
+
+/* Midnight (Deep Blue/Black) */
+body.theme-midnight {
+    --console-body: rgba(20, 20, 30, 0.95); /* Deep Translucent Black */
+    --console-shadow: #05050a;
+    --console-highlight: rgba(255, 255, 255, 0.05);
+    --screen-bg: #000000;
+    --screen-text: #88ccee;
+    --screen-dim: #224466;
+    --btn-dpad: #111;
+    --btn-a: #ee5555;
+    --btn-b: #ee5555;
+    --accent-glow: 0 0 10px rgba(136, 204, 238, 0.4);
+    --bg-color: #050505;
+    --bg-gradient: #111115;
+}
+
