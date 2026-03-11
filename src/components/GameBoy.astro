@@ -56,6 +56,11 @@ const iconSvgs = {
                         <p class="blink">PRESS ANY BUTTON OR CLICK ANYWHERE</p>
                     </div>
                 </div>
+                <div id="boot-screen" class="boot-screen">
+                    <div class="progress-container">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
 
                 <div class="top-hud" id="top-hud" aria-label="Status HUD">
                     <div class="hud-item" id="hud-time">--:--</div>
@@ -414,7 +419,7 @@ const iconSvgs = {
         }
     }
 
-    function updateActiveLink(index) {
+    function updateActiveLink(index, isWrap = false) {
         const links = document.querySelectorAll('.social-link');
         links.forEach(link => link.classList.remove('active'));
         
@@ -428,15 +433,17 @@ const iconSvgs = {
             if (currentTab === 0) {
                 const screen = document.getElementById('main-screen');
                 // Check if scroll is needed
+                const scrollStyle = isWrap ? 'auto' : getScrollBehavior();
+                
                 if (index === 0) {
                     // Scroll to top to show header
-                    if (screen) screen.scrollTo({ top: 0, behavior: getScrollBehavior() });
+                    if (screen) screen.scrollTo({ top: 0, behavior: scrollStyle });
                 } else if (index === links.length - 1) {
                     // Scroll to bottom to show footer
-                    if (screen) screen.scrollTo({ top: screen.scrollHeight, behavior: getScrollBehavior() });
+                    if (screen) screen.scrollTo({ top: screen.scrollHeight, behavior: scrollStyle });
                 } else {
                     // Normal scroll into view
-                    links[index].scrollIntoView({ behavior: getScrollBehavior(), block: 'nearest' });
+                    links[index].scrollIntoView({ behavior: scrollStyle, block: 'nearest' });
                 }
             }
             
@@ -449,11 +456,13 @@ const iconSvgs = {
         if (currentTab === 0) {
             const links = document.querySelectorAll('.social-link');
             if (direction === 'up') {
-                currentIndex = (currentIndex > 0) ? currentIndex - 1 : links.length - 1;
-                updateActiveLink(currentIndex);
+                const isWrap = currentIndex === 0;
+                currentIndex = isWrap ? links.length - 1 : currentIndex - 1;
+                updateActiveLink(currentIndex, isWrap);
             } else if (direction === 'down') {
-                currentIndex = (currentIndex < links.length - 1) ? currentIndex + 1 : 0;
-                updateActiveLink(currentIndex);
+                const isWrap = currentIndex === links.length - 1;
+                currentIndex = isWrap ? 0 : currentIndex + 1;
+                updateActiveLink(currentIndex, isWrap);
             }
         }
         // Tab 1 and 2: About / Help scroll
@@ -915,12 +924,25 @@ const iconSvgs = {
             isPoweredOn = !isPoweredOn;
             
             switchTrack.setAttribute('aria-checked', isPoweredOn);
+            const bootScreen = document.getElementById('boot-screen');
+            const topHud = document.getElementById('top-hud');
             
             if (isPoweredOn) {
                 // Power ON
                 consoleBody.classList.remove('console-off');
                 SoundEngine.playTone(100, 'sawtooth', (FRAME_DURATION * 6) / 1000); // Click sound (6 frames)
-                setTimeout(() => SoundEngine.playTone(600, 'sine', (FRAME_DURATION * 24) / 1000), FRAME_DURATION * 6); // Boot chime (24 frames)
+                
+                // Show boot screen and process gram
+                if (bootScreen) bootScreen.classList.add('active');
+                if (topHud) topHud.style.opacity = '0';
+                
+                // Delay boot chime and UI reveal
+                setTimeout(() => {
+                    if (!isPoweredOn) return; // Abort if switched off during boot
+                    SoundEngine.playTone(600, 'sine', (FRAME_DURATION * 24) / 1000); // Boot chime (24 frames)
+                    if (bootScreen) bootScreen.classList.remove('active');
+                    if (topHud) topHud.style.opacity = '1';
+                }, 3500); // 3-5 sec boot as requested
                 
                 // Re-trigger screen animation
                 if (screenDisplay) {
@@ -937,6 +959,9 @@ const iconSvgs = {
                 
                 consoleBody.classList.add('console-off');
                 document.title = "OFF";
+                
+                if (bootScreen) bootScreen.classList.remove('active');
+                if (topHud) topHud.style.opacity = '1';
 
                 // Reset System State
                 setTimeout(() => {
@@ -1452,6 +1477,57 @@ const iconSvgs = {
     /* Modern Scanline */
     background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
     background-size: 100% 2px, 3px 100%;
+}
+
+/* --- Boot Screen / Process Gram --- */
+.boot-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--screen-bg);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.boot-screen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.progress-container {
+    width: 60%;
+    height: 16px; /* Slightly taller for distinct blocks */
+    border: 3px solid var(--screen-text); /* Thicker border for retro feel */
+    border-radius: 4px; /* Less rounded, more blocky */
+    padding: 2px;
+    box-shadow: 0 0 5px var(--screen-text);
+    background: rgba(0, 0, 0, 0.4); /* Darker background */
+    display: flex;
+    align-items: center;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 100%;
+    background: var(--screen-text);
+    border-radius: 2px;
+}
+
+.boot-screen.active .progress-bar {
+    /* jump-none means the animation reaches 100% at the end frame naturally across 5 blocks */
+    animation: fillProgressBlocks 3.5s steps(5, jump-none) forwards;
+}
+
+@keyframes fillProgressBlocks {
+    0% { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(0 0% 0 0); }
 }
 
 /* Glass Reflection */
@@ -2099,7 +2175,7 @@ h1 {
     justify-content: center;
     gap: 8px;
     transform: rotate(25deg);
-    opacity: 0.6;
+    opacity: 0.85; /* Increased opacity for more definition */
     margin-bottom: 20px;
     justify-self: end; /* Align to right side instead of using margin-left % */
     padding-right: 40px;
@@ -2108,15 +2184,18 @@ h1 {
 .speaker span {
     width: 6px;
     height: 60px;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.6); /* Darker interior for depth */
     border-radius: 5px;
-    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.5);
+    box-shadow: 
+        inset 1px 1px 3px rgba(0,0,0,0.9), /* Deeper internal shadow */
+        inset -1px -1px 2px rgba(255,255,255,0.1), /* Rim highlight inside hole */
+        1px 1px 1px rgba(255,255,255,0.2); /* Edge highlight on the console body */
 }
 
 .console.landscape .speaker {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
+    gap: 6px; /* slightly more gap */
     margin-top: auto; 
     margin-bottom: 25px;
     transform: rotate(-10deg);
@@ -2124,11 +2203,14 @@ h1 {
 }
 
 .console.landscape .speaker span {
-    width: 6px;
-    height: 6px;
-    background: rgba(0,0,0,0.5);
+    width: 8px; /* Slightly larger holes */
+    height: 8px;
+    background: rgba(0,0,0,0.8);
     border-radius: 50%;
-    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.8);
+    box-shadow: 
+        inset 1px 1px 3px rgba(0,0,0,0.9),
+        inset -1px -1px 1px rgba(255,255,255,0.1),
+        1px 1px 1px rgba(255,255,255,0.2);
 }
 
 /* --- Meta Controls (Start / Select) --- */
@@ -2149,6 +2231,24 @@ h1 {
     align-items: center;
     position: relative;
     gap: 4px;
+    z-index: 1; /* Match A/B grouping */
+}
+
+/* Recessed Border (similar to A/B) */
+.meta-group::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    width: 76px; /* Wider to wrap pill */
+    height: 38px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.05);
+    box-shadow: 
+        inset 2px 2px 5px rgba(0,0,0,0.6), 
+        inset -1px -1px 3px rgba(255,255,255,0.1),
+        0 1px 1px rgba(255,255,255,0.2); 
+    z-index: -1;
+    pointer-events: none;
 }
 
 .pill-label {
@@ -2207,6 +2307,16 @@ h1 {
 .console.landscape .meta-group {
     flex-direction: column-reverse; /* Put label on top */
     gap: 2px;
+}
+
+.console.landscape .meta-group::before {
+    top: -3px; /* Adjust for landscape */
+    width: 34px; 
+    height: 28px;
+    border-radius: 14px;
+    /* In landscape, buttons are on glass, keep subtlety */
+    background: rgba(0,0,0,0.2); 
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.8);
 }
 
 .console.landscape .pill-label {
