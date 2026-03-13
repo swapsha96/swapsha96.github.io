@@ -139,16 +139,14 @@ const iconSvgs = {
             </div>
         </div>
 
-        <div class="meta-labels">
-            <span class="pill-label label-select">SELECT</span>
-            <span class="pill-label label-start">START</span>
-        </div>
         <div class="meta-controls">
             <div class="meta-group">
                 <button class="pill-btn select" id="btn-select" aria-label="Select"></button>
+                <span class="pill-label label-select">SELECT</span>
             </div>
             <div class="meta-group">
                 <button class="pill-btn start" id="btn-start" aria-label="Start"></button>
+                <span class="pill-label label-start">START</span>
             </div>
         </div>
 
@@ -2229,10 +2227,11 @@ h1 {
 
 .meta-group {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
     position: relative;
-    gap: 4px;
+    /* Remove column layout/gap to isolate the button size directly */
+    width: 60px;
+    height: 14px;
     z-index: 1; /* Match A/B grouping */
 }
 
@@ -2240,10 +2239,11 @@ h1 {
 .meta-group::before {
     content: '';
     position: absolute;
-    top: -5px;
-    width: 76px; /* Wider to wrap pill */
-    height: 38px;
-    border-radius: 20px;
+    top: -5px; /* Sits exactly 5px above the 14px button */
+    left: -5px; /* Sits exactly 5px left of the 60px button */
+    width: 70px; /* 60px button + (5px * 2) = 70px */
+    height: 24px; /* 14px button + (5px * 2) = 24px */
+    border-radius: 12px;
     background: rgba(0,0,0,0.05);
     box-shadow: 
         inset 2px 2px 5px rgba(0,0,0,0.6), 
@@ -2254,6 +2254,10 @@ h1 {
 }
 
 .pill-label {
+    position: absolute;
+    top: 24px; /* Pull it completely down below the button + groove */
+    width: 100%;
+    text-align: center;
     font-size: 10px;
     color: rgba(255,255,255,0.4);
     font-family: sans-serif;

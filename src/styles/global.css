@@ -190,38 +190,4 @@ body.theme-midnight {
     --bg-gradient: #111115;
 }
 
-/* Position SELECT and START labels outside groove */
-.meta-labels {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 3em;
-    margin-bottom: 0.5em;
-    margin-top: 2em;
-}
-.meta-labels .pill-label {
-    font-size: 0.8em;
-    color: var(--screen-text);
-    letter-spacing: 0.1em;
-    text-shadow: 0 1px 2px var(--console-shadow);
-}
-
-/* Subtle polish for SELECT and START buttons */
-.pill-btn {
-    border-radius: 1em;
-    border: 1.5px solid var(--console-shadow);
-    background: var(--btn-pill);
-    box-shadow: 0 1px 4px var(--console-shadow);
-    transition: box-shadow 0.2s, background 0.2s;
-}
-.pill-btn:hover, .pill-btn:focus {
-    box-shadow: 0 2px 8px var(--accent-glow);
-    background: #666;
-}
-.pill-label {
-    font-size: 0.7em;
-    color: var(--screen-text);
-    margin-top: 0.1em;
-    letter-spacing: 0.05em;
-}
 
