@@ -45,6 +45,13 @@ A GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push to `ma
 5.  **E2E Tests**: Runs Playwright against the preview build.
 6.  **Artifacts**: Uploads failure traces and videos if tests fail.
 
+## Pre-Push Hooks (Husky)
+To catch errors before they event reach the CI pipeline, this project uses [Husky](https://typicode.github.io/husky/) to enforce local testing before pushing code to the remote repository.
+
+A `pre-push` hook is configured (in `.husky/pre-push`) to automatically run `npm run test` (which triggers both Unit Tests and E2E Tests) whenever `git push` is invoked locally. If any tests fail, the push is aborted.
+
+This prevents the codebase from bloated `pre-commit` times, while guaranteeing that developers never push broken code to GitHub.
+
 ## Debugging
 
 ### Interactive Mode (UI)
