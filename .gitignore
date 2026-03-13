@@ -20,3 +20,7 @@ pnpm-debug.log*
 .vscode/
 .idea/
 *.sublime-workspace
+
+# Testing
+playwright-report/
+test-results/
