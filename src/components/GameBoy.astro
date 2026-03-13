@@ -2311,21 +2311,25 @@ h1 {
 }
 
 .console.landscape .meta-group {
-    flex-direction: column-reverse; /* Put label on top */
-    gap: 2px;
+    /* Same absolute positional logic as portrait, but tailored for landscape sizes */
+    flex-direction: column;
+    width: 24px;
+    height: 12px;
 }
 
 .console.landscape .meta-group::before {
-    top: -3px; /* Adjust for landscape */
-    width: 34px; 
-    height: 28px;
-    border-radius: 14px;
+    top: -5px; /* Sits exactly 5px above the 12px button */
+    left: -5px; /* Sits exactly 5px left of the 24px button */
+    width: 34px; /* 24px button + (5px * 2) = 34px */
+    height: 22px; /* 12px button + (5px * 2) = 22px */
+    border-radius: 11px;
     /* In landscape, buttons are on glass, keep subtlety */
     background: rgba(0,0,0,0.2); 
     box-shadow: inset 1px 1px 3px rgba(0,0,0,0.8);
 }
 
 .console.landscape .pill-label {
+    top: -12px; /* absolute position it *above* the groove in landscape! */
     font-size: 8px; /* Slightly smaller text */
 }
 
