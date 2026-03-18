@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://swapsha96.github.io', // Your URL
+  site: 'https://swapnil.wtf', // Your URL
   base: '/',
   compressHTML: true,
 });
