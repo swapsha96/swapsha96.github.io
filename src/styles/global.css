@@ -26,6 +26,8 @@
 }
 
 body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-family: 'Press Start 2P', cursive;
     background-color: var(--bg-color);
     background-image: radial-gradient(circle at center, var(--bg-gradient) 0%, var(--bg-color) 100%);
@@ -39,6 +41,11 @@ body {
     padding: 20px;
     color: #fff;
     position: relative;
+}
+
+::selection {
+    background: var(--screen-text);
+    color: var(--screen-bg);
 }
 
 /* CRT Scanlines Overlay */
@@ -83,6 +90,7 @@ body {
 /* Atomic Purple (Default) - Explicit class to match JS logic */
 body.theme-atomic {
     /* Uses :root defaults */
+    color: inherit;
 }
 
 /* Berry (Vibrant Pink/Red) */

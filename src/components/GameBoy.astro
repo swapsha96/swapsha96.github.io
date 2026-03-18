@@ -203,6 +203,32 @@ const iconSvgs = {
             return this.muted;
         },
 
+        playClick: function(duration = 0.015, vol = 0.1) {
+            if (!this.ctx || this.muted) return;
+            if (this.ctx.state === 'suspended') this.ctx.resume();
+            try {
+                const bufferSize = this.ctx.sampleRate * duration;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 4000;
+                filter.Q.value = 3;
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+                noise.start();
+            } catch(e) { console.error('Audio error', e); }
+        },
+
         playTone: function(freq, type, duration, vol = 0.1) {
             if (!this.ctx || this.muted) return;
             
@@ -419,13 +445,15 @@ const iconSvgs = {
         }
     }
 
-    function updateActiveLink(index, isWrap = false) {
+    function updateActiveLink(index, isWrap = false, isMouseHover = false) {
         const links = document.querySelectorAll('.social-link');
         links.forEach(link => link.classList.remove('active'));
         
         if (links[index]) {
             // Sound blip
-            SoundEngine.playTone(440 + (index * 20), 'sine', 0.1, 0.05); // Increasing pitch for selection
+            if (!isMouseHover) {
+                SoundEngine.playTone(440 + (index * 20), 'sine', 0.1, 0.05); // Increasing pitch for selection
+            }
 
             links[index].classList.add('active');
             
@@ -751,7 +779,7 @@ const iconSvgs = {
                     if (!isNaN(index)) {
                         // Only update active link if using mouse on Links tab
                         if (currentTab === 0) {
-                            updateActiveLink(index);
+                            updateActiveLink(index, false, true);
                         }
                     }
                 }
@@ -930,7 +958,7 @@ const iconSvgs = {
             if (isPoweredOn) {
                 // Power ON
                 consoleBody.classList.remove('console-off');
-                SoundEngine.playTone(100, 'sawtooth', (FRAME_DURATION * 6) / 1000); // Click sound (6 frames)
+                SoundEngine.playClick(); // Click sound
                 
                 // Show boot screen and process gram
                 if (bootScreen) bootScreen.classList.add('active');
@@ -954,7 +982,7 @@ const iconSvgs = {
                 document.title = "Hey!";
             } else {
                 // Power OFF
-                SoundEngine.playTone(100, 'sawtooth', (FRAME_DURATION * 6) / 1000); // Click sound
+                SoundEngine.playClick(); // Click sound
                 SoundEngine.playTone(50, 'square', (FRAME_DURATION * 18) / 1000, 0.2); // Power down buzz (18 frames)
                 
                 consoleBody.classList.add('console-off');
@@ -1050,6 +1078,13 @@ const iconSvgs = {
 </script>
 
 <style is:global>
+/* Extended Hit Areas for Fitts Law */
+.dpad-btn::before, .pill-btn::before, .action-buttons button::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    z-index: 10;
+}
 /* --- Console Body --- */
 @keyframes whipIn {
     0% { transform: translateX(100vw) rotate(5deg) scale(0.9); opacity: 0; }
@@ -1079,8 +1114,8 @@ const iconSvgs = {
     border: 2px solid rgba(255,255,255,0.25); /* Broader, clearer border */
     /* Entrance + Idle Float Animation */
     animation: 
-        whipIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards,
-        consoleFloat 6s ease-in-out infinite 0.8s;
+        whipIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards,
+        consoleFloat 6s ease-in-out infinite 0.3s;
     
     /* Default Portrait Dimensions */
     width: 420px;
@@ -1160,7 +1195,7 @@ const iconSvgs = {
 ::view-transition-group(console-power-switch) {
     /* "Nintendo Snappy" - Fast attack, solid impact, no wobble */
     animation-timing-function: cubic-bezier(0.12, 1, 0.14, 1);
-    animation-duration: 0.5s;
+    animation-duration: 0.25s;
 }
 
 /* Add GBA Boot Flash to Screen Morph */
@@ -1493,7 +1528,7 @@ const iconSvgs = {
     align-items: center;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
+    transition: opacity 0.25s ease-out, visibility 0.25s ease-out;
 }
 
 .boot-screen.active {
@@ -1565,6 +1600,7 @@ const iconSvgs = {
     align-items: center;
     white-space: nowrap;
     text-shadow: 0 0 4px rgba(10, 255, 194, 0.35);
+    font-variant-numeric: tabular-nums;
 }
 
 /* --- Branding Text on Lens --- */
@@ -1626,6 +1662,11 @@ h1 {
     margin: 5px 0;
     text-transform: uppercase;
     text-shadow: 2px 2px 0 var(--screen-dim);
+}
+
+h2 {
+    margin: 0;
+    text-wrap: balance;
 }
 
 .tagline {
@@ -1696,6 +1737,7 @@ h1 {
     background: rgba(0, 0, 0, 0.2);
     border: 1px dotted var(--screen-dim);
     min-height: 100px;
+    text-wrap: pretty;
 }
 
 .help-panel {
@@ -1713,6 +1755,7 @@ h1 {
     text-shadow: 0 0 4px var(--screen-dim);
     border-bottom: 2px solid var(--screen-dim);
     padding-bottom: 4px;
+    text-wrap: balance;
 }
 
 .help-panel ul {
@@ -2041,19 +2084,23 @@ h1 {
 }
 
 .dpad-up:active, .dpad-up.pressed {
-    transform: translateY(4px);
+    transform: perspective(200px) rotateX(15deg);
+    transform-origin: bottom center;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 1px 0 2px rgba(0,0,0,0.2), inset -1px 0 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
 }
 .dpad-down:active, .dpad-down.pressed {
-    transform: translateY(4px);
+    transform: perspective(200px) rotateX(-15deg);
+    transform-origin: top center;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 1px 0 2px rgba(0,0,0,0.2), inset -1px 0 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
 }
 .dpad-left:active, .dpad-left.pressed {
-    transform: translateY(4px);
+    transform: perspective(200px) rotateY(-15deg);
+    transform-origin: right center;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 1.5px 0 2px rgba(0,0,0,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
 }
 .dpad-right:active, .dpad-right.pressed {
-    transform: translateY(4px);
+    transform: perspective(200px) rotateY(15deg);
+    transform-origin: left center;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset -2px 0 4px rgba(0,0,0,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
 }
 
@@ -2273,11 +2320,11 @@ h1 {
 .pill-btn {
     width: 60px;
     height: 14px;
-    background: linear-gradient(to bottom, #666, #444);
+    background: #333;
     border: none;
     border-radius: 10px;
     position: relative;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.1);
     cursor: pointer;
     view-transition-name: none; /* Disable individual transition */
 }
@@ -2288,7 +2335,8 @@ h1 {
 
 .pill-btn:active, .pill-btn.pressed {
     transform: translateY(2px);
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+    background: #222;
+    box-shadow: 0 0 1px rgba(0,0,0,0.8), inset 0 2px 4px rgba(0,0,0,0.5);
 }
 
 
