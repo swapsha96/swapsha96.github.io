@@ -203,7 +203,7 @@ const iconSvgs = {
             return this.muted;
         },
 
-        playClick: function(duration = 0.015, vol = 0.1) {
+        playClick: function(duration = 0.015, vol = 0.25) {
             if (!this.ctx || this.muted) return;
             if (this.ctx.state === 'suspended') this.ctx.resume();
             try {
@@ -229,7 +229,7 @@ const iconSvgs = {
             } catch(e) { console.error('Audio error', e); }
         },
 
-        playTone: function(freq, type, duration, vol = 0.1) {
+        playTone: function(freq, type, duration, vol = 0.25) {
             if (!this.ctx || this.muted) return;
             
             // Ensure context is running (sometimes browsers suspend it)
@@ -255,24 +255,24 @@ const iconSvgs = {
         
         hover: function() {
             // High-pitched blip (6 frames)
-            this.playTone(440, 'sine', (FRAME_DURATION * 6) / 1000, 0.05);
+            this.playTone(440, 'sine', (FRAME_DURATION * 6) / 1000, 0.15);
         },
         
         select: function() {
             // Chime-like ding (Square wave)
             // 6 frames then 12 frames
-            this.playTone(660, 'square', (FRAME_DURATION * 6) / 1000, 0.05);
-            setTimeout(() => this.playTone(880, 'square', (FRAME_DURATION * 12) / 1000, 0.05), FRAME_DURATION * 6);
+            this.playTone(660, 'square', (FRAME_DURATION * 6) / 1000, 0.15);
+            setTimeout(() => this.playTone(880, 'square', (FRAME_DURATION * 12) / 1000, 0.15), FRAME_DURATION * 6);
         },
         
         back: function() {
             // Low-pitched buzz (9 frames)
-            this.playTone(150, 'sawtooth', (FRAME_DURATION * 9) / 1000, 0.05);
+            this.playTone(150, 'sawtooth', (FRAME_DURATION * 9) / 1000, 0.15);
         },
         
         switch: function() {
             // Tab switch sound (6 frames)
-            this.playTone(300, 'triangle', (FRAME_DURATION * 6) / 1000, 0.05);
+            this.playTone(300, 'triangle', (FRAME_DURATION * 6) / 1000, 0.15);
         }
     };
 
