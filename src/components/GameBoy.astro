@@ -1276,7 +1276,6 @@ const iconSvgs = {
 
 .console.landscape .dpad {
     transform: scale(1.1) rotate(360deg); /* 10% bigger + Full Spin */
-    box-shadow: 0 0 15px rgba(0,0,0,0.5); /* Deepen shadow */
     transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
@@ -2504,20 +2503,9 @@ h2 {
     transform: rotate(180deg);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
     .app-turn-control {
-        bottom: 20px;
-        right: 20px;
-    }
-    
-    .app-btn {
-        width: 52px;
-        height: 52px;
-    }
-    
-    .turn-icon {
-        width: 22px;
-        height: 22px;
+        display: none;
     }
 }
 
