@@ -1,0 +1,7 @@
+/* Extended Hit Areas for Fitts Law */
+.dpad-btn::before, .pill-btn::before, .action-buttons button::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    z-index: 10;
+}

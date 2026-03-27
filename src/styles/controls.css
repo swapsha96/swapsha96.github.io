@@ -1,0 +1,456 @@
+/* --- Controls Section --- */
+
+/* Functional D-Pad */
+.dpad-area {
+    width: 140px;
+    height: 140px;
+    position: relative;
+}
+
+.dpad {
+    width: 130px;
+    height: 130px;
+    position: relative;
+    border-radius: 50%;
+    /* Recessed Socket */
+    background: rgba(0,0,0,0.05);
+    box-shadow:
+        inset 2px 2px 8px rgba(0,0,0,0.6),
+        inset -1px -1px 3px rgba(255,255,255,0.1),
+        0 1px 1px rgba(255,255,255,0.2);
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.dpad-btn {
+    position: absolute;
+    background-color: var(--btn-dpad);
+    border: none;
+    cursor: pointer;
+    /* Clean matte finish instead of gradient dots */
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.2) 100%);
+    transition: all 0.08s cubic-bezier(0.3, 0.8, 0.3, 1);
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Subtle engraved arrows instead of nothing */
+.dpad-btn::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    opacity: 0.15;
+}
+
+.dpad-up {
+    top: 12px;
+    left: 45px;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px 4px 0 0;
+    box-shadow:
+        inset 0 1.5px 2px rgba(255,255,255,0.2),
+        inset 1px 0 2px rgba(255,255,255,0.1),
+        inset -1px 0 2px rgba(0,0,0,0.2),
+        0 4px 0 rgba(0,0,0,0.7),
+        0 6px 10px rgba(0,0,0,0.5);
+}
+.dpad-up::after { border-width: 0 6px 7px 6px; border-color: transparent transparent #000 transparent; margin-bottom: 8px;}
+
+.dpad-down {
+    bottom: 12px;
+    left: 45px;
+    width: 40px;
+    height: 40px;
+    border-radius: 0 0 4px 4px;
+    box-shadow:
+        inset 1px 0 2px rgba(255,255,255,0.1),
+        inset -1px 0 2px rgba(0,0,0,0.2),
+        inset 0 -2px 4px rgba(0,0,0,0.5),
+        0 4px 0 rgba(0,0,0,0.7),
+        0 6px 10px rgba(0,0,0,0.5);
+}
+.dpad-down::after { border-width: 7px 6px 0 6px; border-color: #000 transparent transparent transparent; margin-top: 8px; }
+
+.dpad-left {
+    top: 45px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 4px 0 0 4px;
+    box-shadow:
+        inset 1.5px 0 2px rgba(255,255,255,0.2),
+        inset 0 1px 2px rgba(255,255,255,0.1),
+        inset 0 -1px 2px rgba(0,0,0,0.2),
+        0 4px 0 rgba(0,0,0,0.7),
+        0 6px 10px rgba(0,0,0,0.5);
+}
+.dpad-left::after { border-width: 6px 7px 6px 0; border-color: transparent #000 transparent transparent; margin-right: 8px; }
+
+.dpad-right {
+    top: 45px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 0 4px 4px 0;
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,0.1),
+        inset 0 -1px 2px rgba(0,0,0,0.2),
+        inset -2px 0 4px rgba(0,0,0,0.5),
+        0 4px 0 rgba(0,0,0,0.7),
+        0 6px 10px rgba(0,0,0,0.5);
+}
+.dpad-right::after { border-width: 6px 0 6px 7px; border-color: transparent transparent transparent #000; margin-left: 8px; }
+
+.dpad-center {
+    position: absolute;
+    top: 45px;
+    left: 45px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--btn-dpad);
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%);
+    z-index: 3;
+    box-shadow:
+        -4px 0 0 var(--btn-dpad),
+        4px 0 0 var(--btn-dpad),
+        0 -4px 0 var(--btn-dpad),
+        0 4px 0 var(--btn-dpad),
+        0 4px 0 rgba(0,0,0,0.7),
+        0 6px 10px rgba(0,0,0,0.5);
+}
+
+/* Subtle thumb divot in center */
+.dpad-center::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.1);
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.4), 0 1px 1px rgba(255,255,255,0.05);
+}
+
+.dpad-btn:active,
+.dpad-btn.pressed {
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.3) 100%);
+}
+
+.dpad-up:active, .dpad-up.pressed {
+    transform: perspective(200px) rotateX(15deg);
+    transform-origin: bottom center;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 1px 0 2px rgba(0,0,0,0.2), inset -1px 0 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
+}
+.dpad-down:active, .dpad-down.pressed {
+    transform: perspective(200px) rotateX(-15deg);
+    transform-origin: top center;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 1px 0 2px rgba(0,0,0,0.2), inset -1px 0 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
+}
+.dpad-left:active, .dpad-left.pressed {
+    transform: perspective(200px) rotateY(-15deg);
+    transform-origin: right center;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset 1.5px 0 2px rgba(0,0,0,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
+}
+.dpad-right:active, .dpad-right.pressed {
+    transform: perspective(200px) rotateY(15deg);
+    transform-origin: left center;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), inset -2px 0 4px rgba(0,0,0,0.2), inset 0 -1px 2px rgba(0,0,0,0.2), 0 0px 0 rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Functional Buttons A & B */
+.action-buttons {
+    display: flex;
+    gap: 20px;
+    transform: rotate(25deg);
+    margin-bottom: 30px;
+    padding-left: 20px;
+    margin-top: 15px;
+}
+
+.console.landscape .action-buttons {
+    transform: rotate(-15deg);
+    margin-bottom: 20px;
+    padding-left: 0;
+    gap: 15px;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-group::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.6),
+        inset -1px -1px 3px rgba(255,255,255,0.1),
+        0 1px 1px rgba(255,255,255,0.2);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.action-buttons button {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: 1px;
+    color: var(--btn-text, rgba(255, 255, 255, 0.95));
+    background-image: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.15) 100%);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.08s cubic-bezier(0.3, 0.8, 0.3, 1), box-shadow 0.08s cubic-bezier(0.3, 0.8, 0.3, 1);
+}
+
+.btn-a {
+    background-color: var(--btn-a);
+    box-shadow:
+        inset 0 1.5px 2px rgba(255,255,255,0.6),
+        inset 0 -2px 4px rgba(0,0,0,0.3),
+        0 4px 0 rgba(0,0,0,0.6),
+        0 6px 10px rgba(0,0,0,0.6);
+}
+.btn-b {
+    background-color: var(--btn-b);
+    box-shadow:
+        inset 0 1.5px 2px rgba(255,255,255,0.6),
+        inset 0 -2px 4px rgba(0,0,0,0.3),
+        0 4px 0 rgba(0,0,0,0.6),
+        0 6px 10px rgba(0,0,0,0.6);
+}
+
+.action-buttons .btn-a:active,
+.action-buttons .btn-a.pressed {
+    transform: translateY(4px);
+    box-shadow:
+        inset 0 2px 4px rgba(0,0,0,0.5),
+        inset 0 -1px 2px rgba(255,255,255,0.1),
+        0 0px 0 rgba(0,0,0,0.6),
+        0 2px 4px rgba(0,0,0,0.5);
+}
+
+.action-buttons .btn-b:active,
+.action-buttons .btn-b.pressed {
+    transform: translateY(4px);
+    box-shadow:
+        inset 0 2px 4px rgba(0,0,0,0.5),
+        inset 0 -1px 2px rgba(255,255,255,0.1),
+        0 0px 0 rgba(0,0,0,0.6),
+        0 2px 4px rgba(0,0,0,0.5);
+}
+
+.btn-group::after {
+    content: 'A';
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-weight: 800;
+    color: rgba(255,255,255,0.4);
+    font-size: 15px;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+.btn-group:last-child::after { content: 'B'; }
+.btn-group:first-child::after { content: 'A'; }
+
+
+
+.speaker {
+    grid-area: speaker;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    transform: rotate(25deg);
+    opacity: 0.85;
+    margin-bottom: 20px;
+    justify-self: end;
+    padding-right: 40px;
+}
+
+.speaker span {
+    width: 6px;
+    height: 60px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 5px;
+    box-shadow:
+        inset 1px 1px 3px rgba(0,0,0,0.9),
+        inset -1px -1px 2px rgba(255,255,255,0.1),
+        1px 1px 1px rgba(255,255,255,0.2);
+}
+
+.console.landscape .speaker {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: auto;
+    margin-bottom: 25px;
+    transform: rotate(-10deg);
+    margin-left: 0;
+}
+
+.console.landscape .speaker span {
+    width: 8px;
+    height: 8px;
+    background: rgba(0,0,0,0.8);
+    border-radius: 50%;
+    box-shadow:
+        inset 1px 1px 3px rgba(0,0,0,0.9),
+        inset -1px -1px 1px rgba(255,255,255,0.1),
+        1px 1px 1px rgba(255,255,255,0.2);
+}
+
+/* --- Meta Controls (Start / Select) --- */
+.meta-controls {
+    grid-area: meta;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20px;
+    gap: 15px;
+    margin-bottom: 20px;
+    transform: rotate(25deg);
+    z-index: 5;
+}
+
+.meta-group {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 60px;
+    height: 14px;
+    z-index: 1;
+}
+
+/* Recessed Border (similar to A/B) */
+.meta-group::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 70px;
+    height: 24px;
+    border-radius: 12px;
+    background: rgba(0,0,0,0.05);
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.6),
+        inset -1px -1px 3px rgba(255,255,255,0.1),
+        0 1px 1px rgba(255,255,255,0.2);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.pill-label {
+    position: absolute;
+    top: 24px;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    font-family: sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    view-transition-name: none;
+}
+.pill-label.label-select { view-transition-name: label-select; }
+.pill-label.label-start { view-transition-name: label-start; }
+
+
+.pill-btn {
+    width: 60px;
+    height: 14px;
+    background: #333;
+    border: none;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.1);
+    cursor: pointer;
+    view-transition-name: none;
+}
+
+/* Assign unique view transition names to each button so they track individually */
+.pill-btn.select { view-transition-name: btn-select; }
+.pill-btn.start { view-transition-name: btn-start; }
+
+.pill-btn:active, .pill-btn.pressed {
+    transform: translateY(2px);
+    background: #222;
+    box-shadow: 0 0 1px rgba(0,0,0,0.8), inset 0 2px 4px rgba(0,0,0,0.5);
+}
+
+
+/* Landscape: Top corners of console face */
+.console.landscape .meta-controls {
+    position: absolute;
+    top: 20px;
+    bottom: auto;
+    left: 40px;
+    right: 40px;
+    width: auto;
+    height: auto;
+    transform: none;
+    justify-content: space-between;
+    gap: 0;
+    pointer-events: none;
+    padding: 0;
+    margin: 0;
+    z-index: 20;
+}
+
+.console.landscape .meta-group {
+    flex-direction: column;
+    width: 24px;
+    height: 12px;
+}
+
+.console.landscape .meta-group::before {
+    top: -5px;
+    left: -5px;
+    width: 34px;
+    height: 22px;
+    border-radius: 11px;
+    background: rgba(0,0,0,0.2);
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+.console.landscape .pill-label {
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    white-space: nowrap;
+    font-size: 8px;
+}
+
+.console.landscape .pill-btn {
+    pointer-events: auto;
+    width: 24px;
+    height: 12px;
+    border-radius: 6px;
+    background: #333;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.1);
+}
+
+.console.landscape .pill-btn:active,
+.console.landscape .pill-btn.pressed {
+    transform: translateY(1px);
+    background: #222;
+    box-shadow: 0 0 1px rgba(0,0,0,0.8), inset 0 2px 4px rgba(0,0,0,0.5);
+}
