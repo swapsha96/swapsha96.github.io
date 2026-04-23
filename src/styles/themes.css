@@ -1,0 +1,98 @@
+body.theme-atomic {
+  color: inherit;
+}
+
+body.theme-berry {
+  --device-shell: rgba(215, 45, 109, 0.9);
+  --device-shell-shadow: #5c0b2b;
+  --device-screen-bg: #2b0f16;
+  --device-screen-text: #ff7eb6;
+  --device-screen-dim: #a63e6b;
+  --device-button-primary: #00f0ff;
+  --device-button-secondary: #00f0ff;
+  --device-bg-base: #1a0509;
+  --device-bg-gradient: #4d0f22;
+  --shadow-glow-screen: 0 0 10px rgba(255, 126, 182, 0.6);
+}
+
+body.theme-ice {
+  --device-shell: rgba(100, 200, 255, 0.85);
+  --device-shell-shadow: #1a4d66;
+  --device-screen-bg: #0d1b2a;
+  --device-screen-text: #00e5ff;
+  --device-screen-dim: #007ea7;
+  --device-button-primary: #ff0055;
+  --device-button-secondary: #ff0055;
+  --device-bg-base: #05101a;
+  --device-bg-gradient: #153b50;
+  --shadow-glow-screen: 0 0 10px rgba(0, 229, 255, 0.6);
+}
+
+body.theme-jungle {
+  --device-shell: rgba(50, 205, 50, 0.85);
+  --device-shell-shadow: #0f4d12;
+  --device-screen-bg: #0a1f0b;
+  --device-screen-text: #adff2f;
+  --device-screen-dim: #4caf50;
+  --device-button-primary: #ffae00;
+  --device-button-secondary: #ffae00;
+  --device-bg-base: #051406;
+  --device-bg-gradient: #143d16;
+  --shadow-glow-screen: 0 0 10px rgba(173, 255, 47, 0.5);
+}
+
+body.theme-classic {
+  --device-shell: #c0c0c0;
+  --device-shell-shadow: #555;
+  --device-shell-highlight: rgba(255,255,255,0.4);
+  --device-screen-bg: #8bac0f;
+  --device-screen-text: #0f380f;
+  --device-screen-dim: #306230;
+  --device-button-dpad: #333;
+  --device-button-primary: #8b0000;
+  --device-button-secondary: #8b0000;
+  --device-bg-base: #222;
+  --device-bg-gradient: #444;
+  --shadow-glow-screen: none;
+}
+
+body.theme-sunblaze {
+  --device-shell: rgba(255, 100, 0, 0.85);
+  --device-shell-shadow: #662200;
+  --device-screen-bg: #2a0a00;
+  --device-screen-text: #ffaa00;
+  --device-screen-dim: #cc5500;
+  --device-button-primary: #ffee00;
+  --device-button-secondary: #ffee00;
+  --device-bg-base: #1a0a00;
+  --device-bg-gradient: #3d1500;
+  --shadow-glow-screen: 0 0 10px rgba(255, 170, 0, 0.6);
+}
+
+body.theme-cyberpunk {
+  --device-shell: rgba(250, 230, 40, 0.9);
+  --device-shell-shadow: #665c00;
+  --device-screen-bg: #1a0033;
+  --device-screen-text: #00ffff;
+  --device-screen-dim: #ff00ff;
+  --device-button-primary: #ff00ff;
+  --device-button-secondary: #ff00ff;
+  --device-bg-base: #0b001a;
+  --device-bg-gradient: #1a0033;
+  --shadow-glow-screen: 0 0 10px rgba(0, 255, 255, 0.6);
+}
+
+body.theme-midnight {
+  --device-shell: rgba(20, 20, 30, 0.95);
+  --device-shell-shadow: #05050a;
+  --device-shell-highlight: rgba(255, 255, 255, 0.05);
+  --device-screen-bg: #000000;
+  --device-screen-text: #88ccee;
+  --device-screen-dim: #224466;
+  --device-button-dpad: #111;
+  --device-button-primary: #ee5555;
+  --device-button-secondary: #ee5555;
+  --device-bg-base: #050505;
+  --device-bg-gradient: #111115;
+  --shadow-glow-screen: 0 0 10px rgba(136, 204, 238, 0.4);
+}

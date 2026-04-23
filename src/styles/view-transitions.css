@@ -25,9 +25,8 @@
 ::view-transition-group(s1), ::view-transition-group(s2), ::view-transition-group(s3),
 ::view-transition-group(s4), ::view-transition-group(s5), ::view-transition-group(s6),
 ::view-transition-group(console-power-switch) {
-    /* "Nintendo Snappy" - Fast attack, solid impact, no wobble */
-    animation-timing-function: cubic-bezier(0.12, 1, 0.14, 1);
-    animation-duration: 0.25s;
+    animation-timing-function: var(--ease-snappy);
+    animation-duration: var(--motion-normal);
 }
 
 /* Add GBA Boot Flash to Screen Morph */
@@ -38,7 +37,7 @@
 }
 
 ::view-transition-new(console-screen) {
-    animation: gbaFlash 0.5s cubic-bezier(0.12, 1, 0.14, 1);
+    animation: gbaFlash var(--motion-boot) var(--ease-snappy);
     height: 100%;
     width: 100%;
 }

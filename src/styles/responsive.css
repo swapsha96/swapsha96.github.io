@@ -20,9 +20,9 @@
     }
 
     .top-hud {
-        left: 10px;
+        left: var(--space-3);
         right: 52px;
-        gap: 10px;
+        gap: var(--space-2);
         font-size: 11px;
     }
 
@@ -54,8 +54,8 @@
 /* --- App Turn Button (Floating Action) --- */
 .app-turn-control {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    bottom: var(--space-7);
+    right: var(--space-7);
     z-index: 1000;
     pointer-events: auto;
 }
@@ -64,24 +64,24 @@
     appearance: none;
     width: 64px;
     height: 64px;
-    border-radius: 50%;
+    border-radius: var(--radius-button-round);
     background: rgba(20, 20, 30, 0.85);
     backdrop-filter: blur(8px);
     color: rgba(255, 255, 255, 0.9);
     border: 2px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    box-shadow: var(--shadow-floating);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all var(--motion-slow) var(--ease-dramatic);
 }
 
 .app-btn:hover {
     transform: scale(1.1) rotate(5deg);
     background: rgba(40, 40, 50, 0.95);
     color: #fff;
-    box-shadow: 0 12px 35px rgba(108, 38, 194, 0.5);
+    box-shadow: 0 12px 35px color-mix(in srgb, var(--device-shell) 50%, transparent);
     border-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -93,7 +93,7 @@
     width: 28px;
     height: 28px;
     fill: currentColor;
-    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition: transform var(--motion-slow) var(--ease-dramatic);
 }
 
 .app-btn:hover .turn-icon {

@@ -12,27 +12,29 @@
     height: 130px;
     position: relative;
     border-radius: 50%;
-    /* Recessed Socket */
     background: rgba(0,0,0,0.05);
     box-shadow:
         inset 2px 2px 8px rgba(0,0,0,0.6),
         inset -1px -1px 3px rgba(255,255,255,0.1),
         0 1px 1px rgba(255,255,255,0.2);
-    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: transform var(--motion-slow) var(--ease-soft);
 }
 
 .dpad-btn {
     position: absolute;
-    background-color: var(--btn-dpad);
+    background-color: var(--device-button-dpad);
     border: none;
     cursor: pointer;
-    /* Clean matte finish instead of gradient dots */
     background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.2) 100%);
-    transition: all 0.08s cubic-bezier(0.3, 0.8, 0.3, 1);
+    transition: all var(--motion-instant) var(--ease-press);
     z-index: 2;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.dpad-btn:hover {
+    filter: brightness(1.08);
 }
 
 /* Subtle engraved arrows instead of nothing */
@@ -111,14 +113,14 @@
     left: 45px;
     width: 40px;
     height: 40px;
-    background-color: var(--btn-dpad);
+    background-color: var(--device-button-dpad);
     background-image: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%);
     z-index: 3;
     box-shadow:
-        -4px 0 0 var(--btn-dpad),
-        4px 0 0 var(--btn-dpad),
-        0 -4px 0 var(--btn-dpad),
-        0 4px 0 var(--btn-dpad),
+        -4px 0 0 var(--device-button-dpad),
+        4px 0 0 var(--device-button-dpad),
+        0 -4px 0 var(--device-button-dpad),
+        0 4px 0 var(--device-button-dpad),
         0 4px 0 rgba(0,0,0,0.7),
         0 6px 10px rgba(0,0,0,0.5);
 }
@@ -166,25 +168,25 @@
 /* Functional Buttons A & B */
 .action-buttons {
     display: flex;
-    gap: 20px;
+    gap: var(--space-5);
     transform: rotate(25deg);
-    margin-bottom: 30px;
-    padding-left: 20px;
-    margin-top: 15px;
+    margin-bottom: var(--space-7);
+    padding-left: var(--space-5);
+    margin-top: var(--space-4);
 }
 
 .console.landscape .action-buttons {
     transform: rotate(-15deg);
-    margin-bottom: 20px;
+    margin-bottom: var(--space-5);
     padding-left: 0;
-    gap: 15px;
+    gap: var(--space-4);
 }
 
 .btn-group {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-3);
     position: relative;
     z-index: 1;
 }
@@ -208,7 +210,7 @@
 .action-buttons button {
     width: 56px;
     height: 56px;
-    border-radius: 50%;
+    border-radius: var(--radius-button-round);
     border: none;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-weight: 800;
@@ -220,11 +222,11 @@
     cursor: pointer;
     position: relative;
     z-index: 2;
-    transition: transform 0.08s cubic-bezier(0.3, 0.8, 0.3, 1), box-shadow 0.08s cubic-bezier(0.3, 0.8, 0.3, 1);
+    transition: transform var(--motion-instant) var(--ease-press), box-shadow var(--motion-instant) var(--ease-press), filter var(--motion-instant) var(--ease-press);
 }
 
 .btn-a {
-    background-color: var(--btn-a);
+    background-color: var(--device-button-primary);
     box-shadow:
         inset 0 1.5px 2px rgba(255,255,255,0.6),
         inset 0 -2px 4px rgba(0,0,0,0.3),
@@ -232,12 +234,17 @@
         0 6px 10px rgba(0,0,0,0.6);
 }
 .btn-b {
-    background-color: var(--btn-b);
+    background-color: var(--device-button-secondary);
     box-shadow:
         inset 0 1.5px 2px rgba(255,255,255,0.6),
         inset 0 -2px 4px rgba(0,0,0,0.3),
         0 4px 0 rgba(0,0,0,0.6),
         0 6px 10px rgba(0,0,0,0.6);
+}
+
+.action-buttons button:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
 }
 
 .action-buttons .btn-a:active,
@@ -278,23 +285,23 @@
     grid-area: speaker;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: var(--space-2);
     transform: rotate(25deg);
-    opacity: 0.85;
-    margin-bottom: 20px;
+    opacity: 0.92;
+    margin-bottom: var(--space-5);
     justify-self: end;
-    padding-right: 40px;
+    padding-right: var(--space-8);
 }
 
 .speaker span {
     width: 6px;
     height: 60px;
-    background: rgba(0,0,0,0.6);
+    background: linear-gradient(180deg, rgba(0,0,0,0.68), rgba(0,0,0,0.9));
     border-radius: 5px;
     box-shadow:
         inset 1px 1px 3px rgba(0,0,0,0.9),
-        inset -1px -1px 2px rgba(255,255,255,0.1),
-        1px 1px 1px rgba(255,255,255,0.2);
+        inset -1px -1px 2px rgba(255,255,255,0.08),
+        1px 1px 1px rgba(255,255,255,0.16);
 }
 
 .console.landscape .speaker {
@@ -323,9 +330,9 @@
     grid-area: meta;
     display: flex;
     justify-content: flex-start;
-    padding-left: 20px;
-    gap: 15px;
-    margin-bottom: 20px;
+    padding-left: var(--space-5);
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
     transform: rotate(25deg);
     z-index: 5;
 }
@@ -348,11 +355,11 @@
     width: 70px;
     height: 24px;
     border-radius: 12px;
-    background: rgba(0,0,0,0.05);
+    background: rgba(0,0,0,0.08);
     box-shadow:
         inset 2px 2px 5px rgba(0,0,0,0.6),
-        inset -1px -1px 3px rgba(255,255,255,0.1),
-        0 1px 1px rgba(255,255,255,0.2);
+        inset -1px -1px 3px rgba(255,255,255,0.08),
+        0 1px 1px rgba(255,255,255,0.16);
     z-index: -1;
     pointer-events: none;
 }
@@ -362,7 +369,7 @@
     top: 24px;
     width: 100%;
     text-align: center;
-    font-size: 10px;
+    font-size: var(--text-2xs);
     color: rgba(255,255,255,0.4);
     font-family: sans-serif;
     font-weight: bold;
@@ -376,18 +383,23 @@
 .pill-btn {
     width: 60px;
     height: 14px;
-    background: #333;
+    background: var(--device-button-meta);
     border: none;
     border-radius: 10px;
     position: relative;
     box-shadow: 0 2px 3px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.1);
     cursor: pointer;
     view-transition-name: none;
+    transition: transform var(--motion-instant) var(--ease-press), filter var(--motion-instant) var(--ease-press), box-shadow var(--motion-instant) var(--ease-press);
 }
 
 /* Assign unique view transition names to each button so they track individually */
 .pill-btn.select { view-transition-name: btn-select; }
 .pill-btn.start { view-transition-name: btn-start; }
+
+.pill-btn:hover {
+    filter: brightness(1.08);
+}
 
 .pill-btn:active, .pill-btn.pressed {
     transform: translateY(2px);
@@ -399,10 +411,10 @@
 /* Landscape: Top corners of console face */
 .console.landscape .meta-controls {
     position: absolute;
-    top: 20px;
+    top: var(--space-5);
     bottom: auto;
-    left: 40px;
-    right: 40px;
+    left: var(--space-8);
+    right: var(--space-8);
     width: auto;
     height: auto;
     transform: none;

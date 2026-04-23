@@ -1,0 +1,13 @@
+:where(button, [role='button'], [role='switch'], [role='tab'], a):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 3px;
+  box-shadow: var(--focus-ring-shadow);
+}
+
+:where(button, [role='button'], [role='switch'], [role='tab'], a) {
+  transition-timing-function: var(--ease-soft);
+}
+
+.console-off :where(.tab-indicator, .social-link) {
+  pointer-events: none;
+}
