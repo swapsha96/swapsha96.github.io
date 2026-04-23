@@ -145,6 +145,29 @@ test.describe('GameBoy E2E', () => {
         await page.keyboard.press('p');
         await expect(consoleBody).not.toHaveClass(/console-off/);
     });
+
+    test('Controls are disabled when powered off', async ({ page }) => {
+        const consoleBody = page.locator('.console');
+        const firstLink = page.locator('.social-link').first();
+        const secondLink = page.locator('.social-link').nth(1);
+        const body = page.locator('body');
+        const initialClass = await body.getAttribute('class');
+
+        await page.keyboard.press('p');
+        await expect(consoleBody).toHaveClass(/console-off/);
+        await expect(firstLink).toHaveClass(/active/);
+
+        await page.keyboard.press('ArrowDown');
+        await expect(firstLink).toHaveClass(/active/);
+        await expect(secondLink).not.toHaveClass(/active/);
+
+        await page.keyboard.press('x');
+        await expect(body).toHaveClass(initialClass || '');
+
+        await page.keyboard.press('ArrowRight');
+        await expect(page.locator('#tab-0')).toBeVisible();
+        await expect(page.locator('#tab-1')).toBeHidden();
+    });
     
     test('Konami Code (Matrix Mode)', async ({ page }) => {
         const screen = page.locator('#main-screen');

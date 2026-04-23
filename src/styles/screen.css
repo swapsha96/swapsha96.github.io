@@ -101,8 +101,10 @@
     opacity: 0.3;
 }
 
+.console-off .screen-display,
 .console-off .dpad-btn,
-.console-off .action-buttons button {
+.console-off .action-buttons button,
+.console-off .meta-controls {
     pointer-events: none;
 }
 

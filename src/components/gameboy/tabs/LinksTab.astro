@@ -1,0 +1,28 @@
+---
+import { iconSvgs, type IconName } from '../../../lib/icons';
+
+interface LinkItem {
+  data: {
+    title: string;
+    url: string;
+    icon: IconName;
+  };
+}
+
+const { links } = Astro.props as { links: LinkItem[] };
+---
+
+<nav class="links" aria-label="Social links">
+  {links.map((link, index) => (
+    <a
+      href={link.data.url}
+      target={link.data.url.startsWith('mailto') ? '_self' : '_blank'}
+      rel={link.data.url.startsWith('mailto') ? '' : 'noopener noreferrer'}
+      class={`social-link ${link.data.icon} ${index === 0 ? 'active' : ''}`}
+      data-index={index}
+    >
+      <Fragment set:html={iconSvgs[link.data.icon] || ''} />
+      <span class="link-text">{link.data.title}</span>
+    </a>
+  ))}
+</nav>

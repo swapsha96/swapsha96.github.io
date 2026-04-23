@@ -1,25 +1,23 @@
 import { FRAME_DURATION } from './constants';
 import { state } from './state';
 import { SoundEngine } from './sound-engine';
-import { switchToTab, updateActiveLink } from './navigation';
+import { updateActiveLink, updateTabUI } from './navigation';
 
 export function initPowerSwitch() {
     const switchTrack = document.getElementById('power-switch');
     const consoleBody = document.querySelector('.console');
     const screenDisplay = document.querySelector('.screen-display') as HTMLElement | null;
 
-    let isPoweredOn = true;
-
     if (!switchTrack || !consoleBody) return;
 
     const togglePower = () => {
-        isPoweredOn = !isPoweredOn;
+        state.isPoweredOn = !state.isPoweredOn;
 
-        switchTrack.setAttribute('aria-checked', String(isPoweredOn));
+        switchTrack.setAttribute('aria-checked', String(state.isPoweredOn));
         const bootScreen = document.getElementById('boot-screen');
         const topHud = document.getElementById('top-hud') as HTMLElement | null;
 
-        if (isPoweredOn) {
+        if (state.isPoweredOn) {
             consoleBody.classList.remove('console-off');
             SoundEngine.playClick();
 
@@ -27,7 +25,7 @@ export function initPowerSwitch() {
             if (topHud) topHud.style.opacity = '0';
 
             setTimeout(() => {
-                if (!isPoweredOn) return;
+                if (!state.isPoweredOn) return;
                 SoundEngine.playTone(600, 'sine', (FRAME_DURATION * 24) / 1000);
                 if (bootScreen) bootScreen.classList.remove('active');
                 if (topHud) topHud.style.opacity = '1';
@@ -51,9 +49,8 @@ export function initPowerSwitch() {
             if (topHud) topHud.style.opacity = '1';
 
             setTimeout(() => {
-                if (state.currentTab !== 0) {
-                    switchToTab(0);
-                }
+                state.currentTab = 0;
+                updateTabUI();
                 state.currentIndex = 0;
                 updateActiveLink(0);
                 if (screenDisplay) {
