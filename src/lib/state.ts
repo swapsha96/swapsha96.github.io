@@ -3,6 +3,7 @@ export type AppState = {
   currentTab: number;
   numTabs: number;
   isPoweredOn: boolean;
+  isBooting: boolean;
 };
 
 export const state: AppState = {
@@ -10,6 +11,7 @@ export const state: AppState = {
   currentTab: 0,
   numTabs: 3,
   isPoweredOn: true,
+  isBooting: false,
 };
 
 function prefersReducedMotion(): boolean {
@@ -26,4 +28,8 @@ export function getScrollBehavior(): ScrollBehavior {
 
 export function isConsolePoweredOn(): boolean {
   return state.isPoweredOn;
+}
+
+export function isConsoleInteractive(): boolean {
+  return state.isPoweredOn && !state.isBooting;
 }

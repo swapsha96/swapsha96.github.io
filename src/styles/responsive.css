@@ -34,9 +34,26 @@
         font-size: 16px;
     }
 
-    /* Mobile: Hide power switch entirely */
+    /* Mobile: Keep the power switch reachable inside the viewport */
     .power-switch-container {
-        display: none !important;
+        top: max(10px, env(safe-area-inset-top));
+        left: 8px;
+        z-index: 8;
+        padding: 8px;
+    }
+
+    .switch-track {
+        width: 22px;
+        height: 42px;
+    }
+
+    .switch-handle {
+        width: 20px;
+        height: 16px;
+    }
+
+    .switch-track[aria-checked="false"] .switch-handle {
+        top: 24px;
     }
 }
 
@@ -102,6 +119,17 @@
 
 @media (max-width: 768px), (hover: none) and (pointer: coarse) {
     .app-turn-control {
-        display: none;
+        bottom: calc(env(safe-area-inset-bottom) + var(--space-4));
+        right: calc(env(safe-area-inset-right) + var(--space-4));
+    }
+
+    .app-btn {
+        width: 52px;
+        height: 52px;
+    }
+
+    .turn-icon {
+        width: 22px;
+        height: 22px;
     }
 }

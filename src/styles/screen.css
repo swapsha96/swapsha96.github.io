@@ -107,7 +107,11 @@
 .console-off .screen-display,
 .console-off .dpad-btn,
 .console-off .action-buttons button,
-.console-off .meta-controls {
+.console-off .meta-controls,
+.console-booting .screen-display,
+.console-booting .dpad-btn,
+.console-booting .action-buttons button,
+.console-booting .meta-controls {
     pointer-events: none;
 }
 
@@ -195,7 +199,12 @@
     background: var(--device-screen-bg);
     width: 100%;
     height: 230px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.8), var(--shadow-glow-screen-strong);
+    box-shadow:
+        inset 0 0 20px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.04),
+        0 0 0 1px rgba(255,255,255,0.02),
+        0 0 10px color-mix(in srgb, var(--device-screen-text) 10%, transparent),
+        0 3px 10px rgba(0,0,0,0.28);
     overflow: hidden;
     padding: var(--space-4);
     font-family: var(--font-screen);
@@ -207,10 +216,22 @@
 
     /* Modern Scanline */
     background-image:
-      radial-gradient(circle at top center, rgba(255,255,255,0.08), transparent 38%),
+      radial-gradient(circle at top center, rgba(255,255,255,0.05), transparent 34%),
       linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
-      linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.015), rgba(0, 0, 255, 0.04));
     background-size: 100% 100%, 100% 2px, 3px 100%;
+}
+
+.screen-display::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow:
+        inset 0 0 18px rgba(255,255,255,0.02),
+        inset 0 0 28px color-mix(in srgb, var(--device-screen-text) 5%, transparent);
+    opacity: 0.7;
 }
 
 /* --- Boot Screen / Process Gram --- */
@@ -223,8 +244,10 @@
     background: var(--device-screen-bg);
     z-index: 10;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: var(--space-4);
     opacity: 0;
     visibility: hidden;
     transition: opacity var(--motion-normal) var(--ease-soft), visibility var(--motion-normal) var(--ease-soft);
@@ -256,6 +279,16 @@
 
 .boot-screen.active .progress-bar {
     animation: fillProgressBlocks 3.5s steps(5, jump-none) forwards;
+}
+
+.boot-status {
+    margin: 0;
+    font-size: var(--text-sm);
+    letter-spacing: var(--letter-screen);
+    text-transform: uppercase;
+    color: var(--device-screen-text);
+    text-shadow: 0 0 6px rgba(10, 255, 194, 0.3);
+    animation: blink 1.2s steps(2, jump-none) infinite;
 }
 
 @keyframes fillProgressBlocks {

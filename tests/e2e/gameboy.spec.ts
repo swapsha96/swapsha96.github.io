@@ -168,7 +168,70 @@ test.describe('GameBoy E2E', () => {
         await expect(page.locator('#tab-0')).toBeVisible();
         await expect(page.locator('#tab-1')).toBeHidden();
     });
+
+    test('Controls stay locked until boot finishes', async ({ page }) => {
+        const consoleBody = page.locator('.console');
+        const bootScreen = page.locator('#boot-screen');
+        const bootStatus = page.locator('.boot-status');
+        const firstLink = page.locator('.social-link').first();
+        const secondLink = page.locator('.social-link').nth(1);
+        const body = page.locator('body');
+        const initialClass = await body.getAttribute('class');
+
+        await page.keyboard.press('p');
+        await expect(consoleBody).toHaveClass(/console-off/);
+
+        await page.keyboard.press('p');
+        await expect(consoleBody).toHaveClass(/console-booting/);
+        await expect(bootScreen).toHaveClass(/active/);
+        await expect(bootStatus).toBeVisible();
+        await expect(bootStatus).toContainText('CONTROLS LOCKED');
+
+        await page.keyboard.press('ArrowDown');
+        await page.keyboard.press('ArrowRight');
+        await page.keyboard.press('x');
+
+        await expect(firstLink).toHaveClass(/active/);
+        await expect(secondLink).not.toHaveClass(/active/);
+        await expect(page.locator('#tab-0')).toBeVisible();
+        await expect(page.locator('#tab-1')).toBeHidden();
+        await expect(body).toHaveClass(initialClass || '');
+
+        await expect(consoleBody).not.toHaveClass(/console-booting/, { timeout: 5000 });
+        await expect(bootScreen).not.toHaveClass(/active/, { timeout: 5000 });
+
+        await page.keyboard.press('ArrowDown');
+        await expect(secondLink).toHaveClass(/active/);
+    });
     
+    test('Rapid power cycling does not unlock controls early', async ({ page }) => {
+        const consoleBody = page.locator('.console');
+        const firstLink = page.locator('.social-link').first();
+        const secondLink = page.locator('.social-link').nth(1);
+
+        await page.keyboard.press('p');
+        await expect(consoleBody).toHaveClass(/console-off/);
+
+        await page.keyboard.press('p');
+        await expect(consoleBody).toHaveClass(/console-booting/);
+
+        await page.waitForTimeout(1000);
+        await page.keyboard.press('p');
+        await expect(consoleBody).toHaveClass(/console-off/);
+
+        await page.keyboard.press('p');
+        await expect(consoleBody).toHaveClass(/console-booting/);
+
+        await page.waitForTimeout(2600);
+        await page.keyboard.press('ArrowDown');
+        await expect(firstLink).toHaveClass(/active/);
+        await expect(secondLink).not.toHaveClass(/active/);
+
+        await expect(consoleBody).not.toHaveClass(/console-booting/, { timeout: 2000 });
+        await page.keyboard.press('ArrowDown');
+        await expect(secondLink).toHaveClass(/active/);
+    });
+
     test('Konami Code (Matrix Mode)', async ({ page }) => {
         const screen = page.locator('#main-screen');
         

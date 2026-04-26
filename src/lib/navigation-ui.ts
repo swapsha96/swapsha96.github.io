@@ -132,29 +132,47 @@ export function toggleTurnLayout() {
   setTimeout(() => SoundEngine.playTone(440, 'triangle', (FRAME_DURATION * 30) / 1000, 0.1), FRAME_DURATION * 6);
 }
 
+const TOUCH_CLICK_SUPPRESSION_MS = 450;
+let lastTouchStartAt = 0;
+
+function markTouchInteraction() {
+  lastTouchStartAt = Date.now();
+}
+
+function isSyntheticClickAfterTouch() {
+  return Date.now() - lastTouchStartAt < TOUCH_CLICK_SUPPRESSION_MS;
+}
+
 export function bindPressAction(btn: HTMLElement | null, action: () => void) {
   if (!btn) return;
 
   btn.addEventListener('click', () => {
+    if (isSyntheticClickAfterTouch()) return;
     animatePress(btn);
     action();
   });
 
   btn.addEventListener('touchstart', (e) => {
     e.preventDefault();
+    markTouchInteraction();
     animatePress(btn);
     action();
-  });
+  }, { passive: false });
 }
 
 export function bindTouchAction(btn: HTMLElement | null, action: () => void) {
   if (!btn) return;
 
-  btn.addEventListener('click', action);
-  btn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
+  btn.addEventListener('click', () => {
+    if (isSyntheticClickAfterTouch()) return;
     action();
   });
+
+  btn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    markTouchInteraction();
+    action();
+  }, { passive: false });
 }
 
 export function getHoveredLinkIndex(target: EventTarget | null): number | null {

@@ -8,6 +8,7 @@
   transition-timing-function: var(--ease-soft);
 }
 
-.console-off :where(.tab-indicator, .social-link) {
+.console-off :where(.tab-indicator, .social-link),
+.console-booting :where(.tab-indicator, .social-link) {
   pointer-events: none;
 }

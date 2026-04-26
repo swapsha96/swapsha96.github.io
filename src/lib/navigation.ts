@@ -1,5 +1,5 @@
 import { FRAME_DURATION } from './constants';
-import { isConsolePoweredOn, state } from './state';
+import { isConsoleInteractive, state } from './state';
 import { SoundEngine } from './sound-engine';
 import { handleThemeSwitch } from './theme-manager';
 import { getNextIndex, getNextTab, isTypingTarget, type NavigationDirection, type TabDirection } from './navigation-core';
@@ -22,7 +22,7 @@ import {
 export { getNextIndex, getNextTab, updateActiveLink, updateTabUI };
 
 function handleNavigation(direction: NavigationDirection) {
-  if (!isConsolePoweredOn()) return;
+  if (!isConsoleInteractive()) return;
 
   if (state.currentTab === 0) {
     const links = getLinks();
@@ -40,12 +40,12 @@ function handleNavigation(direction: NavigationDirection) {
 }
 
 function handleSelection() {
-  if (!isConsolePoweredOn()) return;
+  if (!isConsoleInteractive()) return;
   activateSelectedLink();
 }
 
 export function switchTab(direction: TabDirection) {
-  if (!isConsolePoweredOn()) return;
+  if (!isConsoleInteractive()) return;
 
   state.currentTab = getNextTab(state.currentTab, state.numTabs, direction);
 
@@ -59,15 +59,25 @@ export function switchTab(direction: TabDirection) {
 }
 
 export function switchToTab(index: number) {
-  if (!isConsolePoweredOn()) return;
+  if (!isConsoleInteractive()) return;
   if (index < 0 || index >= state.numTabs || index === state.currentTab) return;
 
   state.currentTab = index;
   SoundEngine.switch();
+  resetScreenScroll();
   updateTabUI();
+
+  if (state.currentTab === 0) {
+    setTimeout(() => updateActiveLink(state.currentIndex), FRAME_DURATION * 3);
+  }
 }
 
 export function initNavigation() {
+  const whenInteractive = (action: () => void) => () => {
+    if (!isConsoleInteractive()) return;
+    action();
+  };
+
   document.addEventListener('keyup', (e) => {
     toggleButtonState(e.key, false);
   });
@@ -78,7 +88,7 @@ export function initNavigation() {
   });
 
   document.querySelectorAll('.tab-indicator').forEach((tab, index) => {
-    tab.addEventListener('click', () => switchToTab(index));
+    tab.addEventListener('click', whenInteractive(() => switchToTab(index)));
   });
 
   document.addEventListener('keydown', (e) => {
@@ -86,13 +96,13 @@ export function initNavigation() {
     if (isTypingTarget(target) || e.isComposing || e.metaKey) return;
 
     if ((e.key === 'h' || e.key === 'H') && !e.ctrlKey && !e.altKey && !e.metaKey) {
-      if (!isConsolePoweredOn()) return;
+      if (!isConsoleInteractive()) return;
       e.preventDefault();
       switchToTab(2);
       return;
     }
 
-    if (!e.repeat && isConsolePoweredOn()) toggleButtonState(e.key, true);
+    if (!e.repeat && isConsoleInteractive()) toggleButtonState(e.key, true);
 
     switch (e.key) {
       case 'ArrowUp': case 'w': case 'W':
@@ -117,7 +127,7 @@ export function initNavigation() {
         break;
       case 'x': case 'X':
       case 'q': case 'Q':
-        if (!e.ctrlKey && !e.altKey && !e.metaKey && isConsolePoweredOn()) {
+        if (!e.ctrlKey && !e.altKey && !e.metaKey && isConsoleInteractive()) {
           e.preventDefault();
           handleThemeSwitch();
         }
@@ -131,21 +141,21 @@ export function initNavigation() {
     }
   });
 
-  bindPressAction(document.getElementById('up'), () => handleNavigation('up'));
-  bindPressAction(document.getElementById('down'), () => handleNavigation('down'));
-  bindPressAction(document.getElementById('left'), () => switchTab('left'));
-  bindPressAction(document.getElementById('right'), () => switchTab('right'));
-  bindPressAction(document.getElementById('btn-a'), handleSelection);
-  bindPressAction(document.getElementById('btn-b'), handleThemeSwitch);
-  bindPressAction(document.getElementById('btn-select'), handleThemeSwitch);
-  bindPressAction(document.getElementById('btn-start'), () => switchToTab(2));
+  bindPressAction(document.getElementById('up'), whenInteractive(() => handleNavigation('up')));
+  bindPressAction(document.getElementById('down'), whenInteractive(() => handleNavigation('down')));
+  bindPressAction(document.getElementById('left'), whenInteractive(() => switchTab('left')));
+  bindPressAction(document.getElementById('right'), whenInteractive(() => switchTab('right')));
+  bindPressAction(document.getElementById('btn-a'), whenInteractive(handleSelection));
+  bindPressAction(document.getElementById('btn-b'), whenInteractive(handleThemeSwitch));
+  bindPressAction(document.getElementById('btn-select'), whenInteractive(handleThemeSwitch));
+  bindPressAction(document.getElementById('btn-start'), whenInteractive(() => switchToTab(2)));
   bindTouchAction(document.getElementById('btn-turn'), toggleTurnLayout);
 
   const linksContainer = document.querySelector('.links');
   if (linksContainer) {
     linksContainer.addEventListener('mouseover', (e) => {
       const index = getHoveredLinkIndex(e.target);
-      if (index !== null && state.currentTab === 0 && isConsolePoweredOn()) {
+      if (index !== null && state.currentTab === 0 && isConsoleInteractive()) {
         updateActiveLink(index, false, true);
       }
     });
@@ -156,7 +166,7 @@ export function initNavigation() {
   const LINK_SCROLL_THRESHOLD = 30;
 
   document.addEventListener('wheel', (e) => {
-    if (e.ctrlKey || !isConsolePoweredOn()) return;
+    if (e.ctrlKey || !isConsoleInteractive()) return;
     e.preventDefault();
 
     if (state.currentTab === 1 || state.currentTab === 2) {
