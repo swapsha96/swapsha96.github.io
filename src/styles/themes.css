@@ -12,7 +12,9 @@ body.theme-berry {
   --device-button-secondary: #00f0ff;
   --device-bg-base: #1a0509;
   --device-bg-gradient: #4d0f22;
-  --shadow-glow-screen: 0 0 10px rgba(255, 126, 182, 0.6);
+  --border-screen-subtle: rgba(255, 126, 182, 0.22);
+  --border-screen-strong: rgba(255, 126, 182, 0.4);
+  --shadow-glow-screen: 0 0 8px rgba(255, 126, 182, 0.26);
 }
 
 body.theme-ice {
@@ -25,7 +27,9 @@ body.theme-ice {
   --device-button-secondary: #ff0055;
   --device-bg-base: #05101a;
   --device-bg-gradient: #153b50;
-  --shadow-glow-screen: 0 0 10px rgba(0, 229, 255, 0.6);
+  --border-screen-subtle: rgba(0, 229, 255, 0.2);
+  --border-screen-strong: rgba(0, 229, 255, 0.38);
+  --shadow-glow-screen: 0 0 8px rgba(0, 229, 255, 0.24);
 }
 
 body.theme-jungle {
@@ -38,7 +42,9 @@ body.theme-jungle {
   --device-button-secondary: #ffae00;
   --device-bg-base: #051406;
   --device-bg-gradient: #143d16;
-  --shadow-glow-screen: 0 0 10px rgba(173, 255, 47, 0.5);
+  --border-screen-subtle: rgba(173, 255, 47, 0.2);
+  --border-screen-strong: rgba(173, 255, 47, 0.38);
+  --shadow-glow-screen: 0 0 8px rgba(173, 255, 47, 0.22);
 }
 
 body.theme-classic {
@@ -53,7 +59,9 @@ body.theme-classic {
   --device-button-secondary: #8b0000;
   --device-bg-base: #222;
   --device-bg-gradient: #444;
-  --shadow-glow-screen: none;
+  --border-screen-subtle: rgba(15, 56, 15, 0.16);
+  --border-screen-strong: rgba(15, 56, 15, 0.28);
+  --shadow-glow-screen: 0 0 4px rgba(15, 56, 15, 0.08);
 }
 
 body.theme-sunblaze {
@@ -66,7 +74,9 @@ body.theme-sunblaze {
   --device-button-secondary: #ffee00;
   --device-bg-base: #1a0a00;
   --device-bg-gradient: #3d1500;
-  --shadow-glow-screen: 0 0 10px rgba(255, 170, 0, 0.6);
+  --border-screen-subtle: rgba(255, 170, 0, 0.2);
+  --border-screen-strong: rgba(255, 170, 0, 0.38);
+  --shadow-glow-screen: 0 0 8px rgba(255, 170, 0, 0.24);
 }
 
 body.theme-cyberpunk {
@@ -79,7 +89,9 @@ body.theme-cyberpunk {
   --device-button-secondary: #ff00ff;
   --device-bg-base: #0b001a;
   --device-bg-gradient: #1a0033;
-  --shadow-glow-screen: 0 0 10px rgba(0, 255, 255, 0.6);
+  --border-screen-subtle: rgba(0, 255, 255, 0.2);
+  --border-screen-strong: rgba(0, 255, 255, 0.38);
+  --shadow-glow-screen: 0 0 8px rgba(0, 255, 255, 0.24);
 }
 
 body.theme-midnight {
@@ -94,5 +106,7 @@ body.theme-midnight {
   --device-button-secondary: #ee5555;
   --device-bg-base: #050505;
   --device-bg-gradient: #111115;
-  --shadow-glow-screen: 0 0 10px rgba(136, 204, 238, 0.4);
+  --border-screen-subtle: rgba(136, 204, 238, 0.18);
+  --border-screen-strong: rgba(136, 204, 238, 0.34);
+  --shadow-glow-screen: 0 0 8px rgba(136, 204, 238, 0.18);
 }
