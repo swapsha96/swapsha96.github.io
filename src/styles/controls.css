@@ -28,7 +28,11 @@
     border: none;
     cursor: pointer;
     background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%, rgba(0,0,0,0.2) 100%);
-    transition: all var(--motion-instant) var(--ease-press);
+    transition:
+        transform var(--motion-release) var(--ease-release),
+        box-shadow var(--motion-release) var(--ease-release),
+        filter var(--motion-release) var(--ease-release),
+        background-image var(--motion-release) var(--ease-release);
     z-index: 2;
     display: flex;
     justify-content: center;
@@ -144,6 +148,11 @@
 .dpad-btn:active,
 .dpad-btn.pressed {
     background-image: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.3) 100%);
+    transition:
+        transform var(--motion-press-down) var(--ease-snappy),
+        box-shadow var(--motion-press-down) var(--ease-snappy),
+        filter var(--motion-press-down) var(--ease-snappy),
+        background-image var(--motion-press-down) linear;
 }
 
 .dpad-up:active, .dpad-up.pressed {
@@ -226,7 +235,10 @@
     cursor: pointer;
     position: relative;
     z-index: 2;
-    transition: transform var(--motion-instant) var(--ease-press), box-shadow var(--motion-instant) var(--ease-press), filter var(--motion-instant) var(--ease-press);
+    transition:
+        transform var(--motion-release) var(--ease-release),
+        box-shadow var(--motion-release) var(--ease-release),
+        filter var(--motion-release) var(--ease-release);
 }
 
 .btn-a {
@@ -259,6 +271,10 @@
         inset 0 -1px 2px rgba(255,255,255,0.1),
         0 0px 0 rgba(0,0,0,0.6),
         0 2px 4px rgba(0,0,0,0.5);
+    transition:
+        transform var(--motion-press-down) var(--ease-snappy),
+        box-shadow var(--motion-press-down) var(--ease-snappy),
+        filter var(--motion-press-down) var(--ease-snappy);
 }
 
 .action-buttons .btn-b:active,
@@ -269,6 +285,10 @@
         inset 0 -1px 2px rgba(255,255,255,0.1),
         0 0px 0 rgba(0,0,0,0.6),
         0 2px 4px rgba(0,0,0,0.5);
+    transition:
+        transform var(--motion-press-down) var(--ease-snappy),
+        box-shadow var(--motion-press-down) var(--ease-snappy),
+        filter var(--motion-press-down) var(--ease-snappy);
 }
 
 .btn-group::after {
@@ -396,7 +416,11 @@
     box-shadow: 0 2px 3px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.1);
     cursor: pointer;
     view-transition-name: none;
-    transition: transform var(--motion-instant) var(--ease-press), filter var(--motion-instant) var(--ease-press), box-shadow var(--motion-instant) var(--ease-press);
+    transition:
+        transform var(--motion-release) var(--ease-release),
+        filter var(--motion-release) var(--ease-release),
+        box-shadow var(--motion-release) var(--ease-release),
+        background-color var(--motion-release) var(--ease-release);
 }
 
 /* Assign unique view transition names to each button so they track individually */
@@ -411,6 +435,11 @@
     transform: translateY(2px);
     background: #222;
     box-shadow: 0 0 1px rgba(0,0,0,0.8), inset 0 2px 4px rgba(0,0,0,0.5);
+    transition:
+        transform var(--motion-press-down) var(--ease-snappy),
+        filter var(--motion-press-down) var(--ease-snappy),
+        box-shadow var(--motion-press-down) var(--ease-snappy),
+        background-color var(--motion-press-down) linear;
 }
 
 

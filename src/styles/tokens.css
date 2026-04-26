@@ -46,10 +46,13 @@
   --motion-normal: 220ms;
   --motion-slow: 360ms;
   --motion-boot: 600ms;
+  --motion-press-down: 55ms;
+  --motion-release: 120ms;
 
   --ease-snappy: cubic-bezier(0.12, 1, 0.14, 1);
   --ease-soft: cubic-bezier(0.25, 0.8, 0.25, 1);
   --ease-press: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --ease-release: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-dramatic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
   /* Elevation / effects */
