@@ -133,16 +133,25 @@
 
 /* --- Screen Lens area --- */
 .screen-lens {
-    background: linear-gradient(180deg, color-mix(in srgb, var(--device-lens-bg) 88%, white 12%), var(--device-lens-bg));
+    background: linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--device-lens-bg) 86%, white 14%) 0%,
+        color-mix(in srgb, var(--device-lens-bg) 92%, black 8%) 58%,
+        color-mix(in srgb, var(--device-lens-bg) 78%, black 22%) 100%
+    );
     grid-area: screen;
     width: 100%;
     align-self: flex-start;
     border-radius: 15px 15px 45px 15px;
     padding: var(--space-7) var(--space-8) var(--space-4) var(--space-8);
     position: relative;
-    box-shadow: var(--shadow-lens);
+    box-shadow:
+        var(--shadow-lens),
+        inset 0 1px 0 rgba(255,255,255,0.06),
+        inset 0 -12px 18px rgba(0,0,0,0.16),
+        0 0 0 1px rgba(0,0,0,0.16);
     margin-bottom: var(--space-5);
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.06);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -153,6 +162,13 @@
     align-self: stretch;
     border-radius: 15px 15px 45px 15px;
     margin: 10px 0;
+}
+
+.screen-lens > .screen-display {
+    box-shadow:
+        var(--shadow-screen-depth),
+        var(--shadow-screen-surface),
+        0 0 0 10px rgba(0,0,0,0.08);
 }
 
 /* Screen Rainbow Stripes */
