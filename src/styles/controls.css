@@ -36,7 +36,7 @@
 }
 
 .dpad-btn:hover {
-    filter: brightness(1.08);
+    filter: brightness(1.04);
 }
 
 /* Subtle engraved arrows instead of nothing */
@@ -247,8 +247,8 @@
 }
 
 .action-buttons button:hover {
-    filter: brightness(1.05);
-    transform: translateY(-1px);
+    filter: brightness(1.03);
+    transform: translateY(-0.5px);
 }
 
 .action-buttons .btn-a:active,
@@ -404,7 +404,7 @@
 .pill-btn.start { view-transition-name: btn-start; }
 
 .pill-btn:hover {
-    filter: brightness(1.08);
+    filter: brightness(1.04);
 }
 
 .pill-btn:active, .pill-btn.pressed {
