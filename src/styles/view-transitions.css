@@ -25,19 +25,19 @@
 ::view-transition-group(s1), ::view-transition-group(s2), ::view-transition-group(s3),
 ::view-transition-group(s4), ::view-transition-group(s5), ::view-transition-group(s6),
 ::view-transition-group(console-power-switch) {
-    animation-timing-function: var(--ease-snappy);
-    animation-duration: var(--motion-normal);
+    animation-timing-function: var(--ease-soft);
+    animation-duration: 180ms;
 }
 
 /* Add GBA Boot Flash to Screen Morph */
 @keyframes gbaFlash {
-    0% { filter: brightness(1); }
-    40% { filter: brightness(1.3) contrast(0.9); }
-    100% { filter: brightness(1); }
+    0% { filter: brightness(1) contrast(1); }
+    45% { filter: brightness(1.1) contrast(0.98); }
+    100% { filter: brightness(1) contrast(1); }
 }
 
 ::view-transition-new(console-screen) {
-    animation: gbaFlash var(--motion-boot) var(--ease-snappy);
+    animation: gbaFlash 200ms var(--ease-soft);
     height: 100%;
     width: 100%;
 }
@@ -79,4 +79,9 @@
 }
 ::view-transition-new(console-shell) {
     animation: none;
+}
+
+::view-transition-old(console-screen),
+::view-transition-new(console-screen) {
+    mix-blend-mode: normal;
 }

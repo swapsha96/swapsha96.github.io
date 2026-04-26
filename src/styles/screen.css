@@ -652,15 +652,14 @@ h2 {
 
 /* --- CRT Turn On Effect --- */
 @keyframes turnOn {
-    0% { transform: scale(1, 0.002); opacity: 0; }
-    30% { transform: scale(1, 0.002); opacity: 1; }
-    50% { transform: scale(1, 0.002); opacity: 1; }
-    70% { transform: scale(1, 1); opacity: 1; }
+    0% { transform: scale(1, 0.035); opacity: 0; }
+    28% { transform: scale(1, 0.035); opacity: 0.92; }
+    62% { transform: scale(1, 0.88); opacity: 1; }
     100% { transform: scale(1, 1); opacity: 1; }
 }
 
 .screen-display {
-    animation: turnOn var(--motion-normal) var(--ease-soft);
+    animation: turnOn 180ms var(--ease-soft);
     overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
