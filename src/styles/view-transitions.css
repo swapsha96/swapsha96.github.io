@@ -26,7 +26,7 @@
 ::view-transition-group(s4), ::view-transition-group(s5), ::view-transition-group(s6),
 ::view-transition-group(console-power-switch) {
     animation-timing-function: var(--ease-soft);
-    animation-duration: 180ms;
+    animation-duration: var(--motion-transition-weighted);
 }
 
 /* Add GBA Boot Flash to Screen Morph */
@@ -37,7 +37,7 @@
 }
 
 ::view-transition-new(console-screen) {
-    animation: gbaFlash 200ms var(--ease-soft);
+    animation: gbaFlash var(--motion-screen-flash) var(--ease-soft);
     height: 100%;
     width: 100%;
 }

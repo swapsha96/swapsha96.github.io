@@ -165,10 +165,7 @@
 }
 
 .screen-lens > .screen-display {
-    box-shadow:
-        var(--shadow-screen-depth),
-        var(--shadow-screen-surface),
-        0 0 0 10px rgba(0,0,0,0.08);
+    box-shadow: var(--shadow-screen-mounted);
 }
 
 /* Screen Rainbow Stripes */
@@ -659,7 +656,7 @@ h2 {
 }
 
 .screen-display {
-    animation: turnOn 180ms var(--ease-soft);
+    animation: turnOn var(--motion-transition-weighted) var(--ease-soft);
     overflow-y: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
