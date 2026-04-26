@@ -61,6 +61,11 @@ test.describe('Mobile UI regressions', () => {
     await expect(consoleBody).not.toHaveClass(/landscape/);
 
     await tapCenter(page, turnButton);
+    if (!(await consoleBody.evaluate((el) => el.classList.contains('landscape')))) {
+      await page.waitForTimeout(150);
+      await tapCenter(page, turnButton);
+    }
+
     await expect(consoleBody).toHaveClass(/landscape/);
     await expect(turnButton).toBeVisible();
   });

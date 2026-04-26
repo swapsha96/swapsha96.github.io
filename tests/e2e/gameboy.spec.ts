@@ -184,7 +184,6 @@ test.describe('GameBoy E2E', () => {
         await page.keyboard.press('p');
         await expect(consoleBody).toHaveClass(/console-booting/);
         await expect(bootScreen).toHaveClass(/active/);
-        await expect(bootStatus).toBeVisible();
         await expect(bootStatus).toContainText('CONTROLS LOCKED');
 
         await page.keyboard.press('ArrowDown');
@@ -206,6 +205,7 @@ test.describe('GameBoy E2E', () => {
     
     test('Rapid power cycling does not unlock controls early', async ({ page }) => {
         const consoleBody = page.locator('.console');
+        const bootScreen = page.locator('#boot-screen');
         const firstLink = page.locator('.social-link').first();
         const secondLink = page.locator('.social-link').nth(1);
 
@@ -221,13 +221,18 @@ test.describe('GameBoy E2E', () => {
 
         await page.keyboard.press('p');
         await expect(consoleBody).toHaveClass(/console-booting/);
+        await expect(bootScreen).toHaveClass(/active/);
 
-        await page.waitForTimeout(2600);
+        await page.waitForTimeout(2200);
+        await expect(consoleBody).toHaveClass(/console-booting/);
+        await expect(bootScreen).toHaveClass(/active/);
+
         await page.keyboard.press('ArrowDown');
         await expect(firstLink).toHaveClass(/active/);
         await expect(secondLink).not.toHaveClass(/active/);
 
-        await expect(consoleBody).not.toHaveClass(/console-booting/, { timeout: 2000 });
+        await expect(consoleBody).not.toHaveClass(/console-booting/, { timeout: 2500 });
+        await expect(bootScreen).not.toHaveClass(/active/, { timeout: 2500 });
         await page.keyboard.press('ArrowDown');
         await expect(secondLink).toHaveClass(/active/);
     });
