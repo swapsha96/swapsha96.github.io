@@ -213,7 +213,7 @@
 
     /* Modern Scanline */
     background-image:
-      radial-gradient(circle at top center, rgba(255,255,255,0.05), transparent 34%),
+      radial-gradient(circle at 46% 6%, rgba(255,255,255,0.04), transparent 30%),
       linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
       linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.015), rgba(0, 0, 255, 0.04));
     background-size: 100% 100%, 100% 2px, 3px 100%;
@@ -305,7 +305,10 @@
     width: 100%;
     height: 100%;
     border-radius: inherit;
-    background: linear-gradient(110deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 45%, transparent 45.1%);
+    background:
+        linear-gradient(114deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.028) 26%, rgba(255, 255, 255, 0.012) 42%, transparent 54%),
+        radial-gradient(120% 70% at 18% 10%, rgba(255, 255, 255, 0.045), transparent 32%);
+    opacity: 0.85;
     pointer-events: none;
     z-index: 100;
 }
