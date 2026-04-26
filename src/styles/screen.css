@@ -431,10 +431,12 @@ h1 {
 h2 {
     margin: 0;
     text-wrap: balance;
+    font-size: var(--text-md);
+    letter-spacing: 0.06em;
 }
 
 .tagline {
-    font-size: 16px;
+    font-size: var(--text-sm);
     margin: 0;
     opacity: 0.8;
     color: var(--screen-text);
@@ -445,43 +447,42 @@ h2 {
 .tabs-header {
     display: flex;
     justify-content: center;
-    gap: var(--space-4);
-    margin-bottom: var(--space-5);
+    gap: var(--space-5);
+    margin-bottom: var(--space-3);
     border-bottom: 1px solid var(--border-screen-subtle);
-    padding: 0 0 var(--space-2);
-    margin-top: var(--space-4);
+    padding: 0 0 6px;
+    margin-top: var(--space-3);
 }
 
 .tab-indicator {
     appearance: none;
-    border: 1px solid transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
     background: transparent;
     font-size: var(--text-md);
     cursor: pointer;
-    opacity: 0.72;
-    transition: opacity var(--motion-fast), text-shadow var(--motion-fast), background-color var(--motion-fast), border-color var(--motion-fast), transform var(--motion-fast);
+    opacity: 0.62;
+    transition: opacity var(--motion-fast), text-shadow var(--motion-fast), border-color var(--motion-fast);
     color: var(--device-screen-text);
     text-transform: uppercase;
     font-family: var(--font-screen);
-    letter-spacing: var(--letter-screen);
-    border-radius: var(--radius-sm);
-    padding: var(--space-1) var(--space-3);
+    letter-spacing: 0.08em;
+    border-radius: 0;
+    padding: 0 0 2px;
 }
 
 .tab-indicator:hover {
-    opacity: 0.92;
-    background: rgba(255,255,255,0.04);
-    border-color: var(--border-screen-subtle);
-    transform: var(--interactive-hover-shift);
+    opacity: 0.82;
+    border-color: color-mix(in srgb, var(--device-screen-text) 18%, transparent);
 }
 
 .tab-indicator.active {
     opacity: 1;
     font-weight: bold;
-    text-shadow: 0 0 5px var(--device-screen-text);
-    border: 1px solid var(--border-screen-strong);
-    background: rgba(255,255,255,0.06);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 0 10px rgba(10,255,194,0.12);
+    text-shadow: 0 0 4px color-mix(in srgb, var(--device-screen-text) 40%, transparent);
+    border-bottom-color: var(--border-screen-strong);
+    background: transparent;
+    box-shadow: none;
     margin-bottom: 0;
 }
 
@@ -501,38 +502,38 @@ h2 {
 
 .about-text {
     font-family: var(--font-screen);
-    font-size: var(--text-lg);
-    line-height: var(--line-relaxed);
+    font-size: var(--text-md);
+    line-height: 1.3;
     color: var(--device-screen-text);
-    text-shadow: 0 0 2px var(--device-screen-text);
-    padding: var(--space-4);
-    background: linear-gradient(180deg, var(--surface-screen-panel), rgba(0, 0, 0, 0.18));
+    text-shadow: 0 0 1px color-mix(in srgb, var(--device-screen-text) 40%, transparent);
+    padding: 8px var(--space-3);
+    background: rgba(0, 0, 0, 0.12);
     border: 1px solid var(--border-screen-subtle);
-    border-radius: var(--radius-sm);
+    border-radius: 0;
     min-height: 100px;
     text-wrap: pretty;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: none;
 }
 
 .help-panel {
-    padding: var(--space-4);
+    padding: 8px var(--space-3);
     border: 1px solid var(--border-screen-subtle);
-    border-radius: var(--radius-sm);
-    background: linear-gradient(180deg, var(--surface-screen-panel), rgba(0, 0, 0, 0.2));
-    font-size: 18px;
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.1);
+    font-size: var(--text-md);
     color: var(--device-screen-text);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: none;
 }
 
 .help-panel h3 {
-    margin: 0 0 var(--space-3);
-    font-size: var(--text-lg);
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-md);
     color: var(--device-screen-text);
-    text-shadow: 0 0 4px var(--device-screen-dim);
+    text-shadow: none;
     border-bottom: 1px solid var(--border-screen-strong);
-    padding-bottom: var(--space-1);
-    text-wrap: balance;
-    letter-spacing: var(--letter-screen);
+    padding-bottom: 4px;
+    text-wrap: nowrap;
+    letter-spacing: 0.08em;
 }
 
 .help-panel ul {
@@ -540,15 +541,15 @@ h2 {
     margin: 0;
     padding: 0;
     display: grid;
-    gap: var(--space-2);
+    gap: 6px;
 }
 
 .help-panel li {
     display: flex;
     justify-content: space-between;
     gap: var(--space-3);
-    border-bottom: 1px dashed var(--device-screen-dim);
-    padding: 0 0 var(--space-1);
+    border-bottom: 1px solid color-mix(in srgb, var(--device-screen-dim) 55%, transparent);
+    padding: 0 0 4px;
 }
 
 .help-panel li span:first-child {
@@ -558,13 +559,14 @@ h2 {
 
 .secret-hint {
     margin: var(--space-3) 0 0;
-    color: var(--device-screen-dim);
-    background: var(--device-screen-text);
-    padding: var(--space-1) var(--space-2);
+    color: var(--device-screen-text);
+    background: rgba(0, 0, 0, 0.14);
+    border: 1px solid var(--border-screen-subtle);
+    padding: 4px var(--space-2);
     text-align: center;
     font-weight: bold;
-    letter-spacing: 1px;
-    border-radius: var(--radius-xs);
+    letter-spacing: 0.08em;
+    border-radius: 0;
     font-size: 14px;
     white-space: nowrap;
 }
@@ -671,7 +673,7 @@ h2 {
 .links {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-2);
 }
 
 .links a {
@@ -679,20 +681,28 @@ h2 {
     align-items: center;
     color: var(--device-screen-text);
     text-decoration: none;
-    padding: var(--space-2) var(--space-3);
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    transition: all var(--motion-fast);
-    font-size: var(--text-lg);
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    padding: 5px var(--space-3);
+    border: none;
+    border-left: 2px solid transparent;
+    border-radius: 0;
+    transition: color var(--motion-fast), background-color var(--motion-fast), border-color var(--motion-fast), text-shadow var(--motion-fast);
+    font-size: var(--text-md);
+    background: transparent;
 }
 
-.links a:hover, .links a.active {
+.links a:hover {
+    background: color-mix(in srgb, var(--device-screen-text) 10%, transparent);
+    border-left-color: color-mix(in srgb, var(--device-screen-text) 35%, transparent);
+    text-shadow: 0 0 4px color-mix(in srgb, var(--device-screen-text) 28%, transparent);
+}
+
+.links a.active {
     background: var(--device-screen-text);
     color: var(--device-screen-bg);
-    box-shadow: 0 0 10px var(--device-screen-text);
+    border-left-color: var(--device-screen-text);
+    box-shadow: none;
     font-weight: bold;
-    transform: var(--interactive-hover-shift);
+    text-shadow: none;
 }
 
 .links a svg {
@@ -706,10 +716,11 @@ h2 {
 .footer {
     text-align: center;
     color: var(--device-screen-dim);
-    font-size: var(--text-xs);
-    margin-top: var(--space-5);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--device-screen-dim);
+    font-size: var(--text-2xs);
+    margin-top: var(--space-4);
+    padding-top: var(--space-2);
+    border-top: 1px solid color-mix(in srgb, var(--device-screen-dim) 70%, transparent);
+    letter-spacing: 0.08em;
 }
 
 .start-content {
