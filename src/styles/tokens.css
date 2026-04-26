@@ -62,6 +62,16 @@
   --shadow-floating: 0 10px 25px rgba(0,0,0,0.4);
   --shadow-glow-screen: 0 0 10px rgba(10, 255, 194, 0.5);
   --shadow-glow-screen-strong: 0 0 18px rgba(10, 255, 194, 0.35);
+  --shadow-screen-depth:
+    inset 0 0 22px rgba(0,0,0,0.78),
+    inset 0 -10px 18px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-screen-surface:
+    0 0 0 1px rgba(255,255,255,0.02),
+    0 0 8px color-mix(in srgb, var(--device-screen-text) 8%, transparent),
+    0 4px 12px rgba(0,0,0,0.24);
+  --screen-vignette-edge: rgba(0,0,0,0.14);
+  --screen-rim-highlight: rgba(255,255,255,0.03);
 
   /* Screen panel surfaces */
   --surface-screen-panel: rgba(0, 0, 0, 0.24);
