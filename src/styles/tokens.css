@@ -59,27 +59,22 @@
 
   /* Elevation / effects */
   --shadow-shell:
-    inset 2px 2px 5px rgba(255,255,255,0.18),
-    inset -7px -10px 18px rgba(0,0,0,0.34),
-    0 16px 34px rgba(0,0,0,0.24),
-    0 28px 64px rgba(0,0,0,0.46);
-  --shadow-lens: 0 5px 15px rgba(0,0,0,0.5);
-  --shadow-floating: 0 10px 25px rgba(0,0,0,0.4);
+    inset 2px 2px 5px rgba(255, 255, 255, 0.18), inset -7px -10px 18px rgba(0, 0, 0, 0.34),
+    0 16px 34px rgba(0, 0, 0, 0.24), 0 28px 64px rgba(0, 0, 0, 0.46);
+  --shadow-lens: 0 5px 15px rgba(0, 0, 0, 0.5);
+  --shadow-floating: 0 10px 25px rgba(0, 0, 0, 0.4);
   --shadow-glow-screen: 0 0 10px rgba(10, 255, 194, 0.5);
   --shadow-screen-depth:
-    inset 0 0 22px rgba(0,0,0,0.78),
-    inset 0 -10px 18px rgba(0,0,0,0.2),
-    inset 0 1px 0 rgba(255,255,255,0.04);
+    inset 0 0 22px rgba(0, 0, 0, 0.78), inset 0 -10px 18px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
   --shadow-screen-surface:
-    0 0 0 1px rgba(255,255,255,0.02),
+    0 0 0 1px rgba(255, 255, 255, 0.02),
     0 0 8px color-mix(in srgb, var(--device-screen-text) 8%, transparent),
-    0 4px 12px rgba(0,0,0,0.24);
+    0 4px 12px rgba(0, 0, 0, 0.24);
   --shadow-screen-mounted:
-    var(--shadow-screen-depth),
-    var(--shadow-screen-surface),
-    0 0 0 10px rgba(0,0,0,0.08);
-  --screen-vignette-edge: rgba(0,0,0,0.14);
-  --screen-rim-highlight: rgba(255,255,255,0.03);
+    var(--shadow-screen-depth), var(--shadow-screen-surface), 0 0 0 10px rgba(0, 0, 0, 0.08);
+  --screen-vignette-edge: rgba(0, 0, 0, 0.14);
+  --screen-rim-highlight: rgba(255, 255, 255, 0.03);
 
   /* Screen panel surfaces */
   --surface-screen-panel: rgba(0, 0, 0, 0.24);
@@ -90,8 +85,8 @@
 
   /* Surface / semantic color tokens */
   --color-text-primary: #fff;
-  --color-text-secondary: rgba(255,255,255,0.8);
-  --color-text-muted: rgba(255,255,255,0.6);
+  --color-text-secondary: rgba(255, 255, 255, 0.8);
+  --color-text-muted: rgba(255, 255, 255, 0.6);
   --color-bg-canvas: #0f0c29;
   --color-bg-elevated: #1a1a2e;
   --color-danger: #ff0055;
@@ -114,9 +109,9 @@
   --device-bg-gradient: #302b63;
   --device-led-on: #ff3b30;
   --device-led-off: #330000;
-  --device-trim: rgba(255,255,255,0.16);
-  --device-trim-strong: rgba(255,255,255,0.26);
-  --device-shadow-deep: rgba(0,0,0,0.72);
+  --device-trim: rgba(255, 255, 255, 0.16);
+  --device-trim-strong: rgba(255, 255, 255, 0.26);
+  --device-shadow-deep: rgba(0, 0, 0, 0.72);
 
   /* Dimensions */
   --console-width: 420px;

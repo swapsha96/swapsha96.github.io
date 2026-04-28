@@ -2,7 +2,11 @@ export type NavigationDirection = 'up' | 'down';
 export type TabDirection = 'left' | 'right';
 
 /** Pure function for testing: returns the next index with wrapping. */
-export function getNextIndex(current: number, length: number, direction: NavigationDirection): number {
+export function getNextIndex(
+  current: number,
+  length: number,
+  direction: NavigationDirection,
+): number {
   if (direction === 'up') {
     return current === 0 ? length - 1 : current - 1;
   }
@@ -19,9 +23,8 @@ export function getNextTab(current: number, numTabs: number, direction: TabDirec
 
 /** Pure helper for keyboard handling. */
 export function isTypingTarget(target: HTMLElement | null | undefined): boolean {
-  return !!target && (
-    target.tagName === 'INPUT' ||
-    target.tagName === 'TEXTAREA' ||
-    target.isContentEditable
+  return (
+    !!target &&
+    (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
   );
 }

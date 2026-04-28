@@ -211,7 +211,10 @@ describe('snake-engine', () => {
 
     it('detects wall collision (right edge)', () => {
       const running = makeState({
-        snake: [{ x: COLS - 1, y: 0 }, { x: COLS - 2, y: 0 }],
+        snake: [
+          { x: COLS - 1, y: 0 },
+          { x: COLS - 2, y: 0 },
+        ],
         direction: DIR.right,
         running: true,
       });

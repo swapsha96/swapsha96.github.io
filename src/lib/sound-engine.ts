@@ -9,7 +9,10 @@ export function updateMuteIcon() {
   muteIcon.style.visibility = SoundEngine.muted ? 'visible' : 'hidden';
 }
 
-function withActiveAudioContext(ctx: AudioContext | null, callback: (audioContext: AudioContext) => void) {
+function withActiveAudioContext(
+  ctx: AudioContext | null,
+  callback: (audioContext: AudioContext) => void,
+) {
   if (!ctx || SoundEngine.muted) return;
 
   if (ctx.state === 'suspended') {
@@ -99,7 +102,10 @@ export const SoundEngine = {
 
   select() {
     this.playTone(660, 'square', (FRAME_DURATION * 6) / 1000, 0.15);
-    setTimeout(() => this.playTone(880, 'square', (FRAME_DURATION * 12) / 1000, 0.15), FRAME_DURATION * 6);
+    setTimeout(
+      () => this.playTone(880, 'square', (FRAME_DURATION * 12) / 1000, 0.15),
+      FRAME_DURATION * 6,
+    );
   },
 
   back() {
@@ -108,5 +114,5 @@ export const SoundEngine = {
 
   switch() {
     this.playTone(300, 'triangle', (FRAME_DURATION * 6) / 1000, 0.15);
-  }
+  },
 };

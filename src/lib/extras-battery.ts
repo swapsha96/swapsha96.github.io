@@ -27,12 +27,15 @@ export function initBatteryIndicator() {
     return;
   }
 
-  (navigator as any).getBattery().then((battery: any) => {
-    const syncBattery = () => updateBatteryDisplay(level, battery);
-    syncBattery();
-    battery.addEventListener('levelchange', syncBattery);
-    battery.addEventListener('chargingchange', syncBattery);
-  }).catch(() => {
-    applyFallbackBattery(level);
-  });
+  (navigator as any)
+    .getBattery()
+    .then((battery: any) => {
+      const syncBattery = () => updateBatteryDisplay(level, battery);
+      syncBattery();
+      battery.addEventListener('levelchange', syncBattery);
+      battery.addEventListener('chargingchange', syncBattery);
+    })
+    .catch(() => {
+      applyFallbackBattery(level);
+    });
 }

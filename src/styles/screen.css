@@ -1,122 +1,139 @@
 /* --- Power Switch --- */
 .power-switch-container {
-    position: absolute;
-    top: 60px;
-    left: -12px;
-    z-index: -1;
-    transform-style: preserve-3d;
-    cursor: pointer;
-    padding: 10px 20px 10px 0;
-    view-transition-name: console-power-switch;
+  position: absolute;
+  top: 60px;
+  left: -12px;
+  z-index: -1;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  padding: 10px 20px 10px 0;
+  view-transition-name: console-power-switch;
 }
 
 .console.landscape .power-switch-container {
-    left: 178px;
-    top: 45px;
-    z-index: 5;
+  left: 178px;
+  top: 45px;
+  z-index: 5;
 }
 
 /* Landscape Power Switch Sizing */
 .console.landscape .switch-track {
-    width: 18px;
-    height: 40px;
+  width: 18px;
+  height: 40px;
 }
 .console.landscape .switch-handle {
-    width: 16px;
-    height: 14px;
+  width: 16px;
+  height: 14px;
 }
-.console.landscape .switch-track[aria-checked="false"] .switch-handle {
-    top: 24px;
+.console.landscape .switch-track[aria-checked='false'] .switch-handle {
+  top: 24px;
 }
 
 /* Ensure Power Switch is below Screen Lens during transition */
 ::view-transition-group(console-power-switch) {
-    z-index: 5;
+  z-index: 5;
 }
 
 ::view-transition-group(console-screen) {
-    z-index: 20;
+  z-index: 20;
 }
 
 /* Remove separate timing declaration to avoid duplication since we added it to the main group block */
 .switch-track {
-    width: 25px;
-    height: 50px;
-    background: linear-gradient(180deg, #1a1a1a, #0e0e0e);
-    border-radius: 5px 0 0 5px;
-    position: relative;
-    box-shadow:
-        inset 2px 0 5px rgba(255,255,255,0.1),
-        -2px 2px 5px rgba(0,0,0,0.5);
-    border: 1px solid #222;
-    border-right: none;
-    overflow: hidden;
+  width: 25px;
+  height: 50px;
+  background: linear-gradient(180deg, #1a1a1a, #0e0e0e);
+  border-radius: 5px 0 0 5px;
+  position: relative;
+  box-shadow:
+    inset 2px 0 5px rgba(255, 255, 255, 0.1),
+    -2px 2px 5px rgba(0, 0, 0, 0.5);
+  border: 1px solid #222;
+  border-right: none;
+  overflow: hidden;
 }
 
 .switch-handle {
-    width: 24px;
-    height: 18px;
-    background: linear-gradient(180deg, #666, #3c3c3c);
-    background-image: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,0,0,0.5) 2px, rgba(0,0,0,0.5) 3px);
-    position: absolute;
-    left: 1px;
-    border-radius: 3px 0 0 3px;
-    box-shadow:
-        inset 1px 0 1px rgba(255,255,255,0.3),
-        0 2px 4px rgba(0,0,0,0.8);
-    transition: top var(--motion-fast) var(--ease-soft), box-shadow var(--motion-fast) var(--ease-soft), background-color var(--motion-fast) var(--ease-soft);
-    z-index: 2;
+  width: 24px;
+  height: 18px;
+  background: linear-gradient(180deg, #666, #3c3c3c);
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 2px,
+    rgba(0, 0, 0, 0.5) 2px,
+    rgba(0, 0, 0, 0.5) 3px
+  );
+  position: absolute;
+  left: 1px;
+  border-radius: 3px 0 0 3px;
+  box-shadow:
+    inset 1px 0 1px rgba(255, 255, 255, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+  transition:
+    top var(--motion-fast) var(--ease-soft),
+    box-shadow var(--motion-fast) var(--ease-soft),
+    background-color var(--motion-fast) var(--ease-soft);
+  z-index: 2;
 }
 
-.switch-track[aria-checked="false"] .switch-handle {
-    top: 30px;
-    background-color: #333;
-    box-shadow:
-        inset 1px 0 1px rgba(255,255,255,0.12),
-        0 1px 3px rgba(0,0,0,0.75);
+.switch-track[aria-checked='false'] .switch-handle {
+  top: 30px;
+  background-color: #333;
+  box-shadow:
+    inset 1px 0 1px rgba(255, 255, 255, 0.12),
+    0 1px 3px rgba(0, 0, 0, 0.75);
 }
 
-.switch-track[aria-checked="true"] .switch-handle {
-    top: 2px;
-    background-color: #555;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.2), 0 0 0 1px rgba(255,255,255,0.08);
+.switch-track[aria-checked='true'] .switch-handle {
+  top: 2px;
+  background-color: #555;
+  box-shadow:
+    0 0 10px rgba(0, 255, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 /* --- Powered OFF State --- */
 .console-off .screen-display {
-    background: #040404 !important;
-    background-image:
-        radial-gradient(120% 90% at 18% 10%, rgba(255,255,255,0.028), transparent 30%),
-        radial-gradient(130% 110% at 50% 58%, rgba(255,255,255,0.012), transparent 52%),
-        linear-gradient(180deg, rgba(22,22,22,0.45), rgba(0,0,0,0.92)) !important;
-    color: #111 !important;
-    text-shadow: none !important;
-    box-shadow:
-        inset 0 0 42px rgba(0,0,0,0.96),
-        inset 0 -14px 18px rgba(0,0,0,0.32),
-        inset 0 1px 0 rgba(255,255,255,0.025) !important;
-    overflow: hidden;
+  background: #040404 !important;
+  background-image:
+    radial-gradient(120% 90% at 18% 10%, rgba(255, 255, 255, 0.028), transparent 30%),
+    radial-gradient(130% 110% at 50% 58%, rgba(255, 255, 255, 0.012), transparent 52%),
+    linear-gradient(180deg, rgba(22, 22, 22, 0.45), rgba(0, 0, 0, 0.92)) !important;
+  color: #111 !important;
+  text-shadow: none !important;
+  box-shadow:
+    inset 0 0 42px rgba(0, 0, 0, 0.96),
+    inset 0 -14px 18px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025) !important;
+  overflow: hidden;
 }
 
 .console-off .screen-display::before {
-    background:
-        radial-gradient(135% 100% at 20% 8%, rgba(255,255,255,0.028), transparent 26%),
-        radial-gradient(140% 110% at 50% 50%, transparent 60%, rgba(0,0,0,0.22) 100%),
-        linear-gradient(180deg, rgba(255,255,255,0.018), transparent 22%, transparent 80%, rgba(0,0,0,0.12));
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.01);
-    opacity: 0.9;
+  background:
+    radial-gradient(135% 100% at 20% 8%, rgba(255, 255, 255, 0.028), transparent 26%),
+    radial-gradient(140% 110% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.22) 100%),
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.018),
+      transparent 22%,
+      transparent 80%,
+      rgba(0, 0, 0, 0.12)
+    );
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.01);
+  opacity: 0.9;
 }
 
 .console-off .screen-display * {
-    opacity: 0 !important;
-    transition: opacity 0.1s;
+  opacity: 0 !important;
+  transition: opacity 0.1s;
 }
 
 .console-off .power-indicator .led {
-    background: #330000;
-    box-shadow: none;
-    animation: none;
-    opacity: 0.3;
+  background: #330000;
+  box-shadow: none;
+  animation: none;
+  opacity: 0.3;
 }
 
 .console-off .screen-display,
@@ -127,609 +144,675 @@
 .console-booting .dpad-btn,
 .console-booting .action-buttons button,
 .console-booting .meta-controls {
-    pointer-events: none;
+  pointer-events: none;
 }
-
 
 /* --- Screen Lens area --- */
 .screen-lens {
-    background: linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--device-lens-bg) 86%, white 14%) 0%,
-        color-mix(in srgb, var(--device-lens-bg) 92%, black 8%) 58%,
-        color-mix(in srgb, var(--device-lens-bg) 78%, black 22%) 100%
-    );
-    grid-area: screen;
-    width: 100%;
-    align-self: flex-start;
-    border-radius: 15px 15px 45px 15px;
-    padding: var(--space-7) var(--space-8) var(--space-4) var(--space-8);
-    position: relative;
-    box-shadow:
-        var(--shadow-lens),
-        inset 0 1px 0 rgba(255,255,255,0.06),
-        inset 0 -12px 18px rgba(0,0,0,0.16),
-        0 0 0 1px rgba(0,0,0,0.16);
-    margin-bottom: var(--space-5);
-    border: 1px solid rgba(255,255,255,0.06);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--device-lens-bg) 86%, white 14%) 0%,
+    color-mix(in srgb, var(--device-lens-bg) 92%, black 8%) 58%,
+    color-mix(in srgb, var(--device-lens-bg) 78%, black 22%) 100%
+  );
+  grid-area: screen;
+  width: 100%;
+  align-self: flex-start;
+  border-radius: 15px 15px 45px 15px;
+  padding: var(--space-7) var(--space-8) var(--space-4) var(--space-8);
+  position: relative;
+  box-shadow:
+    var(--shadow-lens),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -12px 18px rgba(0, 0, 0, 0.16),
+    0 0 0 1px rgba(0, 0, 0, 0.16);
+  margin-bottom: var(--space-5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .console.landscape .screen-lens {
-    flex: 1;
-    align-self: stretch;
-    border-radius: 15px 15px 45px 15px;
-    margin: 10px 0;
+  flex: 1;
+  align-self: stretch;
+  border-radius: 15px 15px 45px 15px;
+  margin: 10px 0;
 }
 
 .screen-lens > .screen-display {
-    box-shadow: var(--shadow-screen-mounted);
+  box-shadow: var(--shadow-screen-mounted);
 }
 
 /* Screen Rainbow Stripes */
 .screen-lens::before {
-    content: '';
-    position: absolute;
-    top: 25px;
-    left: 40px;
-    right: 40px;
-    height: 3px;
-    background: linear-gradient(90deg, var(--color-danger), #a210bc, #00ccff);
-    box-shadow: 0 0 5px rgba(255,255,255,0.2);
+  content: '';
+  position: absolute;
+  top: 25px;
+  left: 40px;
+  right: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-danger), #a210bc, #00ccff);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
 }
 
 .logo {
-    font-family: sans-serif;
-    color: #ccc;
-    font-style: italic;
-    font-weight: bold;
-    font-size: var(--text-sm);
-    text-align: center;
-    margin-top: var(--space-1);
-    width: 100%;
+  font-family: sans-serif;
+  color: #ccc;
+  font-style: italic;
+  font-weight: bold;
+  font-size: var(--text-sm);
+  text-align: center;
+  margin-top: var(--space-1);
+  width: 100%;
 }
 .logo .advance {
-    font-family: var(--font-display);
-    color: var(--device-button-primary);
-    font-style: normal;
-    font-size: var(--text-2xs);
-    margin-left: var(--space-1);
-    letter-spacing: 1px;
+  font-family: var(--font-display);
+  color: var(--device-button-primary);
+  font-style: normal;
+  font-size: var(--text-2xs);
+  margin-left: var(--space-1);
+  letter-spacing: 1px;
 }
 
 /* --- The Battery LED --- */
 .power-indicator {
-    position: absolute;
-    top: 50%;
-    left: 15px;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    filter: drop-shadow(0 0 6px rgba(255,59,48,0.18));
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  filter: drop-shadow(0 0 6px rgba(255, 59, 48, 0.18));
 }
 
 .power-indicator .led {
-    width: 8px;
-    height: 8px;
-    background: var(--device-led-on);
-    border-radius: 50%;
-    box-shadow: 0 0 6px var(--device-led-on), 0 0 12px rgba(255,59,48,0.2);
-    animation: pulse 3s infinite;
+  width: 8px;
+  height: 8px;
+  background: var(--device-led-on);
+  border-radius: 50%;
+  box-shadow:
+    0 0 6px var(--device-led-on),
+    0 0 12px rgba(255, 59, 48, 0.2);
+  animation: pulse 3s infinite;
 }
 
-@keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
 
 .screen-display {
-    background: var(--device-screen-bg);
-    width: 100%;
-    height: 230px;
-    box-shadow:
-        var(--shadow-screen-depth),
-        var(--shadow-screen-surface);
-    overflow: hidden;
-    padding: var(--space-4);
-    font-family: var(--font-screen);
-    font-size: 1.4rem;
-    color: var(--device-screen-text);
-    position: relative;
-    border-radius: var(--radius-xs);
-    border: 1px solid var(--border-screen-subtle);
+  background: var(--device-screen-bg);
+  width: 100%;
+  height: 230px;
+  box-shadow: var(--shadow-screen-depth), var(--shadow-screen-surface);
+  overflow: hidden;
+  padding: var(--space-4);
+  font-family: var(--font-screen);
+  font-size: 1.4rem;
+  color: var(--device-screen-text);
+  position: relative;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-screen-subtle);
 
-    /* Modern Scanline */
-    background-image:
-      radial-gradient(circle at 46% 6%, rgba(255,255,255,0.035), transparent 28%),
-      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%),
-      linear-gradient(90deg, rgba(255, 0, 0, 0.026), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.026));
-    background-size: 100% 100%, 100% 2px, 3px 100%;
+  /* Modern Scanline */
+  background-image:
+    radial-gradient(circle at 46% 6%, rgba(255, 255, 255, 0.035), transparent 28%),
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.026), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.026));
+  background-size:
+    100% 100%,
+    100% 2px,
+    3px 100%;
 }
 
 .screen-display::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background:
-        radial-gradient(140% 110% at 50% 50%, transparent 58%, var(--screen-vignette-edge) 100%),
-        linear-gradient(180deg, var(--screen-rim-highlight), transparent 18%, transparent 82%, rgba(0,0,0,0.08));
-    box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.015),
-        inset 0 0 20px color-mix(in srgb, var(--device-screen-text) 4%, transparent);
-    opacity: 0.78;
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(140% 110% at 50% 50%, transparent 58%, var(--screen-vignette-edge) 100%),
+    linear-gradient(
+      180deg,
+      var(--screen-rim-highlight),
+      transparent 18%,
+      transparent 82%,
+      rgba(0, 0, 0, 0.08)
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.015),
+    inset 0 0 20px color-mix(in srgb, var(--device-screen-text) 4%, transparent);
+  opacity: 0.78;
 }
 
 /* --- Boot Screen / Process Gram --- */
 .boot-screen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--device-screen-bg);
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-4);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--motion-normal) var(--ease-soft), visibility var(--motion-normal) var(--ease-soft);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--device-screen-bg);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-4);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--motion-normal) var(--ease-soft),
+    visibility var(--motion-normal) var(--ease-soft);
 }
 
 .boot-screen.active {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 .progress-container {
-    width: 60%;
-    height: 16px;
-    border: 3px solid var(--screen-text);
-    border-radius: 4px;
-    padding: 2px;
-    box-shadow: 0 0 5px var(--screen-text);
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
+  width: 60%;
+  height: 16px;
+  border: 3px solid var(--screen-text);
+  border-radius: 4px;
+  padding: 2px;
+  box-shadow: 0 0 5px var(--screen-text);
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
 }
 
 .progress-bar {
-    width: 100%;
-    height: 100%;
-    background: var(--screen-text);
-    border-radius: 2px;
+  width: 100%;
+  height: 100%;
+  background: var(--screen-text);
+  border-radius: 2px;
 }
 
 .boot-screen.active .progress-bar {
-    animation: fillProgressBlocks 3.5s steps(5, jump-none) forwards;
+  animation: fillProgressBlocks 3.5s steps(5, jump-none) forwards;
 }
 
 .boot-status {
-    margin: 0;
-    font-size: var(--text-sm);
-    letter-spacing: var(--letter-screen);
-    text-transform: uppercase;
-    color: var(--device-screen-text);
-    text-shadow: 0 0 6px rgba(10, 255, 194, 0.3);
-    animation: blink 1.2s steps(2, jump-none) infinite;
+  margin: 0;
+  font-size: var(--text-sm);
+  letter-spacing: var(--letter-screen);
+  text-transform: uppercase;
+  color: var(--device-screen-text);
+  text-shadow: 0 0 6px rgba(10, 255, 194, 0.3);
+  animation: blink 1.2s steps(2, jump-none) infinite;
 }
 
 @keyframes fillProgressBlocks {
-    0% { clip-path: inset(0 100% 0 0); }
-    100% { clip-path: inset(0 0% 0 0); }
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0% 0 0);
+  }
 }
 
 /* Glass Reflection */
 .screen-lens::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    background:
-        linear-gradient(114deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.028) 26%, rgba(255, 255, 255, 0.012) 42%, transparent 54%),
-        radial-gradient(120% 70% at 18% 10%, rgba(255, 255, 255, 0.045), transparent 32%);
-    opacity: 0.85;
-    pointer-events: none;
-    z-index: 100;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      114deg,
+      rgba(255, 255, 255, 0.075) 0%,
+      rgba(255, 255, 255, 0.028) 26%,
+      rgba(255, 255, 255, 0.012) 42%,
+      transparent 54%
+    ),
+    radial-gradient(120% 70% at 18% 10%, rgba(255, 255, 255, 0.045), transparent 32%);
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 100;
 }
 
 /* --- Top HUD --- */
 .top-hud {
-    position: absolute;
-    top: var(--space-3);
-    left: var(--space-4);
-    right: 60px;
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    font-size: 13px;
-    line-height: var(--line-tight);
-    color: var(--device-screen-text);
-    z-index: 3;
-    pointer-events: none;
-    text-transform: uppercase;
-    letter-spacing: var(--letter-screen);
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-4);
+  right: 60px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 13px;
+  line-height: var(--line-tight);
+  color: var(--device-screen-text);
+  z-index: 3;
+  pointer-events: none;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-screen);
 }
 
 .hud-item {
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    text-shadow: 0 0 4px rgba(10, 255, 194, 0.35);
-    font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(10, 255, 194, 0.35);
+  font-variant-numeric: tabular-nums;
 }
 
 /* --- Branding Text on Lens --- */
 .brand-text {
-    text-align: center;
-    color: #666;
-    font-style: italic;
-    font-size: 14px;
-    margin-top: 12px;
-    font-family: sans-serif;
-    font-weight: bold;
-    letter-spacing: 1px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  font-size: 14px;
+  margin-top: 12px;
+  font-family: sans-serif;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
 .brand-text span {
-    color: #ccc;
-    font-weight: 800;
+  color: #ccc;
+  font-weight: 800;
 }
 
 .brand-text .color-text {
-    font-family: 'Press Start 2P', cursive;
-    background: linear-gradient(90deg, #ff0055, #00ccff);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    font-size: 16px;
-    position: relative;
-    top: 1px;
+  font-family: 'Press Start 2P', cursive;
+  background: linear-gradient(90deg, #ff0055, #00ccff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: 16px;
+  position: relative;
+  top: 1px;
 }
 
 /* --- Profile Inside Screen --- */
 .profile {
-    text-align: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(10, 255, 194, 0.3);
-    padding-bottom: 10px;
+  text-align: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(10, 255, 194, 0.3);
+  padding-bottom: 10px;
 }
 
 .avatar-wrapper {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 10px;
-    border: 2px solid var(--screen-text);
-    box-shadow: 0 0 10px var(--screen-text);
-    border-radius: 5px;
-    overflow: hidden;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 10px;
+  border: 2px solid var(--screen-text);
+  box-shadow: 0 0 10px var(--screen-text);
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .avatar {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: sepia(1) hue-rotate(130deg) saturate(2) contrast(1.2);
-    image-rendering: pixelated;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(1) hue-rotate(130deg) saturate(2) contrast(1.2);
+  image-rendering: pixelated;
 }
 
 h1 {
-    font-size: 24px;
-    margin: 5px 0;
-    text-transform: uppercase;
-    text-shadow: 2px 2px 0 var(--screen-dim);
+  font-size: 24px;
+  margin: 5px 0;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 var(--screen-dim);
 }
 
 h2 {
-    margin: 0;
-    text-wrap: balance;
-    font-size: var(--text-md);
-    letter-spacing: 0.06em;
+  margin: 0;
+  text-wrap: balance;
+  font-size: var(--text-md);
+  letter-spacing: 0.06em;
 }
 
 .tagline {
-    font-size: var(--text-sm);
-    margin: 0;
-    opacity: 0.8;
-    color: var(--screen-text);
-    text-shadow: 1px 1px 0 var(--screen-dim);
+  font-size: var(--text-sm);
+  margin: 0;
+  opacity: 0.8;
+  color: var(--screen-text);
+  text-shadow: 1px 1px 0 var(--screen-dim);
 }
 
 /* --- Tabs --- */
 .tabs-header {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-5);
-    margin-bottom: var(--space-3);
-    border-bottom: 1px solid var(--border-screen-subtle);
-    padding: 0 0 6px;
-    margin-top: var(--space-3);
+  display: flex;
+  justify-content: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-screen-subtle);
+  padding: 0 0 6px;
+  margin-top: var(--space-3);
 }
 
 .tab-indicator {
-    appearance: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    background: transparent;
-    font-size: var(--text-md);
-    cursor: pointer;
-    opacity: 0.62;
-    transition: opacity var(--motion-fast), text-shadow var(--motion-fast), border-color var(--motion-fast);
-    color: var(--device-screen-text);
-    text-transform: uppercase;
-    font-family: var(--font-screen);
-    letter-spacing: 0.08em;
-    border-radius: 0;
-    padding: 0 0 2px;
+  appearance: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font-size: var(--text-md);
+  cursor: pointer;
+  opacity: 0.62;
+  transition:
+    opacity var(--motion-fast),
+    text-shadow var(--motion-fast),
+    border-color var(--motion-fast);
+  color: var(--device-screen-text);
+  text-transform: uppercase;
+  font-family: var(--font-screen);
+  letter-spacing: 0.08em;
+  border-radius: 0;
+  padding: 0 0 2px;
 }
 
 .tab-indicator:hover {
-    opacity: 0.82;
-    border-color: color-mix(in srgb, var(--device-screen-text) 18%, transparent);
+  opacity: 0.82;
+  border-color: color-mix(in srgb, var(--device-screen-text) 18%, transparent);
 }
 
 .tab-indicator.active {
-    opacity: 1;
-    font-weight: bold;
-    text-shadow: 0 0 4px color-mix(in srgb, var(--device-screen-text) 40%, transparent);
-    border-bottom-color: var(--border-screen-strong);
-    background: transparent;
-    box-shadow: none;
-    margin-bottom: 0;
+  opacity: 1;
+  font-weight: bold;
+  text-shadow: 0 0 4px color-mix(in srgb, var(--device-screen-text) 40%, transparent);
+  border-bottom-color: var(--border-screen-strong);
+  background: transparent;
+  box-shadow: none;
+  margin-bottom: 0;
 }
 
 .tab-content {
-    display: none;
-    animation: fadeIn var(--motion-normal) var(--ease-soft);
+  display: none;
+  animation: fadeIn var(--motion-normal) var(--ease-soft);
 }
 
 .tab-content.active {
-    display: block;
+  display: block;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .about-text {
-    font-family: var(--font-screen);
-    font-size: var(--text-md);
-    line-height: 1.3;
-    color: var(--device-screen-text);
-    text-shadow: 0 0 1px color-mix(in srgb, var(--device-screen-text) 40%, transparent);
-    padding: 8px var(--space-3);
-    background: rgba(0, 0, 0, 0.12);
-    border: 1px solid var(--border-screen-subtle);
-    border-radius: 0;
-    min-height: 100px;
-    text-wrap: pretty;
-    box-shadow: none;
+  font-family: var(--font-screen);
+  font-size: var(--text-md);
+  line-height: 1.3;
+  color: var(--device-screen-text);
+  text-shadow: 0 0 1px color-mix(in srgb, var(--device-screen-text) 40%, transparent);
+  padding: 8px var(--space-3);
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border-screen-subtle);
+  border-radius: 0;
+  min-height: 100px;
+  text-wrap: pretty;
+  box-shadow: none;
 }
 
 .help-panel {
-    padding: 8px var(--space-3);
-    border: 1px solid var(--border-screen-subtle);
-    border-radius: 0;
-    background: rgba(0, 0, 0, 0.1);
-    font-size: var(--text-md);
-    color: var(--device-screen-text);
-    box-shadow: none;
+  padding: 8px var(--space-3);
+  border: 1px solid var(--border-screen-subtle);
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.1);
+  font-size: var(--text-md);
+  color: var(--device-screen-text);
+  box-shadow: none;
 }
 
 .help-panel h3 {
-    margin: 0 0 var(--space-2);
-    font-size: var(--text-md);
-    color: var(--device-screen-text);
-    text-shadow: none;
-    border-bottom: 1px solid var(--border-screen-strong);
-    padding-bottom: 4px;
-    text-wrap: nowrap;
-    letter-spacing: 0.08em;
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-md);
+  color: var(--device-screen-text);
+  text-shadow: none;
+  border-bottom: 1px solid var(--border-screen-strong);
+  padding-bottom: 4px;
+  text-wrap: nowrap;
+  letter-spacing: 0.08em;
 }
 
 .help-panel ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
 }
 
 .help-panel li {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-3);
-    border-bottom: 1px solid color-mix(in srgb, var(--device-screen-dim) 55%, transparent);
-    padding: 0 0 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--device-screen-dim) 55%, transparent);
+  padding: 0 0 4px;
 }
 
 .help-panel li span:first-child {
-    font-weight: bold;
-    color: var(--device-screen-text);
+  font-weight: bold;
+  color: var(--device-screen-text);
 }
 
 .secret-hint {
-    margin: var(--space-3) 0 0;
-    color: var(--device-screen-text);
-    background: rgba(0, 0, 0, 0.14);
-    border: 1px solid var(--border-screen-subtle);
-    padding: 4px var(--space-2);
-    text-align: center;
-    font-weight: bold;
-    letter-spacing: 0.08em;
-    border-radius: 0;
-    font-size: 14px;
-    white-space: nowrap;
+  margin: var(--space-3) 0 0;
+  color: var(--device-screen-text);
+  background: rgba(0, 0, 0, 0.14);
+  border: 1px solid var(--border-screen-subtle);
+  padding: 4px var(--space-2);
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  border-radius: 0;
+  font-size: 14px;
+  white-space: nowrap;
 }
 
 /* --- Typewriter Cursor --- */
 .cursor {
-    display: inline-block;
-    width: 10px;
-    height: 1em;
-    background-color: var(--device-screen-text);
-    animation: blink 1s infinite;
-    vertical-align: bottom;
+  display: inline-block;
+  width: 10px;
+  height: 1em;
+  background-color: var(--device-screen-text);
+  animation: blink 1s infinite;
+  vertical-align: bottom;
 }
 
 /* --- Battery Indicator --- */
 .battery {
-    position: absolute;
-    top: var(--space-4);
-    right: var(--space-5);
-    width: 30px;
-    height: 14px;
-    border: 2px solid var(--device-screen-dim);
-    border-radius: 2px;
-    padding: 1px;
-    display: flex;
-    align-items: center;
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-5);
+  width: 30px;
+  height: 14px;
+  border: 2px solid var(--device-screen-dim);
+  border-radius: 2px;
+  padding: 1px;
+  display: flex;
+  align-items: center;
 }
 
 .battery::after {
-    content: '';
-    position: absolute;
-    right: -4px;
-    top: 3px;
-    width: 2px;
-    height: 4px;
-    background: var(--device-screen-dim);
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 3px;
+  width: 2px;
+  height: 4px;
+  background: var(--device-screen-dim);
 }
 
 .battery-level {
-    height: 100%;
-    width: 0%;
-    background: var(--device-screen-dim);
-    transition: width var(--motion-slow), background-color var(--motion-slow);
+  height: 100%;
+  width: 0%;
+  background: var(--device-screen-dim);
+  transition:
+    width var(--motion-slow),
+    background-color var(--motion-slow);
 }
 
 .battery-level.charging {
-    animation: charge 2s steps(5) infinite;
-    transition: none;
+  animation: charge 2s steps(5) infinite;
+  transition: none;
 }
 
 @keyframes charge {
-    0% { width: 0%; }
-    100% { width: 100%; }
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
 }
 
 /* --- Start Screen Overlay --- */
 #start-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--device-screen-bg);
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-    z-index: 100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: var(--device-screen-text);
-    font-size: var(--text-lg);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--device-screen-bg);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: var(--device-screen-text);
+  font-size: var(--text-lg);
 }
 
 .blink {
-    animation: blink 1s infinite;
+  animation: blink 1s infinite;
 }
 
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 /* --- CRT Turn On Effect --- */
 @keyframes turnOn {
-    0% { transform: scale(1, 0.035); opacity: 0; }
-    28% { transform: scale(1, 0.035); opacity: 0.92; }
-    62% { transform: scale(1, 0.88); opacity: 1; }
-    100% { transform: scale(1, 1); opacity: 1; }
+  0% {
+    transform: scale(1, 0.035);
+    opacity: 0;
+  }
+  28% {
+    transform: scale(1, 0.035);
+    opacity: 0.92;
+  }
+  62% {
+    transform: scale(1, 0.88);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
 }
 
 .screen-display {
-    animation: turnOn var(--motion-transition-weighted) var(--ease-soft);
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+  animation: turnOn var(--motion-transition-weighted) var(--ease-soft);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .screen-display::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 /* --- Links Inside Screen --- */
 .links {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
 .links a {
-    display: flex;
-    align-items: center;
-    color: var(--device-screen-text);
-    text-decoration: none;
-    padding: 5px var(--space-3);
-    border: none;
-    border-left: 2px solid transparent;
-    border-radius: 0;
-    transition: color var(--motion-fast), background-color var(--motion-fast), border-color var(--motion-fast), text-shadow var(--motion-fast);
-    font-size: var(--text-md);
-    background: transparent;
+  display: flex;
+  align-items: center;
+  color: var(--device-screen-text);
+  text-decoration: none;
+  padding: 5px var(--space-3);
+  border: none;
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  transition:
+    color var(--motion-fast),
+    background-color var(--motion-fast),
+    border-color var(--motion-fast),
+    text-shadow var(--motion-fast);
+  font-size: var(--text-md);
+  background: transparent;
 }
 
 .links a:hover {
-    background: color-mix(in srgb, var(--device-screen-text) 10%, transparent);
-    border-left-color: color-mix(in srgb, var(--device-screen-text) 35%, transparent);
-    text-shadow: 0 0 4px color-mix(in srgb, var(--device-screen-text) 28%, transparent);
+  background: color-mix(in srgb, var(--device-screen-text) 10%, transparent);
+  border-left-color: color-mix(in srgb, var(--device-screen-text) 35%, transparent);
+  text-shadow: 0 0 4px color-mix(in srgb, var(--device-screen-text) 28%, transparent);
 }
 
 .links a.active {
-    background: var(--device-screen-text);
-    color: var(--device-screen-bg);
-    border-left-color: var(--device-screen-text);
-    box-shadow: none;
-    font-weight: bold;
-    text-shadow: none;
+  background: var(--device-screen-text);
+  color: var(--device-screen-bg);
+  border-left-color: var(--device-screen-text);
+  box-shadow: none;
+  font-weight: bold;
+  text-shadow: none;
 }
 
 .links a svg {
-    width: 20px;
-    height: 20px;
-    margin-right: var(--space-3);
-    fill: currentColor;
-    flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-right: var(--space-3);
+  fill: currentColor;
+  flex-shrink: 0;
 }
 
 .footer {
-    text-align: center;
-    color: var(--device-screen-dim);
-    font-size: var(--text-2xs);
-    margin-top: var(--space-4);
-    padding-top: var(--space-2);
-    border-top: 1px solid color-mix(in srgb, var(--device-screen-dim) 70%, transparent);
-    letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--device-screen-dim);
+  font-size: var(--text-2xs);
+  margin-top: var(--space-4);
+  padding-top: var(--space-2);
+  border-top: 1px solid color-mix(in srgb, var(--device-screen-dim) 70%, transparent);
+  letter-spacing: 0.08em;
 }
 
 .start-content {
-    text-align: center;
-    padding: var(--space-5);
-    text-shadow: 0 0 10px rgba(10,255,194,0.18);
+  text-align: center;
+  padding: var(--space-5);
+  text-shadow: 0 0 10px rgba(10, 255, 194, 0.18);
 }
 
 .start-content p {
-    font-size: var(--text-sm);
-    margin-top: var(--space-5);
+  font-size: var(--text-sm);
+  margin-top: var(--space-5);
 }

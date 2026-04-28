@@ -5,8 +5,14 @@ import { getStoredString, setStoredValue } from './storage';
 const THEME_STORAGE_KEY = 'gb_theme';
 
 export const themes = [
-  'theme-atomic', 'theme-berry', 'theme-ice', 'theme-jungle',
-  'theme-classic', 'theme-sunblaze', 'theme-cyberpunk', 'theme-midnight'
+  'theme-atomic',
+  'theme-berry',
+  'theme-ice',
+  'theme-jungle',
+  'theme-classic',
+  'theme-sunblaze',
+  'theme-cyberpunk',
+  'theme-midnight',
 ];
 
 /** Pure function for testing: returns the next theme index with wrapping. */

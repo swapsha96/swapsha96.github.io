@@ -1,1 +1,11 @@
-npm run check && npm run test:unit
+# Check for .only() in test files
+if grep -r "\.only(" tests/ --include="*.ts" 2>/dev/null; then
+  echo "❌ Found .only() in tests! Remove before committing."
+  exit 1
+fi
+
+# Run lint-staged (prettier + astro check + tsc on changed files)
+npx lint-staged
+
+# Run unit tests
+npm run test:unit

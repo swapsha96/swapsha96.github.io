@@ -1,6 +1,6 @@
 ---
-title: "Instagram"
-url: "https://www.instagram.com/swapsha96"
-icon: "instagram"
+title: 'Instagram'
+url: 'https://www.instagram.com/swapsha96'
+icon: 'instagram'
 order: 1
 ---

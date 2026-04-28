@@ -8,6 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "astro": "astro",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
@@ -23,7 +25,14 @@
     "@types/node": "^25.4.0",
     "husky": "^9.1.7",
     "jsdom": "^27.0.1",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "*.{ts,astro,css,md,json}": [
+      "prettier --write"
+    ]
   }
 }

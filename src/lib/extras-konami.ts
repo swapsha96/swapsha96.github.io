@@ -2,15 +2,24 @@ import { FRAME_DURATION } from './constants';
 import { isConsolePoweredOn } from './state';
 
 export const konamiCode = [
-  'ArrowUp', 'ArrowUp',
-  'ArrowDown', 'ArrowDown',
-  'ArrowLeft', 'ArrowRight',
-  'ArrowLeft', 'ArrowRight',
-  'x', 'z'
+  'ArrowUp',
+  'ArrowUp',
+  'ArrowDown',
+  'ArrowDown',
+  'ArrowLeft',
+  'ArrowRight',
+  'ArrowLeft',
+  'ArrowRight',
+  'x',
+  'z',
 ] as const;
 
 /** Pure function for testing: checks if a key matches the expected konami step. */
-export function checkKonamiStep(key: string, expectedIndex: number, code: readonly string[]): boolean {
+export function checkKonamiStep(
+  key: string,
+  expectedIndex: number,
+  code: readonly string[],
+): boolean {
   const lowerKey = key.toLowerCase();
   const expected = code[expectedIndex].toLowerCase();
 

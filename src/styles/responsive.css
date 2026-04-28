@@ -1,135 +1,136 @@
 /* Responsiveness */
 @media (max-width: 500px) {
-    body {
-        padding: 0;
-        margin: 0;
-        background-color: #000;
-        background-image: none;
-        overflow: hidden;
-    }
+  body {
+    padding: 0;
+    margin: 0;
+    background-color: #000;
+    background-image: none;
+    overflow: hidden;
+  }
 
-    .console {
-        width: 100vw;
-        border-radius: 0;
-        height: 100dvh;
-        min-height: 100dvh;
-        transform: none;
-        box-shadow: none;
-        border: none;
-        margin: 0;
-    }
+  .console {
+    width: 100vw;
+    border-radius: 0;
+    height: 100dvh;
+    min-height: 100dvh;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    margin: 0;
+  }
 
-    .top-hud {
-        left: var(--space-3);
-        right: 52px;
-        gap: var(--space-2);
-        font-size: 11px;
-    }
+  .top-hud {
+    left: var(--space-3);
+    right: 52px;
+    gap: var(--space-2);
+    font-size: 11px;
+  }
 
-    .profile {
-        margin-top: 58px;
-    }
+  .profile {
+    margin-top: 58px;
+  }
 
-    .help-panel {
-        font-size: 16px;
-    }
+  .help-panel {
+    font-size: 16px;
+  }
 
-    /* Mobile: Keep the power switch reachable inside the viewport */
-    .power-switch-container {
-        top: max(10px, env(safe-area-inset-top));
-        left: 8px;
-        z-index: 8;
-        padding: 8px;
-    }
+  /* Mobile: Keep the power switch reachable inside the viewport */
+  .power-switch-container {
+    top: max(10px, env(safe-area-inset-top));
+    left: 8px;
+    z-index: 8;
+    padding: 8px;
+  }
 
-    .switch-track {
-        width: 22px;
-        height: 42px;
-    }
+  .switch-track {
+    width: 22px;
+    height: 42px;
+  }
 
-    .switch-handle {
-        width: 20px;
-        height: 16px;
-    }
+  .switch-handle {
+    width: 20px;
+    height: 16px;
+  }
 
-    .switch-track[aria-checked="false"] .switch-handle {
-        top: 24px;
-    }
+  .switch-track[aria-checked='false'] .switch-handle {
+    top: 24px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* --- App Turn Button (Floating Action) --- */
 .app-turn-control {
-    position: fixed;
-    bottom: var(--space-7);
-    right: var(--space-7);
-    z-index: 1000;
-    pointer-events: auto;
+  position: fixed;
+  bottom: var(--space-7);
+  right: var(--space-7);
+  z-index: 1000;
+  pointer-events: auto;
 }
 
 .app-btn {
-    appearance: none;
-    width: 64px;
-    height: 64px;
-    border-radius: var(--radius-button-round);
-    background: rgba(20, 20, 30, 0.85);
-    backdrop-filter: blur(8px);
-    color: rgba(255, 255, 255, 0.9);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    box-shadow: var(--shadow-floating);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: all var(--motion-slow) var(--ease-dramatic);
+  appearance: none;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-button-round);
+  background: rgba(20, 20, 30, 0.85);
+  backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-floating);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all var(--motion-slow) var(--ease-dramatic);
 }
 
 .app-btn:hover {
-    transform: scale(1.1) rotate(5deg);
-    background: rgba(40, 40, 50, 0.95);
-    color: #fff;
-    box-shadow: 0 12px 35px color-mix(in srgb, var(--device-shell) 50%, transparent);
-    border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1) rotate(5deg);
+  background: rgba(40, 40, 50, 0.95);
+  color: #fff;
+  box-shadow: 0 12px 35px color-mix(in srgb, var(--device-shell) 50%, transparent);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-.app-btn:active, .app-btn.pressed {
-    transform: scale(0.9);
+.app-btn:active,
+.app-btn.pressed {
+  transform: scale(0.9);
 }
 
 .turn-icon {
-    width: 28px;
-    height: 28px;
-    fill: currentColor;
-    transition: transform var(--motion-slow) var(--ease-dramatic);
+  width: 28px;
+  height: 28px;
+  fill: currentColor;
+  transition: transform var(--motion-slow) var(--ease-dramatic);
 }
 
 .app-btn:hover .turn-icon {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 @media (max-width: 768px), (hover: none) and (pointer: coarse) {
-    .app-turn-control {
-        bottom: calc(env(safe-area-inset-bottom) + var(--space-4));
-        right: calc(env(safe-area-inset-right) + var(--space-4));
-    }
+  .app-turn-control {
+    bottom: calc(env(safe-area-inset-bottom) + var(--space-4));
+    right: calc(env(safe-area-inset-right) + var(--space-4));
+  }
 
-    .app-btn {
-        width: 52px;
-        height: 52px;
-    }
+  .app-btn {
+    width: 52px;
+    height: 52px;
+  }
 
-    .turn-icon {
-        width: 22px;
-        height: 22px;
-    }
+  .turn-icon {
+    width: 22px;
+    height: 22px;
+  }
 }

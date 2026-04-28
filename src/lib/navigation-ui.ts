@@ -4,13 +4,26 @@ import { SoundEngine } from './sound-engine';
 import { startTypewriter, stopTypewriter } from './typewriter';
 
 export const keyMap: Record<string, string> = {
-  ArrowUp: 'up', w: 'up', W: 'up',
-  ArrowDown: 'down', s: 'down', S: 'down',
-  ArrowLeft: 'left', a: 'left', A: 'left',
-  ArrowRight: 'right', d: 'right', D: 'right',
-  Enter: 'btn-a', ' ': 'btn-a', z: 'btn-a', Z: 'btn-a',
-  x: 'btn-b', X: 'btn-b',
-  q: 'btn-select', Q: 'btn-select'
+  ArrowUp: 'up',
+  w: 'up',
+  W: 'up',
+  ArrowDown: 'down',
+  s: 'down',
+  S: 'down',
+  ArrowLeft: 'left',
+  a: 'left',
+  A: 'left',
+  ArrowRight: 'right',
+  d: 'right',
+  D: 'right',
+  Enter: 'btn-a',
+  ' ': 'btn-a',
+  z: 'btn-a',
+  Z: 'btn-a',
+  x: 'btn-b',
+  X: 'btn-b',
+  q: 'btn-select',
+  Q: 'btn-select',
 };
 
 export function getLinks() {
@@ -43,11 +56,11 @@ export function updateTabUI() {
 
 export function updateActiveLink(index: number, isWrap = false, isMouseHover = false) {
   const links = getLinks();
-  links.forEach(link => link.classList.remove('active'));
+  links.forEach((link) => link.classList.remove('active'));
 
   if (links[index]) {
     if (!isMouseHover) {
-      SoundEngine.playTone(440 + (index * 20), 'sine', 0.1, 0.05);
+      SoundEngine.playTone(440 + index * 20, 'sine', 0.1, 0.05);
     }
 
     links[index].classList.add('active');
@@ -75,7 +88,7 @@ export function scrollCurrentPanel(direction: 'up' | 'down', amount = 50) {
 
   screen.scrollBy({
     top: direction === 'up' ? -amount : amount,
-    behavior: getScrollBehavior()
+    behavior: getScrollBehavior(),
   });
 }
 
@@ -109,7 +122,7 @@ export function animatePress(btn: HTMLElement | null, duration = FRAME_DURATION 
 }
 
 export function clearPressedStates() {
-  document.querySelectorAll('.pressed').forEach(el => el.classList.remove('pressed'));
+  document.querySelectorAll('.pressed').forEach((el) => el.classList.remove('pressed'));
 }
 
 export function toggleTurnLayout() {
@@ -129,7 +142,10 @@ export function toggleTurnLayout() {
     performSwitch();
   }
 
-  setTimeout(() => SoundEngine.playTone(440, 'triangle', (FRAME_DURATION * 30) / 1000, 0.1), FRAME_DURATION * 6);
+  setTimeout(
+    () => SoundEngine.playTone(440, 'triangle', (FRAME_DURATION * 30) / 1000, 0.1),
+    FRAME_DURATION * 6,
+  );
 }
 
 const TOUCH_CLICK_SUPPRESSION_MS = 450;
@@ -152,12 +168,16 @@ export function bindPressAction(btn: HTMLElement | null, action: () => void) {
     action();
   });
 
-  btn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    markTouchInteraction();
-    animatePress(btn);
-    action();
-  }, { passive: false });
+  btn.addEventListener(
+    'touchstart',
+    (e) => {
+      e.preventDefault();
+      markTouchInteraction();
+      animatePress(btn);
+      action();
+    },
+    { passive: false },
+  );
 }
 
 export function bindTouchAction(btn: HTMLElement | null, action: () => void) {
@@ -168,11 +188,15 @@ export function bindTouchAction(btn: HTMLElement | null, action: () => void) {
     action();
   });
 
-  btn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    markTouchInteraction();
-    action();
-  }, { passive: false });
+  btn.addEventListener(
+    'touchstart',
+    (e) => {
+      e.preventDefault();
+      markTouchInteraction();
+      action();
+    },
+    { passive: false },
+  );
 }
 
 export function getHoveredLinkIndex(target: EventTarget | null): number | null {

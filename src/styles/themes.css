@@ -50,7 +50,7 @@ body.theme-jungle {
 body.theme-classic {
   --device-shell: #c0c0c0;
   --device-shell-shadow: #555;
-  --device-shell-highlight: rgba(255,255,255,0.4);
+  --device-shell-highlight: rgba(255, 255, 255, 0.4);
   --device-screen-bg: #8bac0f;
   --device-screen-text: #0f380f;
   --device-screen-dim: #306230;

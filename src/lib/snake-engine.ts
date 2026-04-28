@@ -107,8 +107,8 @@ export function tick(state: SnakeState): SnakeState {
   }
 
   const ate = newHead.x === state.food.x && newHead.y === state.food.y;
-  const bonusAte = state.bonusFood !== null &&
-    newHead.x === state.bonusFood.x && newHead.y === state.bonusFood.y;
+  const bonusAte =
+    state.bonusFood !== null && newHead.x === state.bonusFood.x && newHead.y === state.bonusFood.y;
 
   const newSnake = [newHead, ...state.snake];
 
