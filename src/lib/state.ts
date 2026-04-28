@@ -9,7 +9,7 @@ export type AppState = {
 export const state: AppState = {
   currentIndex: 0,
   currentTab: 0,
-  numTabs: 3,
+  numTabs: 4,
   isPoweredOn: true,
   isBooting: false,
 };

@@ -1,0 +1,88 @@
+/* Snake game container */
+
+.snake-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-0);
+  padding: var(--space-0);
+}
+
+.snake-score {
+  font-family: var(--font-screen);
+  font-size: var(--text-xs);
+  color: var(--device-screen-text);
+  text-shadow: 0 0 4px color-mix(in srgb, var(--device-screen-text) 40%, transparent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  user-select: none;
+  padding-bottom: var(--space-0);
+}
+
+.snake-canvas-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.snake-canvas {
+  display: block;
+  width: 100%;
+  max-width: 288px;
+  height: 135px;
+  border: 2px solid color-mix(in srgb, var(--device-screen-text) 30%, transparent);
+  border-radius: 2px;
+  image-rendering: pixelated;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Game Over Overlay */
+.snake-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  background: rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.snake-overlay-text {
+  font-family: var(--font-screen);
+  font-size: var(--text-lg);
+  color: var(--device-screen-text);
+  text-shadow: 0 0 6px color-mix(in srgb, var(--device-screen-text) 50%, transparent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.snake-overlay-score {
+  font-family: var(--font-screen);
+  font-size: var(--text-sm);
+  color: var(--device-screen-text);
+  opacity: 0.8;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.snake-overlay-best {
+  font-family: var(--font-screen);
+  font-size: var(--text-2xs);
+  color: var(--device-screen-dim);
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.snake-overlay-hint {
+  font-family: var(--font-screen);
+  font-size: var(--text-2xs);
+  color: var(--device-screen-text);
+  opacity: 0.7;
+  margin: var(--space-1) 0 0;
+  animation: blink 1s infinite;
+  letter-spacing: 0.06em;
+}

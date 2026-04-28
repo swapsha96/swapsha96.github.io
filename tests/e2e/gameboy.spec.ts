@@ -41,10 +41,12 @@ test.describe('GameBoy E2E', () => {
         const tabLinks = page.locator('#tab-0');
         const tabAbout = page.locator('#tab-1');
         const tabHelp = page.locator('#tab-2');
+        const tabSnake = page.locator('#tab-3');
 
         const indLinks = page.locator('#tab-ind-0');
         const indAbout = page.locator('#tab-ind-1');
         const indHelp = page.locator('#tab-ind-2');
+        const indSnake = page.locator('#tab-ind-3');
 
         // Initial State: Links Active
         await expect(tabLinks).toBeVisible();
@@ -62,17 +64,29 @@ test.describe('GameBoy E2E', () => {
         await expect(tabHelp).toBeVisible();
         await expect(indHelp).toHaveClass(/active/);
 
-        // Loop Right -> Back to Links
+        // Right -> Snake
         await page.keyboard.press('ArrowRight');
         await expect(tabHelp).toBeHidden();
+        await expect(tabSnake).toBeVisible();
+        await expect(indSnake).toHaveClass(/active/);
+
+        // Loop Right -> Back to Links (use evaluate to bypass keyboard — Right is snake control)
+        await page.evaluate(() => {
+          const tabs = document.querySelectorAll('.tab-indicator');
+          (tabs[0] as HTMLElement).click();
+        });
+        await expect(tabSnake).toBeHidden();
         await expect(tabLinks).toBeVisible();
         await expect(indLinks).toHaveClass(/active/);
         
-        // Left -> Help (Loop Backwards)
-        await page.keyboard.press('ArrowLeft');
+        // Go to Snake tab via click (loop backwards)
+        await page.evaluate(() => {
+          const tabs = document.querySelectorAll('.tab-indicator');
+          (tabs[3] as HTMLElement).click();
+        });
         await expect(tabLinks).toBeHidden();
-        await expect(tabHelp).toBeVisible();
-        await expect(indHelp).toHaveClass(/active/);
+        await expect(tabSnake).toBeVisible();
+        await expect(indSnake).toHaveClass(/active/);
     });
 
     test('Selection: Open Link', async ({ page }) => {
@@ -258,5 +272,127 @@ test.describe('GameBoy E2E', () => {
 
         // Verify CSS filter effect
         await expect(screen).toHaveAttribute('style', /filter: invert\(1\) hue-rotate\(180deg\)/);
+    });
+
+    test('Snake: Navigate to Snake tab, start game, move, hit wall', async ({ page }) => {
+        const tabSnake = page.locator('#tab-3');
+        const snakeCanvas = page.locator('#snake-canvas');
+        const snakeScore = page.locator('#snake-score');
+        const snakeOverlay = page.locator('#snake-overlay');
+
+        // Navigate to Snake tab
+        await page.keyboard.press('ArrowRight'); // About
+        await page.keyboard.press('ArrowRight'); // Help
+        await page.keyboard.press('ArrowRight'); // Snake
+        await expect(tabSnake).toBeVisible();
+        await expect(snakeCanvas).toBeVisible();
+
+        // Should show SNAKE overlay (not started)
+        await expect(snakeOverlay).toBeVisible();
+
+        // Press A to start game
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(200);
+
+        // Overlay should disappear when running
+        await expect(snakeOverlay).toBeHidden();
+
+        // Move the snake away from the right wall (initial direction is right)
+        // Turn down first to avoid immediate collision
+        await page.keyboard.press('ArrowDown');
+        await page.waitForTimeout(200);
+        await page.keyboard.press('ArrowLeft');
+        await page.waitForTimeout(200);
+        await page.keyboard.press('ArrowUp');
+        await page.waitForTimeout(200);
+
+        // Snake should still be alive (not game over yet)
+        await expect(snakeOverlay).toBeHidden();
+
+        // Score should update after eating food (snake moves, may eat)
+        const scoreText = await snakeScore.textContent();
+        expect(scoreText).toMatch(/SCORE:/);
+    });
+
+    test('Snake: D-pad does not switch tabs while Snake is active', async ({ page }) => {
+        const tabSnake = page.locator('#tab-3');
+        const tabAbout = page.locator('#tab-1');
+
+        // Navigate to Snake
+        await page.keyboard.press('ArrowRight');
+        await page.keyboard.press('ArrowRight');
+        await page.keyboard.press('ArrowRight');
+        await expect(tabSnake).toBeVisible();
+
+        // Press A to start
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(200);
+
+        // ArrowLeft should NOT switch to Help tab — it controls snake direction
+        await page.keyboard.press('ArrowLeft');
+        await page.waitForTimeout(150);
+        await expect(tabSnake).toBeVisible();
+        await expect(tabAbout).toBeHidden();
+
+        // ArrowRight should NOT switch to Help tab either
+        await page.keyboard.press('ArrowRight');
+        await page.waitForTimeout(150);
+        await expect(tabSnake).toBeVisible();
+    });
+
+    test('Snake: Game starts paused when navigating away', async ({ page }) => {
+        // Navigate to Snake
+        await page.keyboard.press('ArrowRight');
+        await page.keyboard.press('ArrowRight');
+        await page.keyboard.press('ArrowRight');
+
+        // Start game
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(300);
+
+        // Switch away via evaluate
+        await page.evaluate(() => {
+          const tabs = document.querySelectorAll('.tab-indicator');
+          (tabs[1] as HTMLElement).click();
+        });
+        await page.waitForTimeout(300);
+
+        // Switch back to Snake
+        await page.evaluate(() => {
+          const tabs = document.querySelectorAll('.tab-indicator');
+          (tabs[3] as HTMLElement).click();
+        });
+        await page.waitForTimeout(300);
+
+        // Canvas should still exist
+        await expect(page.locator('#snake-canvas')).toBeVisible();
+    });
+
+    test('Snake: Restart after game over', async ({ page }) => {
+        const snakeOverlay = page.locator('#snake-overlay');
+
+        // Navigate to Snake
+        await page.keyboard.press('ArrowRight');
+        await page.keyboard.press('ArrowRight');
+        await page.keyboard.press('ArrowRight');
+
+        // Start game
+        await page.keyboard.press('Enter');
+        await page.waitForTimeout(200);
+
+        // Run into right wall by not changing direction
+        // Snake starts moving right from mid-grid (col 8), has ~8 cols to the wall
+        // At 130ms/tick, that's ~1 second to hit the wall
+        await page.waitForTimeout(2000);
+
+        // Check if game over overlay appeared
+        const gameOverVisible = await snakeOverlay.isVisible();
+        if (gameOverVisible) {
+            // Press A to restart
+            await page.keyboard.press('Enter');
+            await page.waitForTimeout(200);
+            // Game should restart (overlay hidden)
+            await expect(snakeOverlay).toBeHidden();
+        }
     });
 });

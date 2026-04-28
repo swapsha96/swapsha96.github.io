@@ -8,6 +8,7 @@ import TurnButton from './gameboy/TurnButton.astro';
 import LinksTab from './gameboy/tabs/LinksTab.astro';
 import AboutTab from './gameboy/tabs/AboutTab.astro';
 import HelpTab from './gameboy/tabs/HelpTab.astro';
+import SnakeTab from './gameboy/tabs/SnakeTab.astro';
 import '../styles/hit-areas.css';
 import '../styles/console-layout.css';
 import '../styles/view-transitions.css';
@@ -61,6 +62,9 @@ const aboutText = aboutEntry && aboutEntry.body ? aboutEntry.body.trim() : '';
                     </div>
                     <div class="tab-content" id="tab-2" role="tabpanel" aria-labelledby="tab-ind-2" hidden>
                         <HelpTab />
+                    </div>
+                    <div class="tab-content" id="tab-3" role="tabpanel" aria-labelledby="tab-ind-3" hidden>
+                        <SnakeTab />
                     </div>
                 </div>
 

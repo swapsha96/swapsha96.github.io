@@ -104,6 +104,21 @@ export function initNavigation() {
 
     if (!e.repeat && isConsoleInteractive()) toggleButtonState(e.key, true);
 
+    // Delegate D-pad / A-button to Snake when Snake tab is active
+    if (state.currentTab === 3) {
+      const dirKeys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','W','a','A','s','S','d','D'];
+      if (dirKeys.includes(e.key)) {
+        e.preventDefault();
+        document.dispatchEvent(new CustomEvent('snake-direction', { detail: { key: e.key } }));
+        return;
+      }
+      if (['Enter',' ','z','Z'].includes(e.key)) {
+        e.preventDefault();
+        document.dispatchEvent(new CustomEvent('snake-action'));
+        return;
+      }
+    }
+
     switch (e.key) {
       case 'ArrowUp': case 'w': case 'W':
         e.preventDefault();
@@ -141,11 +156,26 @@ export function initNavigation() {
     }
   });
 
-  bindPressAction(document.getElementById('up'), whenInteractive(() => handleNavigation('up')));
-  bindPressAction(document.getElementById('down'), whenInteractive(() => handleNavigation('down')));
-  bindPressAction(document.getElementById('left'), whenInteractive(() => switchTab('left')));
-  bindPressAction(document.getElementById('right'), whenInteractive(() => switchTab('right')));
-  bindPressAction(document.getElementById('btn-a'), whenInteractive(handleSelection));
+  bindPressAction(document.getElementById('up'), whenInteractive(() => {
+    if (state.currentTab === 3) { document.dispatchEvent(new CustomEvent('snake-direction', { detail: { key: 'ArrowUp' } })); return; }
+    handleNavigation('up');
+  }));
+  bindPressAction(document.getElementById('down'), whenInteractive(() => {
+    if (state.currentTab === 3) { document.dispatchEvent(new CustomEvent('snake-direction', { detail: { key: 'ArrowDown' } })); return; }
+    handleNavigation('down');
+  }));
+  bindPressAction(document.getElementById('left'), whenInteractive(() => {
+    if (state.currentTab === 3) { document.dispatchEvent(new CustomEvent('snake-direction', { detail: { key: 'ArrowLeft' } })); return; }
+    switchTab('left');
+  }));
+  bindPressAction(document.getElementById('right'), whenInteractive(() => {
+    if (state.currentTab === 3) { document.dispatchEvent(new CustomEvent('snake-direction', { detail: { key: 'ArrowRight' } })); return; }
+    switchTab('right');
+  }));
+  bindPressAction(document.getElementById('btn-a'), whenInteractive(() => {
+    if (state.currentTab === 3) { document.dispatchEvent(new CustomEvent('snake-action')); return; }
+    handleSelection();
+  }));
   bindPressAction(document.getElementById('btn-b'), whenInteractive(handleThemeSwitch));
   bindPressAction(document.getElementById('btn-select'), whenInteractive(handleThemeSwitch));
   bindPressAction(document.getElementById('btn-start'), whenInteractive(() => switchToTab(2)));
@@ -167,6 +197,9 @@ export function initNavigation() {
 
   document.addEventListener('wheel', (e) => {
     if (e.ctrlKey || !isConsoleInteractive()) return;
+
+    if (state.currentTab === 3) return;
+
     e.preventDefault();
 
     if (state.currentTab === 1 || state.currentTab === 2) {
