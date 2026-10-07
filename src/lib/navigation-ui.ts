@@ -56,11 +56,19 @@ export function updateTabUI() {
   updateFooterHint();
 }
 
+/** Keymap hints shown on the snake overlay + footer per game sub-state. */
+export const SNAKE_HINTS = {
+  title: 'A: START | L/R: TABS',
+  running: 'ARROWS: STEER | START: MENU',
+  paused: 'A: RESUME | L/R: TABS',
+  gameOver: 'A: RESTART | L/R: TABS',
+} as const;
+
 const FOOTER_HINTS = [
   'UP/DOWN: LINKS | A: OPEN | L/R: TABS',
   'UP/DOWN: SCROLL | L/R: TABS',
   'UP/DOWN: SCROLL | L/R: TABS',
-  'ARROWS: STEER | A: START | START: MENU',
+  SNAKE_HINTS.title,
 ] as const;
 
 /** Shows the keymap hint for the currently active tab in the screen footer. */

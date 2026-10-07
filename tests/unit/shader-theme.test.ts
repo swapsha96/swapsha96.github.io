@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { buildShaderTheme, mixHex, parseColor } from '../../src/lib/shader-theme';
+import {
+  buildShaderTheme,
+  DEFAULT_THEME_TOKENS,
+  mixHex,
+  parseColor,
+  readThemeTokens,
+} from '../../src/lib/shader-theme';
 
 describe('parseColor', () => {
   it('parses #rrggbb', () => {
@@ -80,5 +86,13 @@ describe('buildShaderTheme', () => {
     for (const color of allColors) {
       expect(color).toMatch(/^#[0-9a-f]{6}$/);
     }
+  });
+});
+
+describe('readThemeTokens', () => {
+  it('falls back to the default palette when CSS variables are unavailable', () => {
+    // jsdom exposes no CSS custom properties, so every read is empty and
+    // each token must fall back to the atomic palette.
+    expect(readThemeTokens()).toEqual(DEFAULT_THEME_TOKENS);
   });
 });

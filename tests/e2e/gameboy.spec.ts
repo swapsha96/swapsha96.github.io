@@ -498,19 +498,50 @@ test.describe('GameBoy E2E', () => {
 
     await expect(menu).toBeHidden();
 
-    // Physical START button opens the menu
+    // Physical START button opens the menu, moves focus into the dialog
     await page.dispatchEvent('#btn-start', 'click');
     await expect(menu).toBeVisible();
     await expect(menu.locator('.pause-menu-hint')).toContainText('A: OK');
     await expect(menu).toHaveAttribute('aria-activedescendant', 'pause-menu-item-0');
+    await expect(menu).toHaveAttribute('aria-modal', 'true');
+    const focusedId = await page.evaluate(() => document.activeElement?.id);
+    expect(focusedId).toBe('pause-menu');
 
-    // B (x) closes it
-    await page.keyboard.press('x');
+    // Physical B closes it and restores focus to the START button
+    await page.dispatchEvent('#btn-b', 'click');
     await expect(menu).toBeHidden();
+    const focusedAfterClose = await page.evaluate(() => document.activeElement?.id);
+    expect(focusedAfterClose).toBe('btn-start');
 
     // Escape also toggles it
     await page.keyboard.press('Escape');
     await expect(menu).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeHidden();
+  });
+
+  test('Menu: modal — global shortcuts and mouse do nothing while open', async ({ page }) => {
+    const menu = page.locator('#pause-menu');
+    const consoleEl = page.locator('.console');
+
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeVisible();
+
+    // m (mute), h (help), p (power) are swallowed while the menu is open
+    await page.keyboard.press('m');
+    const muted = await page.evaluate(() => localStorage.getItem('gb_muted'));
+    expect(muted).toBeNull();
+
+    await page.keyboard.press('h');
+    await expect(page.locator('#tab-0')).toBeVisible();
+
+    await page.keyboard.press('p');
+    await expect(consoleEl).not.toHaveClass(/console-off/);
+
+    // Clicking a tab indicator under the overlay must not switch tabs
+    await page.dispatchEvent('#tab-ind-1', 'click');
+    await expect(page.locator('#tab-1')).toBeHidden();
+
     await page.keyboard.press('Escape');
     await expect(menu).toBeHidden();
   });
@@ -637,5 +668,23 @@ test.describe('GameBoy E2E', () => {
     const before = await canvas.getAttribute('data-theme');
     await page.keyboard.press('x');
     await expect(canvas).not.toHaveAttribute('data-theme', before!);
+  });
+
+  test('Shader theme mirror works without WebGPU', async ({ page }) => {
+    // Strip navigator.gpu so the lazy engine import must never happen.
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'gpu', { value: undefined, configurable: true });
+    });
+    await page.reload();
+
+    const overlay = page.locator('#start-overlay');
+    await expect(overlay).toBeVisible();
+    await page.keyboard.press('Space');
+    await expect(overlay).toBeHidden();
+
+    const canvas = page.locator('#shader-bg');
+    await expect(canvas).toHaveAttribute('data-theme', /theme-/);
+    // The WebGPU engine must never have mounted.
+    await expect(canvas).not.toHaveClass(/is-ready/);
   });
 });

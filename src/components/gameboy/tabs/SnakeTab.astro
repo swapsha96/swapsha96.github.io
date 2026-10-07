@@ -30,7 +30,8 @@ import '../../../styles/snake.css';
     type SnakeState,
     type Direction,
   } from '../../../lib/snake-engine';
-  import { state } from '../../../lib/state';
+  import { state, isConsoleInteractive } from '../../../lib/state';
+  import { SNAKE_HINTS } from '../../../lib/navigation-ui';
   import { SoundEngine } from '../../../lib/sound-engine';
 
   // --------------- Palettes ---------------
@@ -244,19 +245,19 @@ import '../../../styles/snake.css';
       overlayScoreEl.textContent = `SCORE: ${game.score}`;
       const isNewBest = game.score > 0 && game.score >= highScore;
       overlayBestEl.textContent = isNewBest ? 'NEW BEST!' : `BEST: ${highScore}`;
-      hintEl.textContent = 'A: RESTART | L/R: TABS';
+      hintEl.textContent = SNAKE_HINTS.gameOver;
       overlayEl.style.display = 'flex';
     } else if (pausedExternally) {
       overlayTextEl.textContent = 'PAUSED';
       overlayScoreEl.textContent = `SCORE: ${game.score}`;
       overlayBestEl.textContent = '';
-      hintEl.textContent = 'A: RESUME | L/R: TABS';
+      hintEl.textContent = SNAKE_HINTS.paused;
       overlayEl.style.display = 'flex';
     } else if (!game.running) {
       overlayTextEl.textContent = 'SNAKE';
       overlayScoreEl.textContent = highScore > 0 ? `BEST: ${highScore}` : '';
       overlayBestEl.textContent = paletteIdx > 0 ? `SKIN: ${paletteName()}` : '';
-      hintEl.textContent = 'A: START | L/R: TABS';
+      hintEl.textContent = SNAKE_HINTS.title;
       overlayEl.style.display = 'flex';
     } else {
       overlayEl.style.display = 'none';
@@ -268,10 +269,10 @@ import '../../../styles/snake.css';
   function updateFooterHint() {
     const footer = document.getElementById('footer-hint');
     if (!footer) return;
-    if (game.gameOver) footer.textContent = 'A: RESTART | L/R: TABS';
-    else if (pausedExternally) footer.textContent = 'A: RESUME | L/R: TABS';
-    else if (!game.running) footer.textContent = 'A: START | L/R: TABS';
-    else footer.textContent = 'ARROWS: STEER | START: MENU';
+    if (game.gameOver) footer.textContent = SNAKE_HINTS.gameOver;
+    else if (pausedExternally) footer.textContent = SNAKE_HINTS.paused;
+    else if (!game.running) footer.textContent = SNAKE_HINTS.title;
+    else footer.textContent = SNAKE_HINTS.running;
   }
 
   function updateScore() {
@@ -307,7 +308,7 @@ import '../../../styles/snake.css';
       return;
     }
 
-    if (game.running && !game.gameOver && !state.menuOpen) {
+    if (game.running && !game.gameOver && !state.menuOpen && state.isPoweredOn) {
       if (now - lastTick >= tickInterval()) {
         lastTick = now;
         const prevScore = game.score;
@@ -396,9 +397,9 @@ import '../../../styles/snake.css';
     SoundEngine.playTone(440 + paletteIdx * 80, 'triangle', 0.1, 0.1);
   }
 
-  // Direct keydown handler
+  // Direct keydown handler — the single keyboard input path for Snake.
   document.addEventListener('keydown', (e) => {
-    if (state.currentTab !== 3 || state.menuOpen) return;
+    if (state.currentTab !== 3 || state.menuOpen || !isConsoleInteractive()) return;
 
     const dirKeys: Record<string, boolean> = {
       ArrowUp: true, w: true, W: true,
@@ -451,7 +452,7 @@ import '../../../styles/snake.css';
     overlayTextEl.textContent = 'SNAKE';
     overlayScoreEl.textContent = highScore > 0 ? `BEST: ${highScore}` : '';
     overlayBestEl.textContent = paletteIdx > 0 ? `SKIN: ${paletteName()}` : '';
-    hintEl.textContent = 'A: START | L/R: TABS';
+    hintEl.textContent = SNAKE_HINTS.title;
     requestAnimationFrame(gameLoop);
   }
 
@@ -474,8 +475,7 @@ import '../../../styles/snake.css';
         }
       }
     });
-    observer.observe(tabContent, { attributes: true, attributeFilter: ['class'] });
-    observer.observe(tabContent, { attributes: true, attributeFilter: ['hidden'] });
+    observer.observe(tabContent, { attributes: true, attributeFilter: ['class', 'hidden'] });
   }
 
   setTimeout(init, 100);

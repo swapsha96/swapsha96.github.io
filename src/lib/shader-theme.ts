@@ -94,15 +94,35 @@ export function buildShaderTheme(tokens: ThemeTokens): ShaderThemeProps {
   };
 }
 
+/** Fallback tokens (atomic theme) when CSS variables are missing/unparsable. */
+export const DEFAULT_THEME_TOKENS: ThemeTokens = {
+  bgBase: '#0f0c29',
+  bgGradient: '#302b63',
+  accent: '#0affc2',
+  accent2: '#ff0055',
+};
+
 /** Reads the current theme tokens from the page's CSS variables. */
 export function readThemeTokens(): ThemeTokens {
   const read = (name: string): string =>
     getComputedStyle(document.body).getPropertyValue(name).trim();
 
-  return {
+  const tokens = {
     bgBase: read('--device-bg-base'),
     bgGradient: read('--device-bg-gradient'),
     accent: read('--device-screen-text'),
     accent2: read('--device-button-primary'),
   };
+
+  // A theme that can't be parsed must never break the page: fall back
+  // per-token to the atomic palette.
+  for (const key of Object.keys(tokens) as (keyof ThemeTokens)[]) {
+    try {
+      parseColor(tokens[key]);
+    } catch {
+      tokens[key] = DEFAULT_THEME_TOKENS[key];
+    }
+  }
+
+  return tokens;
 }

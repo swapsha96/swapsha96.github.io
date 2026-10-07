@@ -37,12 +37,16 @@ function openMenu() {
   state.menuIndex = 0;
   SoundEngine.playTone(520, 'square', 0.06, 0.08);
   updatePauseMenu();
+  // Move focus into the dialog so screen readers announce it.
+  document.getElementById('pause-menu')?.focus();
 }
 
 function closeMenu() {
   state.menuOpen = false;
   SoundEngine.playTone(320, 'square', 0.05, 0.06);
   updatePauseMenu();
+  // Restore focus to the control that opened the menu.
+  document.getElementById('btn-start')?.focus();
 }
 
 function toggleMenu() {
@@ -85,8 +89,8 @@ function activateMenuSelection() {
   }
 }
 
-/** Routes a keypress while the pause menu owns input. Returns true if handled. */
-function handleMenuKey(key: string): boolean {
+/** Routes a keypress while the pause menu owns input. */
+function handleMenuKey(key: string): void {
   switch (key) {
     case 'Escape':
     case 'x':
@@ -94,26 +98,26 @@ function handleMenuKey(key: string): boolean {
     case 'q':
     case 'Q':
       closeMenu();
-      return true;
+      return;
     case 'ArrowUp':
     case 'w':
     case 'W':
       moveMenuSelection('up');
-      return true;
+      return;
     case 'ArrowDown':
     case 's':
     case 'S':
       moveMenuSelection('down');
-      return true;
+      return;
     case 'Enter':
     case ' ':
     case 'z':
     case 'Z':
       activateMenuSelection();
-      return true;
+      return;
     default:
       // The menu is modal: every other key is swallowed.
-      return true;
+      return;
   }
 }
 
@@ -187,7 +191,10 @@ export function initNavigation() {
   document.querySelectorAll('.tab-indicator').forEach((tab, index) => {
     tab.addEventListener(
       'click',
-      whenInteractive(() => switchToTab(index)),
+      whenInteractive(() => {
+        if (state.menuOpen) return; // modal
+        switchToTab(index);
+      }),
     );
   });
 
@@ -218,9 +225,12 @@ export function initNavigation() {
 
     if (!e.repeat && isConsoleInteractive()) toggleButtonState(e.key, true);
 
-    // Delegate D-pad / A-button to Snake when the game owns them.
-    // While the snake is NOT actively running, L/R fall through to the
-    // normal tab switching below so players can always leave the Snake tab.
+    // On the Snake tab the game owns the keyboard: SnakeTab's own keydown
+    // listener is the single steering/action path. Here we only swallow
+    // what must not reach navigation (direction keys while playing, the A
+    // button always). While the snake is NOT actively running, L/R fall
+    // through to the normal tab switching below so players can always
+    // leave the Snake tab.
     if (state.currentTab === 3) {
       const dirKeys = [
         'ArrowUp',
@@ -238,13 +248,11 @@ export function initNavigation() {
       ];
       if (dirKeys.includes(e.key)) {
         if (state.snakePlaying) {
-          e.preventDefault();
-          document.dispatchEvent(new CustomEvent('snake-direction', { detail: { key: e.key } }));
+          e.preventDefault(); // SnakeTab steers.
           return;
         }
       } else if (['Enter', ' ', 'z', 'Z'].includes(e.key)) {
-        e.preventDefault();
-        document.dispatchEvent(new CustomEvent('snake-action'));
+        e.preventDefault(); // SnakeTab starts / resumes / restarts.
         return;
       }
     }
@@ -396,13 +404,15 @@ export function initNavigation() {
     }),
   );
   bindPressAction(document.getElementById('btn-start'), whenInteractive(toggleMenu));
-  bindTouchAction(document.getElementById('btn-turn'), toggleTurnLayout);
+  bindTouchAction(document.getElementById('btn-turn'), () => {
+    if (!state.menuOpen) toggleTurnLayout();
+  });
 
   const linksContainer = document.querySelector('.links');
   if (linksContainer) {
     linksContainer.addEventListener('mouseover', (e) => {
       const index = getHoveredLinkIndex(e.target);
-      if (index !== null && state.currentTab === 0 && isConsoleInteractive()) {
+      if (index !== null && state.currentTab === 0 && isConsoleInteractive() && !state.menuOpen) {
         updateActiveLink(index, false, true);
       }
     });
