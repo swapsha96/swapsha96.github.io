@@ -37,8 +37,9 @@ function openMenu() {
   state.menuIndex = 0;
   SoundEngine.playTone(520, 'square', 0.06, 0.08);
   updatePauseMenu();
-  // Move focus into the dialog so screen readers announce it.
-  document.getElementById('pause-menu')?.focus();
+  // Move focus to the menu list so screen readers announce the dialog
+  // and track the active item via aria-activedescendant.
+  document.getElementById('pause-menu-list')?.focus();
 }
 
 function closeMenu() {

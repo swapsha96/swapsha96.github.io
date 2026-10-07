@@ -24,6 +24,7 @@ const aboutText = aboutEntry && aboutEntry.body ? aboutEntry.body.trim() : '';
 ---
 
 <main class="console">
+    <h1 class="sr-only">Swapnil Sharma</h1>
     <div class="console-body">
         <PowerSwitch />
         <Controls />
@@ -70,8 +71,8 @@ const aboutText = aboutEntry && aboutEntry.body ? aboutEntry.body.trim() : '';
                 </div>
 
                 <div class="pause-menu" id="pause-menu" role="dialog" aria-modal="true" aria-label="Pause menu" tabindex="-1" hidden>
-                    <h3 class="pause-menu-title" id="pause-menu-title">PAUSE</h3>
-                    <ul class="pause-menu-list" id="pause-menu-list" role="menu" aria-labelledby="pause-menu-title">
+                    <h2 class="pause-menu-title" id="pause-menu-title">PAUSE</h2>
+                    <ul class="pause-menu-list" id="pause-menu-list" role="menu" aria-labelledby="pause-menu-title" tabindex="-1">
                         <li class="pause-menu-item" id="pause-menu-item-0" data-action="resume" role="menuitem" tabindex="-1"><span class="pause-menu-label">RESUME</span></li>
                         <li class="pause-menu-item" id="pause-menu-item-1" data-action="theme" role="menuitem" tabindex="-1"><span class="pause-menu-label">THEME</span></li>
                         <li class="pause-menu-item" id="pause-menu-item-2" data-action="sound" role="menuitem" tabindex="-1"><span class="pause-menu-label">SOUND: ON</span></li>

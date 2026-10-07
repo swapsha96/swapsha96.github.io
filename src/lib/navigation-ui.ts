@@ -246,10 +246,16 @@ export function updatePauseMenu() {
   if (!menu) return;
 
   menu.hidden = !state.menuOpen;
-  menu.setAttribute(
-    'aria-activedescendant',
-    state.menuOpen ? `pause-menu-item-${state.menuIndex}` : '',
-  );
+
+  // aria-activedescendant lives on the focusable role="menu" list (it is
+  // not valid on role="dialog").
+  const list = document.getElementById('pause-menu-list');
+  if (list) {
+    list.setAttribute(
+      'aria-activedescendant',
+      state.menuOpen ? `pause-menu-item-${state.menuIndex}` : '',
+    );
+  }
 
   menu.querySelectorAll<HTMLElement>('.pause-menu-item').forEach((item, index) => {
     item.classList.toggle('active', state.menuOpen && index === state.menuIndex);

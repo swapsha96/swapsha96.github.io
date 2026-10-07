@@ -502,10 +502,13 @@ test.describe('GameBoy E2E', () => {
     await page.dispatchEvent('#btn-start', 'click');
     await expect(menu).toBeVisible();
     await expect(menu.locator('.pause-menu-hint')).toContainText('A: OK');
-    await expect(menu).toHaveAttribute('aria-activedescendant', 'pause-menu-item-0');
+    await expect(page.locator('#pause-menu-list')).toHaveAttribute(
+      'aria-activedescendant',
+      'pause-menu-item-0',
+    );
     await expect(menu).toHaveAttribute('aria-modal', 'true');
     const focusedId = await page.evaluate(() => document.activeElement?.id);
-    expect(focusedId).toBe('pause-menu');
+    expect(focusedId).toBe('pause-menu-list');
 
     // Physical B closes it and restores focus to the START button
     await page.dispatchEvent('#btn-b', 'click');

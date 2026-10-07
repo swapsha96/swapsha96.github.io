@@ -581,7 +581,7 @@ h2 {
   box-shadow: none;
 }
 
-.help-panel h3 {
+.help-panel h2 {
   margin: 0 0 var(--space-2);
   font-size: var(--text-md);
   color: var(--device-screen-text);
