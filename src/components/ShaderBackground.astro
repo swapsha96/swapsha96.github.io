@@ -1,0 +1,172 @@
+---
+import '../styles/shader-background.css';
+---
+
+<canvas id="shader-bg" class="shader-bg" aria-hidden="true"></canvas>
+
+<script>
+  import type { PresetConfig, ShaderInstance } from 'shaders/js';
+  import { buildShaderTheme, readThemeTokens } from '../lib/shader-theme';
+
+  type HotContext = { dispose(callback: () => void): void };
+
+  const canvas = document.getElementById('shader-bg');
+
+  if (canvas instanceof HTMLCanvasElement) {
+    // Mirror the active theme class on the canvas (debug/testing seam) and
+    // keep it in sync even before the WebGPU engine has loaded.
+    const mirrorTheme = () => {
+      canvas.dataset.theme = document.body.className || '';
+    };
+    mirrorTheme();
+    new MutationObserver(mirrorTheme).observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+  }
+
+  // The shaders.com engine is a large chunk (~2.4 MB min); load it lazily
+  // and only on browsers that expose WebGPU. Everyone else gets zero bytes.
+  if (canvas instanceof HTMLCanvasElement && 'gpu' in navigator) {
+    void initShaderBackground(canvas);
+  }
+
+  /**
+   * Animated WebGPU backdrop composed from the free shaders.com component
+   * library, colored from the active console theme so it harmonizes with
+   * the shell and screen. Kept dark and slow on purpose.
+   *
+   * Stack (first = bottom): a nebula mesh gradient, a haze of simplex
+   * noise, a field of twinkling pixel-dots, a film grain pass, a vignette,
+   * and a cursor trail that fades from screen-mint to button-pink.
+   */
+  async function initShaderBackground(target: HTMLCanvasElement): Promise<void> {
+    const { createShader, isWebGPUSupported } = await import('shaders/js');
+    if (!isWebGPUSupported()) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const theme = buildShaderTheme(readThemeTokens());
+
+    const preset: PresetConfig = {
+      components: [
+        {
+          type: 'MeshGradient',
+          id: 'nebula',
+          props: {
+            stops: theme.nebulaStops,
+            colorSpace: 'oklab',
+            count: 5,
+            smoothness: 2.8,
+            variation: 0.55,
+            swirl: 0.35,
+            drift: 0.7,
+            speed: reduceMotion ? 0 : 0.35,
+            seed: 11,
+          },
+        },
+        {
+          type: 'SimplexNoise',
+          id: 'haze',
+          props: {
+            colorA: theme.hazeColor,
+            colorB: '#000000',
+            scale: 1.4,
+            balance: -0.4,
+            contrast: 1,
+            speed: reduceMotion ? 0 : 0.4,
+            opacity: 0.1,
+            blendMode: 'softLight',
+          },
+        },
+        {
+          type: 'DotGrid',
+          id: 'stars',
+          props: {
+            color: theme.starsColor,
+            density: 60,
+            dotSize: 0.08,
+            offset: 0.5,
+            speed: reduceMotion ? 0 : -0.05,
+            speedVariance: 0.6,
+            twinkle: 0.5,
+            opacity: 0.45,
+            blendMode: 'screen',
+          },
+        },
+        {
+          type: 'FilmGrain',
+          id: 'grain',
+          props: {
+            strength: 0.06,
+            bias: 0,
+            animated: !reduceMotion,
+          },
+        },
+        {
+          type: 'Vignette',
+          id: 'vignette',
+          props: {
+            color: theme.vignetteColor,
+            radius: 0.55,
+            falloff: 1,
+            intensity: 0.85,
+          },
+        },
+        ...(reduceMotion
+          ? []
+          : [
+              {
+                type: 'CursorTrail',
+                id: 'trail',
+                props: {
+                  colorA: theme.trailColorA,
+                  colorB: theme.trailColorB,
+                  radius: 1.1,
+                  length: 1.2,
+                  shrink: 1,
+                  softness: 0.9,
+                  opacity: 0.4,
+                  blendMode: 'screen',
+                },
+              },
+            ]),
+      ],
+    };
+
+    let instance: ShaderInstance | null = null;
+
+    try {
+      instance = await createShader(target, preset, {
+        disableTelemetry: true,
+        onReady: () => target.classList.add('is-ready'),
+        // Terminal GPU failure: fade back to the CSS radial gradient behind it.
+        onError: () => target.classList.remove('is-ready'),
+      });
+    } catch {
+      return;
+    }
+
+    // Re-paint the palette whenever the console theme changes.
+    const applyTheme = () => {
+      const next = buildShaderTheme(readThemeTokens());
+      try {
+        instance?.update('nebula', { stops: next.nebulaStops });
+        instance?.update('haze', { colorA: next.hazeColor });
+        instance?.update('stars', { color: next.starsColor });
+        instance?.update('vignette', { color: next.vignetteColor });
+        if (!reduceMotion) {
+          instance?.update('trail', { colorA: next.trailColorA, colorB: next.trailColorB });
+        }
+      } catch {
+        // A decorative background must never break theme switching.
+      }
+    };
+    new MutationObserver(applyTheme).observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    const hot = (import.meta as ImportMeta & { hot?: HotContext }).hot;
+    hot?.dispose(() => instance?.destroy());
+  }
+</script>

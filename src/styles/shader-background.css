@@ -1,0 +1,24 @@
+/* WebGPU shader background (shaders.com) — sits beneath the CRT overlays. */
+.shader-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /*
+   * Layering (all positive): shader 0 → pixels 1 → scanlines 2 → console 3.
+   * A composited canvas at a negative z-index flickers/tears in Chromium
+   * and Safari, so it must stay at 0 with the layers above it.
+   */
+  z-index: 0;
+  pointer-events: none;
+  /*
+   * Hidden until the first GPU frame is ready; toggling opacity instantly
+   * (no CSS transition) avoids animating a composited WebGPU layer, which
+   * flickers in some Chromium/Safari versions.
+   */
+  opacity: 0;
+}
+
+.shader-bg.is-ready {
+  opacity: 1;
+}

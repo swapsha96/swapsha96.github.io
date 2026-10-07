@@ -30,6 +30,15 @@ body {
   height: var(--console-height);
   border-radius: var(--radius-shell);
   box-shadow: var(--shadow-shell);
+  /*
+   * Positioned + z-index keeps the console above the fixed backdrop layers
+   * (shader 0 → pixels 1 → scanlines 2). This also makes the console a
+   * stacking context, so negative-z descendants (e.g. the power switch that
+   * tucks behind the shell) stay behind the shell but in front of the
+   * shader background.
+   */
+  position: relative;
+  z-index: 3;
 }
 
 .console.landscape {
