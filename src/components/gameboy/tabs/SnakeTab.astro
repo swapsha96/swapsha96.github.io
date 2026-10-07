@@ -47,12 +47,10 @@ import '../../../styles/snake.css';
   const TICK_INTERVAL_MIN = 80;
   const SPEED_RAMP_STEP = 50;
   const BONUS_FOOD_CHANCE = 0.06;      // per tick
-  const BONUS_FOOD_DURATION = 40;      // ticks (~7s at 180ms)
   const BONUS_FOOD_FLASH_START = 8;    // start flashing when ≤8 ticks left
 
   let game: SnakeState = createInitialState();
   let lastTick = 0;
-  let animFrameId = 0;
   let initialized = false;
   let pausedExternally = false;
   let paletteIdx = 0;
@@ -71,7 +69,6 @@ import '../../../styles/snake.css';
   const overlayScoreEl = document.getElementById('snake-overlay-score')!;
   const overlayBestEl = document.getElementById('snake-overlay-best')!;
   const hintEl = document.querySelector<HTMLElement>('.snake-overlay-hint')!;
-  const footerEl = document.querySelector<HTMLElement>('.footer');
 
   // Load persisted state
   try {
@@ -247,23 +244,34 @@ import '../../../styles/snake.css';
       overlayScoreEl.textContent = `SCORE: ${game.score}`;
       const isNewBest = game.score > 0 && game.score >= highScore;
       overlayBestEl.textContent = isNewBest ? 'NEW BEST!' : `BEST: ${highScore}`;
-      hintEl.textContent = 'PRESS A TO RESTART';
+      hintEl.textContent = 'A: RESTART | L/R: TABS';
       overlayEl.style.display = 'flex';
     } else if (pausedExternally) {
       overlayTextEl.textContent = 'PAUSED';
       overlayScoreEl.textContent = `SCORE: ${game.score}`;
       overlayBestEl.textContent = '';
-      hintEl.textContent = 'PRESS A TO RESUME';
+      hintEl.textContent = 'A: RESUME | L/R: TABS';
       overlayEl.style.display = 'flex';
     } else if (!game.running) {
       overlayTextEl.textContent = 'SNAKE';
       overlayScoreEl.textContent = highScore > 0 ? `BEST: ${highScore}` : '';
       overlayBestEl.textContent = paletteIdx > 0 ? `SKIN: ${paletteName()}` : '';
-      hintEl.textContent = 'PRESS A TO START';
+      hintEl.textContent = 'A: START | L/R: TABS';
       overlayEl.style.display = 'flex';
     } else {
       overlayEl.style.display = 'none';
     }
+    updateFooterHint();
+  }
+
+  /** Keeps the screen footer in sync with the current snake sub-state. */
+  function updateFooterHint() {
+    const footer = document.getElementById('footer-hint');
+    if (!footer) return;
+    if (game.gameOver) footer.textContent = 'A: RESTART | L/R: TABS';
+    else if (pausedExternally) footer.textContent = 'A: RESUME | L/R: TABS';
+    else if (!game.running) footer.textContent = 'A: START | L/R: TABS';
+    else footer.textContent = 'ARROWS: STEER | START: MENU';
   }
 
   function updateScore() {
@@ -281,6 +289,9 @@ import '../../../styles/snake.css';
     drawSnake();
     drawOverlay();
     updateScore();
+    // The D-pad belongs to the snake only while it is actively running;
+    // otherwise L/R switches tabs (escape hatch handled in navigation.ts).
+    state.snakePlaying = game.running && !game.gameOver && !state.menuOpen;
   }
 
   // --------------- Game loop ---------------
@@ -292,11 +303,11 @@ import '../../../styles/snake.css';
 
   function gameLoop(now: number) {
     if (state.currentTab !== 3) {
-      animFrameId = requestAnimationFrame(gameLoop);
+      requestAnimationFrame(gameLoop);
       return;
     }
 
-    if (game.running && !game.gameOver) {
+    if (game.running && !game.gameOver && !state.menuOpen) {
       if (now - lastTick >= tickInterval()) {
         lastTick = now;
         const prevScore = game.score;
@@ -331,13 +342,14 @@ import '../../../styles/snake.css';
     }
 
     render();
-    animFrameId = requestAnimationFrame(gameLoop);
+    requestAnimationFrame(gameLoop);
   }
 
   function restartGame() {
     game = createInitialState();
     game.running = true;
     pausedExternally = false;
+    state.snakePlaying = true;
     lastTick = performance.now();
     overlayEl.style.display = 'none';
     SoundEngine.playTone(660, 'square', 0.08, 0.1);
@@ -347,6 +359,7 @@ import '../../../styles/snake.css';
   function resumeGame() {
     game.running = true;
     pausedExternally = false;
+    state.snakePlaying = true;
     lastTick = performance.now();
     overlayEl.style.display = 'none';
   }
@@ -385,7 +398,7 @@ import '../../../styles/snake.css';
 
   // Direct keydown handler
   document.addEventListener('keydown', (e) => {
-    if (state.currentTab !== 3) return;
+    if (state.currentTab !== 3 || state.menuOpen) return;
 
     const dirKeys: Record<string, boolean> = {
       ArrowUp: true, w: true, W: true,
@@ -395,7 +408,11 @@ import '../../../styles/snake.css';
     };
 
     if (dirKeys[e.key]) {
-      handleDirection(e.key);
+      // Only steer while actively playing; otherwise leave the event alone
+      // so navigation.ts can treat L/R as tab switching.
+      if (game.running && !game.gameOver) {
+        handleDirection(e.key);
+      }
       return;
     }
 
@@ -414,12 +431,12 @@ import '../../../styles/snake.css';
 
   // Physical button clicks forwarded as custom events
   document.addEventListener('snake-direction', ((e: CustomEvent) => {
-    if (state.currentTab !== 3) return;
+    if (state.currentTab !== 3 || state.menuOpen) return;
     handleDirection(e.detail.key);
   }) as EventListener);
 
   document.addEventListener('snake-action', (() => {
-    if (state.currentTab !== 3) return;
+    if (state.currentTab !== 3 || state.menuOpen) return;
     handleAction();
   }) as EventListener);
 
@@ -428,15 +445,14 @@ import '../../../styles/snake.css';
   function init() {
     if (initialized) return;
     initialized = true;
-    if (footerEl) footerEl.style.display = 'none';
     setupCanvas();
     lastTick = performance.now();
     overlayEl.style.display = 'flex';
     overlayTextEl.textContent = 'SNAKE';
     overlayScoreEl.textContent = highScore > 0 ? `BEST: ${highScore}` : '';
     overlayBestEl.textContent = paletteIdx > 0 ? `SKIN: ${paletteName()}` : '';
-    hintEl.textContent = 'PRESS A TO START';
-    animFrameId = requestAnimationFrame(gameLoop);
+    hintEl.textContent = 'A: START | L/R: TABS';
+    requestAnimationFrame(gameLoop);
   }
 
   const tabContent = document.getElementById('tab-3');
@@ -444,7 +460,6 @@ import '../../../styles/snake.css';
     const observer = new MutationObserver(() => {
       const isActive = tabContent.classList.contains('active') && !(tabContent as HTMLElement).hidden;
       if (isActive) {
-        if (footerEl) footerEl.style.display = 'none';
         if (!initialized) {
           init();
         } else {
@@ -452,7 +467,7 @@ import '../../../styles/snake.css';
           lastTick = performance.now();
         }
       } else {
-        if (footerEl) footerEl.style.display = '';
+        state.snakePlaying = false;
         if (game.running && !game.gameOver) {
           game.running = false;
           pausedExternally = true;

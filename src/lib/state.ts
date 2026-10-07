@@ -4,6 +4,12 @@ export type AppState = {
   numTabs: number;
   isPoweredOn: boolean;
   isBooting: boolean;
+  /** True while the Snake game is actively running (owns the D-pad). */
+  snakePlaying: boolean;
+  /** True while the START pause menu is open (it owns all keys). */
+  menuOpen: boolean;
+  /** Index of the highlighted pause-menu item. */
+  menuIndex: number;
 };
 
 export const state: AppState = {
@@ -12,6 +18,9 @@ export const state: AppState = {
   numTabs: 4,
   isPoweredOn: true,
   isBooting: false,
+  snakePlaying: false,
+  menuOpen: false,
+  menuIndex: 0,
 };
 
 function prefersReducedMotion(): boolean {

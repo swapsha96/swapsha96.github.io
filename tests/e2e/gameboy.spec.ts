@@ -123,6 +123,19 @@ test.describe('GameBoy E2E', () => {
     await expect(body).toHaveClass(newClass!);
   });
 
+  test('Theme switching goes forward with B and backward with SELECT', async ({ page }) => {
+    const body = page.locator('body');
+    const current = await body.getAttribute('class');
+
+    // SELECT (q) steps one theme back
+    await page.keyboard.press('q');
+    await expect(body).not.toHaveClass(current!);
+
+    // B (x) steps one theme forward again — back to where we started
+    await page.keyboard.press('x');
+    await expect(body).toHaveClass(current!);
+  });
+
   test('Audio Mute Toggle & Persistence', async ({ page }) => {
     // 1. Toggle Mute with 'm'
     await page.keyboard.press('m');
@@ -294,22 +307,22 @@ test.describe('GameBoy E2E', () => {
 
     // Press A to start game
     await page.keyboard.press('Enter');
-    await page.waitForTimeout(200);
 
-    // Overlay should disappear when running
-    await expect(snakeOverlay).toBeHidden();
+    // Overlay should disappear when running (generous timeout: the tab's
+    // rAF loop may take a moment to initialize under parallel load)
+    await expect(snakeOverlay).toBeHidden({ timeout: 8000 });
 
-    // Move the snake away from the right wall (initial direction is right)
-    // Turn down first to avoid immediate collision
+    // Move the snake away from the right wall (initial direction is right).
+    // Turn down first to avoid the wall; each wait covers the 180ms tick.
     await page.keyboard.press('ArrowDown');
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(250);
     await page.keyboard.press('ArrowLeft');
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(250);
     await page.keyboard.press('ArrowUp');
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(250);
 
     // Snake should still be alive (not game over yet)
-    await expect(snakeOverlay).toBeHidden();
+    await expect(snakeOverlay).toBeHidden({ timeout: 4000 });
 
     // Score should update after eating food (snake moves, may eat)
     const scoreText = await snakeScore.textContent();
@@ -396,5 +409,233 @@ test.describe('GameBoy E2E', () => {
       // Game should restart (overlay hidden)
       await expect(snakeOverlay).toBeHidden();
     }
+  });
+
+  test('Snake: L/R keys switch tabs at the title screen', async ({ page }) => {
+    const tabSnake = page.locator('#tab-3');
+    const tabHelp = page.locator('#tab-2');
+    const tabLinks = page.locator('#tab-0');
+    const hint = page.locator('#snake-overlay .snake-overlay-hint');
+
+    // Navigate to Snake
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await expect(tabSnake).toBeVisible();
+
+    // The title screen tells the user how to leave
+    await expect(hint).toContainText('L/R');
+
+    // Game not running: Left exits to the Help tab
+    await page.keyboard.press('ArrowLeft');
+    await expect(tabSnake).toBeHidden();
+    await expect(tabHelp).toBeVisible();
+
+    // Back into Snake, then Right wraps around to the Links tab
+    await page.keyboard.press('ArrowRight');
+    await expect(tabSnake).toBeVisible();
+    await page.keyboard.press('ArrowRight');
+    await expect(tabSnake).toBeHidden();
+    await expect(tabLinks).toBeVisible();
+  });
+
+  test('Snake: L/R keys exit after game over', async ({ page }) => {
+    const tabSnake = page.locator('#tab-3');
+    const tabHelp = page.locator('#tab-2');
+    const snakeOverlay = page.locator('#snake-overlay');
+    const hint = page.locator('#snake-overlay .snake-overlay-hint');
+
+    // Navigate to Snake and start
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await expect(tabSnake).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(snakeOverlay).toBeHidden();
+
+    // Run into the right wall: GAME OVER overlay appears
+    await expect(snakeOverlay).toBeVisible({ timeout: 8000 });
+    await expect(hint).toContainText('L/R');
+
+    // The escape hatch: Left/Right now switch tabs again
+    await page.keyboard.press('ArrowLeft');
+    await expect(tabSnake).toBeHidden();
+    await expect(tabHelp).toBeVisible();
+  });
+
+  test('Snake: D-pad buttons exit at the title screen but steer while running', async ({
+    page,
+  }) => {
+    const tabSnake = page.locator('#tab-3');
+    const tabHelp = page.locator('#tab-2');
+
+    // Navigate to Snake
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await expect(tabSnake).toBeVisible();
+
+    // Physical D-pad LEFT leaves the Snake tab at the title screen
+    await page.dispatchEvent('#left', 'click');
+    await expect(tabSnake).toBeHidden();
+    await expect(tabHelp).toBeVisible();
+
+    // Back to Snake and start the game
+    await page.dispatchEvent('#tab-ind-3', 'click');
+    await expect(tabSnake).toBeVisible();
+    await page.dispatchEvent('#btn-a', 'click');
+    await page.waitForTimeout(200);
+
+    // While the game is running, the D-pad LEFT steers and must NOT switch tabs
+    await page.dispatchEvent('#left', 'click');
+    await page.waitForTimeout(150);
+    await expect(tabSnake).toBeVisible();
+    await expect(tabHelp).toBeHidden();
+  });
+
+  test('Menu: START opens the pause menu, B closes it', async ({ page }) => {
+    const menu = page.locator('#pause-menu');
+
+    await expect(menu).toBeHidden();
+
+    // Physical START button opens the menu
+    await page.dispatchEvent('#btn-start', 'click');
+    await expect(menu).toBeVisible();
+    await expect(menu.locator('.pause-menu-hint')).toContainText('A: OK');
+    await expect(menu).toHaveAttribute('aria-activedescendant', 'pause-menu-item-0');
+
+    // B (x) closes it
+    await page.keyboard.press('x');
+    await expect(menu).toBeHidden();
+
+    // Escape also toggles it
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeHidden();
+  });
+
+  test('Menu: selection, theme action, and help action', async ({ page }) => {
+    const menu = page.locator('#pause-menu');
+    const body = page.locator('body');
+
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeVisible();
+
+    // RESUME is selected by default
+    await expect(menu.locator('li').first()).toHaveClass(/active/);
+
+    // Down -> THEME, A activates it; the menu stays open
+    await page.keyboard.press('ArrowDown');
+    await expect(menu.locator('li').nth(1)).toHaveClass(/active/);
+    const before = (await body.getAttribute('class')) || '';
+    await page.keyboard.press('Enter');
+    await expect(menu).toBeVisible();
+    await expect(body).not.toHaveClass(before);
+
+    // B closes; reopen and jump to HELP
+    await page.keyboard.press('x');
+    await expect(menu).toBeHidden();
+    await page.keyboard.press('Escape');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await expect(menu.locator('li').nth(3)).toHaveClass(/active/);
+    await page.keyboard.press('Enter');
+    await expect(menu).toBeHidden();
+    await expect(page.locator('#tab-2')).toBeVisible();
+  });
+
+  test('Menu: sound toggle updates label and persists', async ({ page }) => {
+    const menu = page.locator('#pause-menu');
+
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeVisible();
+
+    // RESUME(0) -> THEME(1) -> SOUND(2)
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await expect(menu.locator('li').nth(2)).toContainText('SOUND: ON');
+
+    await page.keyboard.press('Enter');
+    await expect(menu.locator('li').nth(2)).toContainText('SOUND: OFF');
+    const muted = await page.evaluate(() => localStorage.getItem('gb_muted'));
+    expect(muted).toBe('true');
+
+    // The HUD mute icon reflects the menu-driven toggle
+    await expect(page.locator('#hud-mute')).toHaveCSS('visibility', 'visible');
+
+    await page.keyboard.press('Enter');
+    await expect(menu.locator('li').nth(2)).toContainText('SOUND: ON');
+    await expect(page.locator('#hud-mute')).toHaveCSS('visibility', 'hidden');
+  });
+
+  test('Menu: power off from the menu', async ({ page }) => {
+    const menu = page.locator('#pause-menu');
+
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeVisible();
+
+    // RESUME(0) THEME(1) SOUND(2) HELP(3) POWER(4)
+    for (let i = 0; i < 4; i++) {
+      await page.keyboard.press('ArrowDown');
+    }
+    await expect(menu.locator('li').nth(4)).toHaveClass(/active/);
+    await page.keyboard.press('Enter');
+
+    await expect(menu).toBeHidden();
+    await expect(page.locator('.console')).toHaveClass(/console-off/);
+  });
+
+  test('Menu: opening the menu pauses a running snake', async ({ page }) => {
+    const snakeOverlay = page.locator('#snake-overlay');
+    const menu = page.locator('#pause-menu');
+    const tabSnake = page.locator('#tab-3');
+
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await expect(tabSnake).toBeVisible();
+    await page.keyboard.press('Enter');
+    await expect(snakeOverlay).toBeHidden();
+
+    // Open the menu: the snake must freeze in place
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeVisible();
+    await page.waitForTimeout(2000); // longer than it takes to hit the right wall
+
+    // Closing the menu resumes the frozen game — no game over, still on Snake
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeHidden();
+    await expect(tabSnake).toBeVisible();
+    await page.waitForTimeout(300);
+    await expect(snakeOverlay).toBeHidden();
+  });
+
+  test('Footer hints change per tab and follow the snake sub-state', async ({ page }) => {
+    const footer = page.locator('#footer-hint');
+
+    await expect(footer).toContainText('UP/DOWN: LINKS');
+
+    await page.keyboard.press('ArrowRight');
+    await expect(footer).toContainText('UP/DOWN: SCROLL');
+
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await expect(footer).toContainText('A: START'); // snake title screen
+
+    // Starting the game switches the hint to the steering keymap
+    await page.keyboard.press('Enter');
+    await expect(footer).toContainText('ARROWS: STEER');
+  });
+
+  test('Shader canvas mirrors the active theme', async ({ page }) => {
+    const canvas = page.locator('#shader-bg');
+
+    await expect(canvas).toHaveAttribute('data-theme', /theme-/);
+
+    const before = await canvas.getAttribute('data-theme');
+    await page.keyboard.press('x');
+    await expect(canvas).not.toHaveAttribute('data-theme', before!);
   });
 });

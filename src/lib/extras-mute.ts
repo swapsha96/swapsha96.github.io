@@ -1,9 +1,9 @@
 import { SoundEngine } from './sound-engine';
-import { isConsolePoweredOn } from './state';
+import { isConsolePoweredOn, state } from './state';
 
 export function initMuteShortcut() {
   document.addEventListener('keydown', (e) => {
-    if (e.key.toLowerCase() === 'm' && isConsolePoweredOn()) {
+    if (e.key.toLowerCase() === 'm' && isConsolePoweredOn() && !state.menuOpen) {
       SoundEngine.toggleMute();
     }
   });

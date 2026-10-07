@@ -52,6 +52,21 @@ export function updateTabUI() {
       else stopTypewriter();
     }
   });
+
+  updateFooterHint();
+}
+
+const FOOTER_HINTS = [
+  'UP/DOWN: LINKS | A: OPEN | L/R: TABS',
+  'UP/DOWN: SCROLL | L/R: TABS',
+  'UP/DOWN: SCROLL | L/R: TABS',
+  'ARROWS: STEER | A: START | START: MENU',
+] as const;
+
+/** Shows the keymap hint for the currently active tab in the screen footer. */
+export function updateFooterHint() {
+  const hint = document.getElementById('footer-hint');
+  if (hint) hint.textContent = FOOTER_HINTS[state.currentTab] ?? '';
 }
 
 export function updateActiveLink(index: number, isWrap = false, isMouseHover = false) {
@@ -212,4 +227,26 @@ export function resetScreenScroll() {
   if (screen) {
     screen.scrollTo({ top: 0, behavior: 'auto' });
   }
+}
+
+export const PAUSE_MENU_ACTIONS = ['resume', 'theme', 'sound', 'help', 'power'] as const;
+export type PauseMenuAction = (typeof PAUSE_MENU_ACTIONS)[number];
+
+/** Syncs the pause-menu overlay with `state.menuOpen` / `state.menuIndex`. */
+export function updatePauseMenu() {
+  const menu = document.getElementById('pause-menu');
+  if (!menu) return;
+
+  menu.hidden = !state.menuOpen;
+  menu.setAttribute(
+    'aria-activedescendant',
+    state.menuOpen ? `pause-menu-item-${state.menuIndex}` : '',
+  );
+
+  menu.querySelectorAll<HTMLElement>('.pause-menu-item').forEach((item, index) => {
+    item.classList.toggle('active', state.menuOpen && index === state.menuIndex);
+  });
+
+  const soundLabel = menu.querySelector<HTMLElement>('[data-action="sound"] .pause-menu-label');
+  if (soundLabel) soundLabel.textContent = `SOUND: ${SoundEngine.muted ? 'OFF' : 'ON'}`;
 }

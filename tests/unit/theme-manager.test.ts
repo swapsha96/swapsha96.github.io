@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getNextThemeIndex, themes } from '../../src/lib/theme-manager';
+import { getNextThemeIndex, getPrevThemeIndex, themes } from '../../src/lib/theme-manager';
 
 describe('getNextThemeIndex', () => {
   it('advances to the next theme', () => {
@@ -15,6 +15,23 @@ describe('getNextThemeIndex', () => {
     const custom = ['a', 'b', 'c'];
     expect(getNextThemeIndex(0, custom)).toBe(1);
     expect(getNextThemeIndex(2, custom)).toBe(0);
+  });
+});
+
+describe('getPrevThemeIndex', () => {
+  it('steps back to the previous theme', () => {
+    expect(getPrevThemeIndex(1, themes)).toBe(0);
+    expect(getPrevThemeIndex(4, themes)).toBe(3);
+  });
+
+  it('wraps from the first theme back to the last', () => {
+    expect(getPrevThemeIndex(0, themes)).toBe(themes.length - 1);
+  });
+
+  it('works with a custom theme list', () => {
+    const custom = ['a', 'b', 'c'];
+    expect(getPrevThemeIndex(0, custom)).toBe(2);
+    expect(getPrevThemeIndex(2, custom)).toBe(1);
   });
 });
 

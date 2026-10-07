@@ -1,5 +1,5 @@
 import { FRAME_DURATION } from './constants';
-import { isConsolePoweredOn } from './state';
+import { isConsolePoweredOn, state } from './state';
 
 export const konamiCode = [
   'ArrowUp',
@@ -45,7 +45,7 @@ export function initKonamiCode() {
   let konamiIndex = 0;
 
   document.addEventListener('keydown', (e) => {
-    if (!isConsolePoweredOn()) return;
+    if (!isConsolePoweredOn() || state.menuOpen) return;
 
     if (checkKonamiStep(e.key, konamiIndex, konamiCode)) {
       konamiIndex++;

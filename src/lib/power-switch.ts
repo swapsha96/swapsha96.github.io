@@ -122,7 +122,7 @@ export function initPowerSwitch() {
 
     if (isTypingTarget || e.metaKey || e.ctrlKey || e.altKey) return;
 
-    if ((e.key === 'p' || e.key === 'P') && state.currentTab !== 3) {
+    if ((e.key === 'p' || e.key === 'P') && state.currentTab !== 3 && !state.menuOpen) {
       e.preventDefault();
       togglePower();
     }

@@ -153,7 +153,6 @@ describe('snake-engine', () => {
     });
 
     it('moves snake one cell in current direction', () => {
-      const state = createInitialState();
       const midX = Math.floor(COLS / 2);
       const midY = Math.floor(ROWS / 2);
 

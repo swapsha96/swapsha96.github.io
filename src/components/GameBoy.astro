@@ -14,6 +14,7 @@ import '../styles/console-layout.css';
 import '../styles/view-transitions.css';
 import '../styles/screen.css';
 import '../styles/controls.css';
+import '../styles/pause-menu.css';
 import '../styles/responsive.css';
 
 const allLinks = await getCollection('links');
@@ -68,8 +69,20 @@ const aboutText = aboutEntry && aboutEntry.body ? aboutEntry.body.trim() : '';
                     </div>
                 </div>
 
+                <div class="pause-menu" id="pause-menu" role="dialog" aria-label="Pause menu" hidden>
+                    <h3 class="pause-menu-title" id="pause-menu-title">PAUSE</h3>
+                    <ul class="pause-menu-list" id="pause-menu-list" role="menu" aria-labelledby="pause-menu-title">
+                        <li class="pause-menu-item" id="pause-menu-item-0" data-action="resume" role="menuitem"><span class="pause-menu-label">RESUME</span></li>
+                        <li class="pause-menu-item" id="pause-menu-item-1" data-action="theme" role="menuitem"><span class="pause-menu-label">THEME</span></li>
+                        <li class="pause-menu-item" id="pause-menu-item-2" data-action="sound" role="menuitem"><span class="pause-menu-label">SOUND: ON</span></li>
+                        <li class="pause-menu-item" id="pause-menu-item-3" data-action="help" role="menuitem"><span class="pause-menu-label">HELP</span></li>
+                        <li class="pause-menu-item" id="pause-menu-item-4" data-action="power" role="menuitem"><span class="pause-menu-label">POWER OFF</span></li>
+                    </ul>
+                    <p class="pause-menu-hint">UP/DOWN: MOVE | A: OK | B: CLOSE</p>
+                </div>
+
                 <footer class="footer">
-                    <p>MADE WITH &lt;3</p>
+                    <p id="footer-hint">UP/DOWN: LINKS | A: OPEN | L/R: TABS</p>
                 </footer>
             </div>
             <div class="logo">GAME BOY <span class="advance">ADVANCE</span></div>

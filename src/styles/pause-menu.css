@@ -1,0 +1,63 @@
+/* --- Pause Menu (START) --- */
+.pause-menu {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  background: var(--device-screen-bg);
+  border-radius: inherit;
+  font-family: var(--font-screen);
+}
+
+.pause-menu[hidden] {
+  display: none;
+}
+
+.pause-menu-title {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  text-align: center;
+  color: var(--device-screen-text);
+  letter-spacing: 0.2em;
+  margin: 0 0 var(--space-2);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--device-screen-text) 40%, transparent);
+}
+
+.pause-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.pause-menu-item {
+  font-size: 1.3rem;
+  line-height: var(--line-normal);
+  color: var(--device-screen-dim);
+  padding: 2px var(--space-3);
+  letter-spacing: 0.06em;
+}
+
+.pause-menu-item.active {
+  color: var(--device-screen-text);
+  background: color-mix(in srgb, var(--device-screen-text) 10%, transparent);
+}
+
+.pause-menu-item.active::before {
+  content: '> ';
+  color: var(--device-button-primary);
+}
+
+.pause-menu-hint {
+  margin: var(--space-3) 0 0;
+  text-align: center;
+  font-size: var(--text-2xs);
+  color: var(--device-screen-dim);
+  letter-spacing: 0.08em;
+}

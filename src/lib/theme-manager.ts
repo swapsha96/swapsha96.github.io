@@ -20,6 +20,11 @@ export function getNextThemeIndex(current: number, themeList: string[]): number 
   return (current + 1) % themeList.length;
 }
 
+/** Pure function for testing: returns the previous theme index with wrapping. */
+export function getPrevThemeIndex(current: number, themeList: string[]): number {
+  return (current - 1 + themeList.length) % themeList.length;
+}
+
 function getSavedTheme(): string | null {
   const savedTheme = getStoredString(THEME_STORAGE_KEY);
   return savedTheme && themes.includes(savedTheme) ? savedTheme : null;
@@ -53,9 +58,20 @@ export function initTheme() {
 }
 
 export function handleThemeSwitch() {
+  stepTheme('next');
+}
+
+export function handleThemeSwitchBack() {
+  stepTheme('prev');
+}
+
+function stepTheme(direction: 'next' | 'prev') {
   SoundEngine.playTone(200, 'triangle', (FRAME_DURATION * 12) / 1000, 0.05);
 
-  currentThemeIndex = getNextThemeIndex(currentThemeIndex, themes);
+  currentThemeIndex =
+    direction === 'next'
+      ? getNextThemeIndex(currentThemeIndex, themes)
+      : getPrevThemeIndex(currentThemeIndex, themes);
   const nextTheme = themes[currentThemeIndex];
 
   setStoredValue(THEME_STORAGE_KEY, nextTheme);
